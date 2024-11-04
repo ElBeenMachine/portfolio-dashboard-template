@@ -6,7 +6,7 @@
 		"dev": "doppler run next dev",
 		"build": "doppler run next build",
 		"start": "doppler run next start",
-		"lint": "doppler run next lint"
+		"lint": "next lint"
 	},
 	"dependencies": {
 		"next": "15.0.2",
