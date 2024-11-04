@@ -5,6 +5,6 @@ test:
           artifacts: true
     stage: test
     script:
-        - docker load < builds/$PROJECT_NAME:$CI_COMMIT_REF-arm64.tar
-        - docker run $PROJECT_NAME:$CI_COMMIT_REF-arm64 -p 3000:3000 -d
+        - docker load < builds/$PROJECT_NAME:$CI_COMMIT_SHA-arm64.tar
+        - docker run $PROJECT_NAME:$CI_COMMIT_SHA-arm64 -p 3000:3000 -d
         - curl -s http://localhost:3000

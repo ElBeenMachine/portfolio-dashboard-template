@@ -1,0 +1,16 @@
+release_arm64:
+    needs:
+        - job: build_arm64
+          artifacts: true
+    stage: release
+    before_script:
+        - until docker info; do sleep 1; done
+        - echo "$AZURECR_PASSWORD" | docker login $AZURECR_HOST -u $AZURECR_USER --password-stdin
+    script:
+        - docker load < builds/$PROJECT_NAME:$CI_COMMIT_SHA-arm64.tar
+        - docker tag $PROJECT_NAME:$TAG-arm64 $IMAGE_NAME:$TAG-arm64
+        - docker rmi $PROJECT_NAME:$CI_COMMIT_SHA-arm64
+        - docker tag $IMAGE_NAME:$TAG-arm64 $IMAGE_NAME:$latest-arm64
+        - docker push $IMAGE_NAME:$TAG-arm64
+    tags:
+        - arm_kubernetes

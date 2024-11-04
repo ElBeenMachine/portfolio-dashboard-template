@@ -6,7 +6,7 @@ build_amd64:
     script:
         - mkdir -p builds
         - docker build . -t $PROJECT_NAME:$CI_COMMIT_SHA
-        - docker save $PROJECT_NAME:$CI_COMMIT_REF > builds/$PROJECT_NAME:$CI_COMMIT_REF-amd64.tar
+        - docker save $PROJECT_NAME:$CI_COMMIT_SHA > builds/$PROJECT_NAME:$CI_COMMIT_SHA-amd64.tar
     artifacts:
         paths:
             - builds
@@ -19,7 +19,7 @@ build_arm64:
     script:
         - mkdir -p builds
         - docker build . -t $PROJECT_NAME:$CI_COMMIT_SHA
-        - docker save $PROJECT_NAME:$CI_COMMIT_REF > builds/$PROJECT_NAME:$CI_COMMIT_REF-arm64.tar
+        - docker save $PROJECT_NAME:$CI_COMMIT_SHA > builds/$PROJECT_NAME:$CI_COMMIT_SHA-arm64.tar
     artifacts:
         paths:
             - builds
