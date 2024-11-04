@@ -1,7 +1,7 @@
 # Build the project for AMD64 hardware
 build_amd64:
     needs:
-        - job: lint
+        - job: eslint
     stage: build
     before_script:
         - mkdir -p build
@@ -15,7 +15,7 @@ build_amd64:
 # Build the project for ARM64 hardware
 build_arm64:
     needs:
-        - job: lint
+        - job: eslint
     stage: build
     before_script:
         - mkdir -p build
