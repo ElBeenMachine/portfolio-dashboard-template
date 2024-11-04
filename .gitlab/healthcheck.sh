@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 container_name=test_container
 
 timeout=120
