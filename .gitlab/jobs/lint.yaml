@@ -1,0 +1,7 @@
+# Job to lint the code
+eslint:
+    stage: lint
+    image: $NODE_IMAGE
+    script:
+        - npm install
+        - npm run lint
