@@ -10,4 +10,3 @@ test:
         - docker run -d -p 3000:3000 --name=test_container $PROJECT_NAME:$CI_COMMIT_SHA-amd64
         - chmod +x ./.gitlab/healthcheck.sh
         - ./.gitlab/healthcheck.sh
-        - curl -s http://localhost:3000
