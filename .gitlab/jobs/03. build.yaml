@@ -5,8 +5,8 @@ build_amd64:
     stage: build
     script:
         - mkdir -p builds
-        - docker build . -t $PROJECT_NAME:$CI_COMMIT_SHA
-        - docker save $PROJECT_NAME:$CI_COMMIT_SHA > builds/$PROJECT_NAME:$CI_COMMIT_SHA-amd64.tar
+        - docker build . -t $PROJECT_NAME:$CI_COMMIT_SHA-amd64
+        - docker save $PROJECT_NAME:$CI_COMMIT_SHA-amd64 > builds/$PROJECT_NAME:$CI_COMMIT_SHA-amd64.tar
     artifacts:
         paths:
             - builds
@@ -18,8 +18,8 @@ build_arm64:
     stage: build
     script:
         - mkdir -p builds
-        - docker build . -t $PROJECT_NAME:$CI_COMMIT_SHA
-        - docker save $PROJECT_NAME:$CI_COMMIT_SHA > builds/$PROJECT_NAME:$CI_COMMIT_SHA-arm64.tar
+        - docker build . -t $PROJECT_NAME:$CI_COMMIT_SHA-arm64
+        - docker save $PROJECT_NAME:$CI_COMMIT_SHA-arm64 > builds/$PROJECT_NAME:$CI_COMMIT_SHA-arm64.tar
     artifacts:
         paths:
             - builds
