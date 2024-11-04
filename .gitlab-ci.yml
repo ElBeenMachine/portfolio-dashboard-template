@@ -25,7 +25,6 @@ include:
 stages:
     - lint
     - version
-    - prepare
     - build
     - test
     - release

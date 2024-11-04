@@ -10,16 +10,14 @@ update_version:
     # - merge_requests
     # - staging
 
-# Prepare the version tag for the job
+# Get the version tag for the job
 get_version:
-    needs:
-        - job: eslint
-    stage: prepare
+    stage: version
     image: $NODE_IMAGE
-    before_script: []
     script:
         - export TAG=$(node -p "require('./package.json').version")
         - echo "TAG=$TAG" >> variables.env
+    before_script: []
     services: []
     artifacts:
         reports:
