@@ -33,5 +33,5 @@ release_amd64:
         - docker load < builds/$PROJECT_NAME:$CI_COMMIT_SHA-amd64.tar
         - docker tag $PROJECT_NAME:$CI_COMMIT_SHA-amd64 $IMAGE_NAME:$TAG-amd64
         - docker rmi $PROJECT_NAME:$CI_COMMIT_SHA-amd64
-        - docker tag $IMAGE_NAME:$TAG-amd64 $IMAGE_NAME:$latest
+        - docker tag $IMAGE_NAME:$TAG-amd64 $IMAGE_NAME:latest
         - docker push $IMAGE_NAME:$TAG-amd64
