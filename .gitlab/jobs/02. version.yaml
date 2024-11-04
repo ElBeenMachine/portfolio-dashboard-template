@@ -11,4 +11,4 @@ update_version:
 get_version:
     stage: prepare
     script:
-        - echo "Version: $(npm version)"
+        - echo $(npm version)
