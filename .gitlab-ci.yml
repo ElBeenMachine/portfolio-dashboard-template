@@ -28,5 +28,6 @@ stages:
     - version
     - prepare
     - build
+    - test
     - release
     - deploy
