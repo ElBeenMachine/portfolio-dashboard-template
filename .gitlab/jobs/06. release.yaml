@@ -1,3 +1,4 @@
+# Release for arm64 architecture
 release_arm64:
     needs:
         - job: test
@@ -16,6 +17,7 @@ release_arm64:
         - docker tag $IMAGE_NAME:$TAG-arm64 $IMAGE_NAME:$latest-arm64
         - docker push $IMAGE_NAME:$TAG-arm64
 
+# Release for amd64 architecture
 release_amd64:
     needs:
         - job: test

@@ -6,5 +6,5 @@ test:
     stage: test
     script:
         - docker load < builds/$PROJECT_NAME:$CI_COMMIT_SHA-amd64.tar
-        - docker run $PROJECT_NAME:$CI_COMMIT_SHA-amd64 -p 3000:3000 -d
+        - docker run  -d -p 3000:3000 $PROJECT_NAME:$CI_COMMIT_SHA-amd64
         - curl -s http://localhost:3000
