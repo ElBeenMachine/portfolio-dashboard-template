@@ -4,12 +4,12 @@ build_amd64:
         - job: eslint
     stage: build
     script:
-        - mkdir -p build
+        - mkdir -p builds
         - docker build . -t $IMAGE_NAME:$CI_COMMIT_SHA
-        - docker save $IMAGE_NAME:$CI_COMMIT_REF > image/$IMAGE_NAME:$CI_COMMIT_REF-arm64.tar
+        - docker save $IMAGE_NAME:$CI_COMMIT_REF > builds/$IMAGE_NAME:$CI_COMMIT_REF-arm64.tar
     artifacts:
         paths:
-            - build
+            - builds
 
 # Build the project for ARM64 hardware
 build_arm64:
@@ -17,11 +17,11 @@ build_arm64:
         - job: eslint
     stage: build
     script:
-        - mkdir -p build
+        - mkdir -p builds
         - docker build . -t $IMAGE_NAME:$CI_COMMIT_SHA
-        - docker save $IMAGE_NAME:$CI_COMMIT_REF > image/$IMAGE_NAME:$CI_COMMIT_REF-arm64.tar
+        - docker save $IMAGE_NAME:$CI_COMMIT_REF > builds/$IMAGE_NAME:$CI_COMMIT_REF-arm64.tar
     artifacts:
         paths:
-            - build
+            - builds
     tags:
         - arm_kubernetes
