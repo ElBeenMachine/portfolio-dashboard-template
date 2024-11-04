@@ -1,0 +1,25 @@
+# Build the project for AMD64 hardware
+build_amd64:
+    stage: build
+    before_script:
+        - mkdir -p build
+    script:
+        - doppler run docker build . -t $IMAGE_NAME:$CI_COMMIT_REF
+        - docker save $IMAGE_NAME:$CI_COMMIT_REF > image/$IMAGE_NAME:$CI_COMMIT_REF-arm64.tar
+    artifacts:
+        paths:
+            - build
+
+# Build the project for ARM64 hardware
+build_arm64:
+    stage: build
+    before_script:
+        - mkdir -p build
+    script:
+        - doppler run docker build . -t $IMAGE_NAME:$CI_COMMIT_REF
+        - docker save $IMAGE_NAME:$CI_COMMIT_REF > image/$IMAGE_NAME:$CI_COMMIT_REF-arm64.tar
+    artifacts:
+        paths:
+            - build
+    tags:
+        - arm_kubernetes

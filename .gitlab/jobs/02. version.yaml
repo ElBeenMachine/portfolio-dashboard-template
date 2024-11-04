@@ -1,0 +1,14 @@
+update_version:
+    needs:
+        - lint
+    stage: version
+    script:
+        - echo $CI_MERGE_REQUEST_LABELS
+    only:
+        - merge_requests
+        - staging
+
+get_version:
+    stage: prepare
+    script:
+        - echo "Version: $(npm version)"

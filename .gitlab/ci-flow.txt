@@ -1,0 +1,2 @@
+lint        ->          update version             ->               prepare                 ->          build           -> 
+                    (only on mr to staging)             (only on mr to staging or prod)
