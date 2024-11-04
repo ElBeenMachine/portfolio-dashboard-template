@@ -1,0 +1,4 @@
+
+before_script:
+    - until docker info; do sleep 1; done
+    - echo "$AZURECR_PASSWORD" | docker login $AZURECR_HOST -u $AZURECR_USER --password-stdin
