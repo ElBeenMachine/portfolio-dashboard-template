@@ -12,3 +12,6 @@ get_version:
     stage: prepare
     script:
         - echo $(npm version)
+    only:
+        - merge_requests
+        - production
