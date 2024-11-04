@@ -11,12 +11,10 @@ release_arm64:
         - echo "$AZURECR_PASSWORD" | docker login $AZURECR_HOST -u $AZURECR_USER --password-stdin
     script:
         - docker load < builds/$PROJECT_NAME:$CI_COMMIT_SHA-arm64.tar
-        - docker tag $PROJECT_NAME:$TAG-arm64 $IMAGE_NAME:$TAG-arm64
+        - docker tag $PROJECT_NAME:$CI_COMMIT_SHA-arm64 $IMAGE_NAME:$TAG-arm64
         - docker rmi $PROJECT_NAME:$CI_COMMIT_SHA-arm64
         - docker tag $IMAGE_NAME:$TAG-arm64 $IMAGE_NAME:$latest-arm64
         - docker push $IMAGE_NAME:$TAG-arm64
-    tags:
-        - arm_kubernetes
 
 release_amd64:
     needs:
@@ -31,7 +29,7 @@ release_amd64:
         - echo "$AZURECR_PASSWORD" | docker login $AZURECR_HOST -u $AZURECR_USER --password-stdin
     script:
         - docker load < builds/$PROJECT_NAME:$CI_COMMIT_SHA-amd64.tar
-        - docker tag $PROJECT_NAME:$TAG-amd64 $IMAGE_NAME:$TAG-amd64
+        - docker tag $PROJECT_NAME:$CI_COMMIT_SHA-amd64 $IMAGE_NAME:$TAG-amd64
         - docker rmi $PROJECT_NAME:$CI_COMMIT_SHA-amd64
         - docker tag $IMAGE_NAME:$TAG-amd64 $IMAGE_NAME:$latest
         - docker push $IMAGE_NAME:$TAG-amd64

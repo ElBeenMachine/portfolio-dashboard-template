@@ -6,15 +6,16 @@ update_version:
     before_script: []
     script:
         - echo $CI_MERGE_REQUEST_LABELS
-    only:
-        - merge_requests
-        - staging
+    # only:
+    # - merge_requests
+    # - staging
 
 # Prepare the version tag for the job
 get_version:
     needs:
         - job: eslint
     stage: prepare
+    image: $NODE_IMAGE
     before_script: []
     script:
         - export TAG=$(node -p "require('./package.json').version")
