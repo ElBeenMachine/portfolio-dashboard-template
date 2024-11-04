@@ -1,13 +1,7 @@
 #!/usr/bin/env bash
-container_name=$1
-shift
-timeout=$1
+container_name=test_container
 
-default_timeout=120
-
-if [ -z ${timeout} ]; then
-    timeout=${default_timeout}
-fi
+timeout=120
 
 RETURN_HEALTHY=0
 RETURN_STARTING=1
