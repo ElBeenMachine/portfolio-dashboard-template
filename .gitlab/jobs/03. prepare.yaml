@@ -1,7 +1,7 @@
 # Prepare the version tag for the job
 prepare:
     needs:
-        - lint
+        - job: eslint
     stage: prepare
     script:
         - export TAG=$(node -p "require('./package.json').version")
