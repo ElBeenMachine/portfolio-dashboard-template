@@ -14,7 +14,7 @@ release_arm64:
         - docker load < builds/$PROJECT_NAME:$CI_COMMIT_SHA-arm64.tar
         - docker tag $PROJECT_NAME:$CI_COMMIT_SHA-arm64 $IMAGE_NAME:$TAG-arm64
         - docker rmi $PROJECT_NAME:$CI_COMMIT_SHA-arm64
-        - docker tag $IMAGE_NAME:$TAG-arm64 $IMAGE_NAME:$latest-arm64
+        - docker tag $IMAGE_NAME:$TAG-arm64 $IMAGE_NAME:latest-arm64
         - docker push $IMAGE_NAME:$TAG-arm64
 
 # Release for amd64 architecture
