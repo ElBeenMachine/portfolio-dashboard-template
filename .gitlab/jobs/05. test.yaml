@@ -6,5 +6,5 @@ test:
     stage: test
     script:
         - docker load < build/$IMAGE_NAME:$CI_COMMIT_REF-arm64.tar
-        - docker run $IMAGE_NAME:$CI_COMMIT_REF-arm64
+        - docker run $IMAGE_NAME:$CI_COMMIT_REF-arm64 -p 3000:3000 -d
         - curl -s http://localhost:3000
