@@ -1,3 +1,4 @@
+# Update the version of the project
 update_version:
     needs:
         - job: eslint
@@ -9,11 +10,16 @@ update_version:
         - merge_requests
         - staging
 
+# Prepare the version tag for the job
 get_version:
+    needs:
+        - job: eslint
     stage: prepare
     before_script: []
     script:
-        - echo $(npm version)
-    only:
-        - merge_requests
-        - production
+        - export TAG=$(node -p "require('./package.json').version")
+        - echo "TAG=$TAG" >> variables.env
+    services: []
+    artifacts:
+        reports:
+            dotenv: variables.env
