@@ -7,5 +7,6 @@ test:
     script:
         - apk add --update curl && rm -rf /var/cache/apk/*
         - docker load < builds/$PROJECT_NAME:$CI_COMMIT_SHA-amd64.tar
-        - docker run  -d -p 3000:3000 $PROJECT_NAME:$CI_COMMIT_SHA-amd64
+        - docker run -d -p 3000:3000 --name=test_container $PROJECT_NAME:$CI_COMMIT_SHA-amd64
+        - docker wait test_container
         - curl -s http://localhost:3000
