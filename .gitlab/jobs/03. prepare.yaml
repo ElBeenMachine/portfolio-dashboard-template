@@ -3,10 +3,10 @@ prepare:
     needs:
         - job: eslint
     stage: prepare
+    before_script: []
     script:
         - export TAG=$(node -p "require('./package.json').version")
         - echo "TAG=$TAG" >> variables.env
-    before_script: []
     services: []
     artifacts:
         reports:

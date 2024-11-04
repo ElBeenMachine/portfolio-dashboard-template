@@ -3,9 +3,8 @@ build_amd64:
     needs:
         - job: eslint
     stage: build
-    before_script:
-        - mkdir -p build
     script:
+        - mkdir -p build
         - docker build . -t $IMAGE_NAME:$CI_COMMIT_REF
         - docker save $IMAGE_NAME:$CI_COMMIT_REF > image/$IMAGE_NAME:$CI_COMMIT_REF-arm64.tar
     artifacts:
@@ -19,7 +18,6 @@ build_arm64:
     stage: build
     before_script:
         - mkdir -p build
-    script:
         - docker build . -t $IMAGE_NAME:$CI_COMMIT_REF
         - docker save $IMAGE_NAME:$CI_COMMIT_REF > image/$IMAGE_NAME:$CI_COMMIT_REF-arm64.tar
     artifacts:

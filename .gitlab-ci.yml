@@ -5,6 +5,8 @@ default:
     image: docker:24.0.5
     services:
         - docker:24.0.5-dind
+    before_script:
+        - until docker info; do sleep 1; done
 
 # Define variables
 variables:

@@ -2,6 +2,7 @@ update_version:
     needs:
         - job: eslint
     stage: version
+    before_script: []
     script:
         - echo $CI_MERGE_REQUEST_LABELS
     only:
@@ -10,6 +11,7 @@ update_version:
 
 get_version:
     stage: prepare
+    before_script: []
     script:
         - echo $(npm version)
     only:
