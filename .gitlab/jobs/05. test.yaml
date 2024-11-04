@@ -1,8 +1,8 @@
 # Test the docker image to ensure it loads
 test:
     needs:
-        - build_amd64:
-              artifacts: true
+        - job: build_amd64
+          artifacts: true
     stage: test
     script:
         - docker load < build/$IMAGE_NAME:$CI_COMMIT_REF-arm64.tar
