@@ -30,7 +30,8 @@ COPY --from=builder /app ./
 EXPOSE 3000
 
 # Set up the healthcheck
-HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=5 CMD wget -q -O - http://localhost:3000 || exit 1
+HEALTHCHECK --interval=30s --timeout=5s --retries=5 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:3000 || exit 1
 
 # Start the Next.js application
 CMD ["npm", "start"]
