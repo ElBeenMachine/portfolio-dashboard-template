@@ -5,7 +5,7 @@ image: docker:20
 
 # Define variables
 variables:
-    NODE_IMAGE: nod:20-alpine
+    NODE_IMAGE: node:20-alpine
 
 # Include all job files
 include:
