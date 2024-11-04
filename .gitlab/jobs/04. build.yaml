@@ -5,7 +5,7 @@ build_amd64:
     stage: build
     script:
         - mkdir -p build
-        - docker build . -t $IMAGE_NAME:$CI_COMMIT_REF
+        - docker build . -t $IMAGE_NAME:$CI_COMMIT_SHA
         - docker save $IMAGE_NAME:$CI_COMMIT_REF > image/$IMAGE_NAME:$CI_COMMIT_REF-arm64.tar
     artifacts:
         paths:
@@ -18,7 +18,7 @@ build_arm64:
     stage: build
     script:
         - mkdir -p build
-        - docker build . -t $IMAGE_NAME:$CI_COMMIT_REF
+        - docker build . -t $IMAGE_NAME:$CI_COMMIT_SHA
         - docker save $IMAGE_NAME:$CI_COMMIT_REF > image/$IMAGE_NAME:$CI_COMMIT_REF-arm64.tar
     artifacts:
         paths:
