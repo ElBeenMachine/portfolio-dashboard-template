@@ -1,6 +1,6 @@
 update_version:
     needs:
-        - job: lint
+        - job: eslint
     stage: version
     script:
         - echo $CI_MERGE_REQUEST_LABELS
