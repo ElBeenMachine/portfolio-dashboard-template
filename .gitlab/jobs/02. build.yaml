@@ -1,33 +1,27 @@
 # Build the project for AMD64 hardware
 build_amd64:
+    needs:
+        - job: eslint
     stage: build
-    before_script:
-        - mkdir -p builds
-        - apk add --update curl gnupg && rm -rf /var/cache/apk/*
-        - curl -Ls --tlsv1.2 --proto "=https" --retry 3 https://cli.doppler.com/install.sh | sh
     script:
+        - mkdir -p builds
         - docker build . --tag $PROJECT_NAME:$CI_COMMIT_SHA-amd64
         - docker save $PROJECT_NAME:$CI_COMMIT_SHA-amd64 > builds/$PROJECT_NAME:$CI_COMMIT_SHA-amd64.tar
     artifacts:
         paths:
             - builds
-    only:
-        - merge_requests
 
 # Build the project for ARM64 hardware
 build_arm64:
+    needs:
+        - job: eslint
     stage: build
-    before_script:
-        - mkdir -p builds
-        - apk add --update curl gnupg && rm -rf /var/cache/apk/*
-        - curl -Ls --tlsv1.2 --proto "=https" --retry 3 https://cli.doppler.com/install.sh | sh
     script:
+        - mkdir -p builds
         - docker build . --tag $PROJECT_NAME:$CI_COMMIT_SHA-arm64
         - docker save $PROJECT_NAME:$CI_COMMIT_SHA-arm64 > builds/$PROJECT_NAME:$CI_COMMIT_SHA-arm64.tar
     artifacts:
         paths:
             - builds
-    only:
-        - merge_requests
     tags:
         - arm_kubernetes

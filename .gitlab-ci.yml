@@ -23,7 +23,6 @@ include:
 
 # Define the stages
 stages:
-    - lint
     - version
     - build
     - test
