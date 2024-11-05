@@ -20,14 +20,10 @@ update_version:
                 echo "No valid version label found. Exiting."
                 exit 1
             fi
-
-        # Configure Git for committing and pushing changes
-        - git config --global user.email "ci@example.com" # Replace with a valid CI email
+        - git config --global user.email "ci@mail.beenhamow.co.uk"
         - git config --global user.name "GitLab CI"
-
-        # Commit and push version update back to the production branch
-        - git add package.json package-lock.json # Adjust to files you want to commit
-        - git commit -m "chore: update version based on labels"
+        - git add package.json package-lock.json
+        - git commit -m "ci: update version based on labels"
         - git push origin "$CI_COMMIT_REF_NAME"
 
 # Get the version tag for the job
