@@ -8,20 +8,18 @@ update_version:
           allow_failure: false
     script:
         - labels=$(echo "$CI_MERGE_REQUEST_LABELS")
-        - |
-            # Check labels and update version accordingly
-            if [[ $labels =~ "patch" ]]; then
-                npm version patch
-            elif [[ $labels =~ "minor" ]]; then
-                npm version minor
-            elif [[ $labels =~ "major" ]]; then
-                npm version major
-            else
-                echo "No valid version label found. Exiting."
-                exit 1
-            fi
+
+        # Check labels and update version accordingly (no multiline here)
+        - if [[ $labels =~ "patch" ]]; then npm version patch; \
+          elif [[ $labels =~ "minor" ]]; then npm version minor; \
+          elif [[ $labels =~ "major" ]]; then npm version major; \
+          else echo "No valid version label found. Exiting."; exit 1; fi
+
+        # Configure Git for committing and pushing changes
         - git config --global user.email "ci@mail.beenhamow.co.uk"
         - git config --global user.name "GitLab CI"
+
+        # Commit and push version update back to the branch
         - git add package.json package-lock.json
         - git commit -m "ci: update version based on labels"
         - git push origin "$CI_COMMIT_REF_NAME"
