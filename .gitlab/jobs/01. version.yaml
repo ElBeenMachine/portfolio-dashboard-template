@@ -10,10 +10,7 @@ update_version:
         - labels=$(echo "$CI_MERGE_REQUEST_LABELS")
 
         # Check labels and update version accordingly (no multiline here)
-        - if [[ $labels =~ "patch" ]]; then npm version patch; \
-          elif [[ $labels =~ "minor" ]]; then npm version minor; \
-          elif [[ $labels =~ "major" ]]; then npm version major; \
-          else echo "No valid version label found. Exiting."; exit 1; fi
+        - if [[ $labels =~ "patch" ]]; then npm version patch; elif [[ $labels =~ "minor" ]]; then npm version minor; elif [[ $labels =~ "major" ]]; then npm version major; else echo "No valid version label found. Exiting."; exit 1; fi
 
         # Configure Git for committing and pushing changes
         - git config --global user.email "ci@mail.beenhamow.co.uk"
