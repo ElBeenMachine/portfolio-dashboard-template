@@ -13,12 +13,7 @@ build_amd64:
         - echo $AUTH_MICROSOFT_ENTRA_ID_SECRET
         - echo $AUTH_MICROSOFT_ENTRA_ID_ISSUER
 
-        - doppler run -- docker build .
-          --tag $PROJECT_NAME:$CI_COMMIT_SHA-amd64
-          --build-arg AUTH_SECRET=$AUTH_SECRET
-          --build-arg AUTH_MICROSOFT_ENTRA_ID_ID=$AUTH_MICROSOFT_ENTRA_ID_ID
-          --build-arg AUTH_MICROSOFT_ENTRA_ID_SECRET=$AUTH_MICROSOFT_ENTRA_ID_SECRET
-          --build-arg AUTH_MICROSOFT_ENTRA_ID_ISSUER=$AUTH_MICROSOFT_ENTRA_ID_ISSUER
+        - docker build . --tag $PROJECT_NAME:$CI_COMMIT_SHA-amd64
         - docker save $PROJECT_NAME:$CI_COMMIT_SHA-amd64 > builds/$PROJECT_NAME:$CI_COMMIT_SHA-amd64.tar
     artifacts:
         paths:
@@ -31,13 +26,7 @@ build_arm64:
     stage: build
     script:
         - mkdir -p builds
-        - apk add --update curl gnupg && rm -rf /var/cache/apk/*
-        - curl -Ls --tlsv1.2 --proto "=https" --retry 3 https://cli.doppler.com/install.sh | sh
-        - doppler run -- docker build .
-          --tag $PROJECT_NAME:$CI_COMMIT_SHA-arm64
-          --build-arg AUTH_MICROSOFT_ENTRA_ID_ID=$AUTH_MICROSOFT_ENTRA_ID_ID
-          --build-arg AUTH_MICROSOFT_ENTRA_ID_SECRET=$AUTH_MICROSOFT_ENTRA_ID_SECRET
-          --build-arg AUTH_MICROSOFT_ENTRA_ID_ISSUER=$AUTH_MICROSOFT_ENTRA_ID_ISSUER
+        - docker build . --tag $PROJECT_NAME:$CI_COMMIT_SHA-arm64
         - docker save $PROJECT_NAME:$CI_COMMIT_SHA-arm64 > builds/$PROJECT_NAME:$CI_COMMIT_SHA-arm64.tar
     artifacts:
         paths:

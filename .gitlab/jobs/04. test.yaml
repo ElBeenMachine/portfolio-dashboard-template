@@ -4,9 +4,11 @@ test:
         - job: build_amd64
           artifacts: true
     stage: test
+    before_script:
+        - apk add --update curl gnupg && rm -rf /var/cache/apk/*
+        - curl -Ls --tlsv1.2 --proto "=https" --retry 3 https://cli.doppler.com/install.sh | sh
     script:
-        - apk add --update curl && rm -rf /var/cache/apk/*
         - docker load < builds/$PROJECT_NAME:$CI_COMMIT_SHA-amd64.tar
-        - docker run -d -p 3000:3000 --name=test_container $PROJECT_NAME:$CI_COMMIT_SHA-amd64
+        - doppler run -- docker run -d -p 3000:3000 --name=test_container $PROJECT_NAME:$CI_COMMIT_SHA-amd64
         - chmod +x ./.gitlab/healthcheck.sh
         - ./.gitlab/healthcheck.sh

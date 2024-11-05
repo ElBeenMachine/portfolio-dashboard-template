@@ -14,22 +14,6 @@ RUN npm install
 # Copy the rest of the application code to the working directory
 COPY . .
 
-# Create .env.production
-ARG AUTH_SECRET
-ARG AUTH_URL
-ARG AUTH_MICROSOFT_ENTRA_ID_ID
-ARG AUTH_MICROSOFT_ENTRA_ID_SECRET
-ARG AUTH_MICROSOFT_ENTRA_ID_ISSUER
-
-RUN touch .env.production
-RUN echo "AUTH_TRUST_HOST=true" >> .env.production
-RUN echo "AUTH_SECRET=${AUTH_SECRET}" >> .env.production
-RUN echo "AUTH_MICROSOFT_ENTRA_ID_ID=${AUTH_MICROSOFT_ENTRA_ID_ID}" >> .env.production
-RUN echo "AUTH_MICROSOFT_ENTRA_ID_SECRET=${AUTH_MICROSOFT_ENTRA_ID_SECRET}" >> .env.production
-RUN echo "AUTH_MICROSOFT_ENTRA_ID_ISSUER=${AUTH_MICROSOFT_ENTRA_ID_ISSUER}" >> .env.production
-RUN cat env.production
-
-
 # Build the Next.js application
 RUN npx next build
 

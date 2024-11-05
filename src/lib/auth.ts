@@ -5,13 +5,14 @@
 
 import NextAuth from "next-auth";
 import EntraID from "next-auth/providers/microsoft-entra-id";
+import { env } from "next-runtime-env";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
 	providers: [
 		EntraID({
-			clientId: process.env.AUTH_MICROSOFT_ENTRA_ID_ID,
-			clientSecret: process.env.AUTH_MICROSOFT_ENTRA_ID_SECRET,
-			issuer: process.env.AUTH_MICROSOFT_ENTRA_ID_ISSUER,
+			clientId: env("AUTH_MICROSOFT_ENTRA_ID_ID"),
+			clientSecret: env("AUTH_MICROSOFT_ENTRA_ID_SECRET"),
+			issuer: env("AUTH_MICROSOFT_ENTRA_ID_ISSUER"),
 		}),
 	],
 	callbacks: {
@@ -20,4 +21,5 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 			return !!auth;
 		},
 	},
+	trustHost: true,
 });
