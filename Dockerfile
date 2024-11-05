@@ -27,6 +27,7 @@ RUN echo "AUTH_SECRET=${AUTH_SECRET}" >> .env.production
 RUN echo "AUTH_MICROSOFT_ENTRA_ID_ID=${AUTH_MICROSOFT_ENTRA_ID_ID}" >> .env.production
 RUN echo "AUTH_MICROSOFT_ENTRA_ID_SECRET=${AUTH_MICROSOFT_ENTRA_ID_SECRET}" >> .env.production
 RUN echo "AUTH_MICROSOFT_ENTRA_ID_ISSUER=${AUTH_MICROSOFT_ENTRA_ID_ISSUER}" >> .env.production
+RUN cat env.production
 
 
 # Build the Next.js application
