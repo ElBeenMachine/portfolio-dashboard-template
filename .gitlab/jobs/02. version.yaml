@@ -17,8 +17,13 @@ update_version:
     only:
         - merge_requests
         - production
+    rules:
         - changes:
-              - src/
+              - src/**/*
+              - public/**/*
+              - Dockerfile
+              - package.json
+              - package-lock.json
 
 # Get the version tag for the job
 get_version:

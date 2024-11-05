@@ -18,9 +18,13 @@ build_amd64:
     artifacts:
         paths:
             - builds
-    only:
+    rules:
         - changes:
-              - src/
+              - src/**/*
+              - public/**/*
+              - Dockerfile
+              - package.json
+              - package-lock.json
 
 # Build the project for ARM64 hardware
 build_arm64:
@@ -34,8 +38,12 @@ build_arm64:
     artifacts:
         paths:
             - builds
-    only:
+    rules:
         - changes:
-              - src/
+              - src/**/*
+              - public/**/*
+              - Dockerfile
+              - package.json
+              - package-lock.json
     tags:
         - arm_kubernetes
