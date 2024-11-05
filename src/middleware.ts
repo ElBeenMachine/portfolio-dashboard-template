@@ -1,4 +1,6 @@
 /**
+ * @author Ollie Beenham
+ *
  * Middleware component for authentication, provided by the next-auth (now auth.js) library.
  */
 

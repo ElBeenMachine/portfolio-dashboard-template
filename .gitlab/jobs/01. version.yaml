@@ -1,15 +1,3 @@
-# Update the version of the project
-update_version:
-    needs:
-        - job: eslint
-    stage: version
-    before_script: []
-    script:
-        - echo $CI_MERGE_REQUEST_LABELS
-    only:
-    - merge_requests
-    - staging
-
 # Get the version tag for the job
 get_version:
     stage: version

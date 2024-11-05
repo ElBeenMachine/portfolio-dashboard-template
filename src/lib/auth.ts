@@ -1,4 +1,6 @@
 /**
+ * @author Ollie Beenham
+ *
  * Authentication configuration, using secrets from the environment to allow for
  * authentication via Microsoft EntraID.
  */
