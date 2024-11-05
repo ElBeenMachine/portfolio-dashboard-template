@@ -18,6 +18,7 @@ update_version:
         - merge_requests
         - production
     rules:
+        - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "production"'
         - changes:
               - src/**/*
               - public/**/*
