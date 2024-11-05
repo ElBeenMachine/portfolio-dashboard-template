@@ -7,8 +7,8 @@ update_version:
     script:
         - echo $CI_MERGE_REQUEST_LABELS
     only:
-    - merge_requests
-    - staging
+        - merge_requests
+        - staging
 
 # Get the version tag for the job
 get_version:
@@ -22,3 +22,5 @@ get_version:
     artifacts:
         reports:
             dotenv: variables.env
+    only:
+        - production
