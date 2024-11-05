@@ -91,6 +91,8 @@ build_amd64:
             - builds
     rules:
         - changes:
+              - .gitlab/**/*
+              - .gitlab-ci.yml
               - src/**/*
               - public/**/*
               - Dockerfile
@@ -114,6 +116,8 @@ build_arm64:
             - builds
     rules:
         - changes:
+              - .gitlab/**/*
+              - .gitlab-ci.yml
               - src/**/*
               - public/**/*
               - Dockerfile
