@@ -16,11 +16,6 @@ variables:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_TLS_CERTDIR: ""
 
-# Include all job files
-include:
-    - local: ".gitlab/jobs/*.yaml"
-    - local: ".gitlab/jobs/*.yml"
-
 # Define the stages
 stages:
     - lint
@@ -29,3 +24,159 @@ stages:
     - test
     - release
     - deploy
+
+# Job to lint the code
+eslint:
+    stage: lint
+    image: $NODE_IMAGE
+    before_script: []
+    script:
+        - npm install
+        - npm run lint
+
+# Update the version of the project
+update_version:
+    stage: version
+    before_script: []
+    script:
+        - labels=$(echo "$CI_MERGE_REQUEST_LABELS")
+        - if [[ $labels =~ "patch" ]]; then
+          npm version patch
+          elif [[ $labels =~ "minor" ]]; then
+          npm version minor
+          elif [[ $labels =~ "major" ]]; then
+          npm version major
+          else
+          echo "No valid version label found. Exiting."
+          exit 1
+          fi
+    rules:
+        - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "production"'
+        - changes:
+              - src/**/*
+              - public/**/*
+              - Dockerfile
+              - package.json
+              - package-lock.json
+
+# Get the version tag for the job
+get_version:
+    stage: version
+    image: $NODE_IMAGE
+    script:
+        - export TAG=$(node -p "require('./package.json').version")
+        - echo "TAG=$TAG" >> variables.env
+    before_script: []
+    services: []
+    artifacts:
+        reports:
+            dotenv: variables.env
+    only:
+        - production
+
+# Build the project for AMD64 hardware
+build_amd64:
+    needs:
+        - job: eslint
+    stage: build
+    before_script:
+        - mkdir -p builds
+        - apk add --update curl gnupg && rm -rf /var/cache/apk/*
+        - curl -Ls --tlsv1.2 --proto "=https" --retry 3 https://cli.doppler.com/install.sh | sh
+    script:
+        - docker build . --tag $PROJECT_NAME:$CI_COMMIT_SHA-amd64
+        - docker save $PROJECT_NAME:$CI_COMMIT_SHA-amd64 > builds/$PROJECT_NAME:$CI_COMMIT_SHA-amd64.tar
+    artifacts:
+        paths:
+            - builds
+    rules:
+        - changes:
+              - src/**/*
+              - public/**/*
+              - Dockerfile
+              - package.json
+              - package-lock.json
+
+# Build the project for ARM64 hardware
+build_arm64:
+    needs:
+        - job: eslint
+    stage: build
+    before_script:
+        - mkdir -p builds
+        - apk add --update curl gnupg && rm -rf /var/cache/apk/*
+        - curl -Ls --tlsv1.2 --proto "=https" --retry 3 https://cli.doppler.com/install.sh | sh
+    script:
+        - docker build . --tag $PROJECT_NAME:$CI_COMMIT_SHA-arm64
+        - docker save $PROJECT_NAME:$CI_COMMIT_SHA-arm64 > builds/$PROJECT_NAME:$CI_COMMIT_SHA-arm64.tar
+    artifacts:
+        paths:
+            - builds
+    rules:
+        - changes:
+              - src/**/*
+              - public/**/*
+              - Dockerfile
+              - package.json
+              - package-lock.json
+    tags:
+        - arm_kubernetes
+
+# Test the docker image to ensure it loads
+test:
+    needs:
+        - job: build_amd64
+          artifacts: true
+    stage: test
+    before_script:
+        - apk add --update curl gnupg && rm -rf /var/cache/apk/*
+        - curl -Ls --tlsv1.2 --proto "=https" --retry 3 https://cli.doppler.com/install.sh | sh
+    script:
+        - docker load < builds/$PROJECT_NAME:$CI_COMMIT_SHA-amd64.tar
+        - doppler run -- docker run -d -p 3000:3000 --name=test_container $PROJECT_NAME:$CI_COMMIT_SHA-amd64
+        - chmod +x ./.gitlab/healthcheck.sh
+        - ./.gitlab/healthcheck.sh
+
+# Release for arm64 architecture
+release_arm64:
+    needs:
+        - job: test
+        - job: build_arm64
+          artifacts: true
+        - job: get_version
+          artifacts: true
+    stage: release
+    before_script:
+        - until docker info; do sleep 1; done
+        - echo "$AZURECR_PASSWORD" | docker login $AZURECR_HOST -u $AZURECR_USER --password-stdin
+    script:
+        - docker load < builds/$PROJECT_NAME:$CI_COMMIT_SHA-arm64.tar
+        - docker tag $PROJECT_NAME:$CI_COMMIT_SHA-arm64 $IMAGE_NAME:$TAG-arm64
+        - docker rmi $PROJECT_NAME:$CI_COMMIT_SHA-arm64
+        - docker tag $IMAGE_NAME:$TAG-arm64 $IMAGE_NAME:latest-arm64
+        - docker push $IMAGE_NAME:$TAG-arm64
+        - docker push $IMAGE_NAME:latest-arm64
+    only:
+        - production
+
+# Release for amd64 architecture
+release_amd64:
+    needs:
+        - job: test
+        - job: build_amd64
+          artifacts: true
+        - job: get_version
+          artifacts: true
+    stage: release
+    before_script:
+        - until docker info; do sleep 1; done
+        - echo "$AZURECR_PASSWORD" | docker login $AZURECR_HOST -u $AZURECR_USER --password-stdin
+    script:
+        - docker load < builds/$PROJECT_NAME:$CI_COMMIT_SHA-amd64.tar
+        - docker tag $PROJECT_NAME:$CI_COMMIT_SHA-amd64 $IMAGE_NAME:$TAG
+        - docker rmi $PROJECT_NAME:$CI_COMMIT_SHA-amd64
+        - docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:latest
+        - docker push $IMAGE_NAME:$TAG
+        - docker push $IMAGE_NAME:latest
+    only:
+        - production
