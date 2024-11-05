@@ -7,6 +7,12 @@ build_amd64:
         - mkdir -p builds
         - apk add --update curl gnupg && rm -rf /var/cache/apk/*
         - curl -Ls --tlsv1.2 --proto "=https" --retry 3 https://cli.doppler.com/install.sh | sh
+
+        - echo $AUTH_SECRET
+        - echo $AUTH_MICROSOFT_ENTRA_ID_ID
+        - echo $AUTH_MICROSOFT_ENTRA_ID_SECRET
+        - echo $AUTH_MICROSOFT_ENTRA_ID_ISSUER
+
         - doppler run -- docker build .
           --tag $PROJECT_NAME:$CI_COMMIT_SHA-amd64
           --build-arg AUTH_SECRET=$AUTH_SECRET
