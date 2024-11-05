@@ -3,7 +3,17 @@ update_version:
     stage: version
     before_script: []
     script:
-        - echo $CI_MERGE_REQUEST_LABELS
+        - labels=$(echo "$CI_MERGE_REQUEST_LABELS")
+        - if [[ $labels =~ "patch" ]]; then
+          npm version patch
+          elif [[ $labels =~ "minor" ]]; then
+          npm version minor
+          elif [[ $labels =~ "major" ]]; then
+          npm version major
+          else
+          echo "No valid version label found. Exiting."
+          exit 1
+          fi
     only:
         - merge_requests
         - production
