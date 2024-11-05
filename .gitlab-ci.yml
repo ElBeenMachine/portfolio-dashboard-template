@@ -53,6 +53,8 @@ update_version:
     rules:
         - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "production"'
         - changes:
+              - .gitlab/**/*
+              - .gitlab-ci.yml
               - src/**/*
               - public/**/*
               - Dockerfile
