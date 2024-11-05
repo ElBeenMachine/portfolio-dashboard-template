@@ -17,6 +17,8 @@ update_version:
     only:
         - merge_requests
         - production
+        - changes:
+              - src/
 
 # Get the version tag for the job
 get_version:

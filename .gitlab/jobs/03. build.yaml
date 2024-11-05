@@ -18,6 +18,9 @@ build_amd64:
     artifacts:
         paths:
             - builds
+    only:
+        - changes:
+              - src/
 
 # Build the project for ARM64 hardware
 build_arm64:
@@ -31,5 +34,8 @@ build_arm64:
     artifacts:
         paths:
             - builds
+    only:
+        - changes:
+              - src/
     tags:
         - arm_kubernetes
