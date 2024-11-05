@@ -17,9 +17,9 @@ update_version:
         - git config --global user.name "GitLab CI"
 
         # Commit and push version update back to the branch
-        - git add package.json package-lock.json
-        - git commit -m "ci: update version based on labels"
-        - git push origin "$CI_COMMIT_REF_NAME"
+        # - git add package.json package-lock.json
+        # - git commit -m "ci: update version based on labels"
+        # - git push origin "$CI_COMMIT_REF_NAME"
 
 # Get the version tag for the job
 get_version:
