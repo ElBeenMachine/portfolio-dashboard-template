@@ -10,3 +10,5 @@ get_version:
     artifacts:
         reports:
             dotenv: variables.env
+    only:
+        - production
