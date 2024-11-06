@@ -12,3 +12,11 @@ test:
         - doppler run -- docker run -d -p 3000:3000 --name=test_container $PROJECT_NAME:$CI_COMMIT_SHA-amd64
         - chmod +x ./.gitlab/healthcheck.sh
         - ./.gitlab/healthcheck.sh
+
+# Lint the code
+lint:
+    stage: test
+    image: $NODE_IMAGE
+    script:
+        - npm install
+        - npm run lint
