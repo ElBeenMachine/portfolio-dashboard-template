@@ -19,5 +19,7 @@ build_arm64:
     artifacts:
         paths:
             - builds
+    only:
+        - production
     tags:
         - arm_kubernetes
