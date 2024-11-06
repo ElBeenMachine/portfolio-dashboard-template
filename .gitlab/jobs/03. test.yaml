@@ -17,6 +17,7 @@ test:
 lint:
     stage: test
     image: $NODE_IMAGE
+    before_script: []
     script:
         - npm install
         - npm run lint
