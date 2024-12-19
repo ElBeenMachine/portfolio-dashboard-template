@@ -8,18 +8,23 @@ import "@/styles/dashboard.css";
 import { PublicEnvScript } from "next-runtime-env";
 import NavBar from "@/components/dash/Navigation/NavBar";
 import { SessionProvider } from "next-auth/react";
-import { Metadata } from "next";
+// import { Metadata } from "next";
 import Breadcrumbs from "@/components/dash/Navigation/Breadcrumbs";
+import { getTitle } from "@/lib/db/local/queries";
 
 /**
  * Metadata for the dashboard layout.
  */
-export const metadata: Metadata = {
-	title: {
-		template: "%s | My Dashboard",
-		default: "Home | My Dashboard",
-	},
-};
+export async function generateMetadata() {
+	const { title } = await getTitle();
+
+	return {
+		title: {
+			template: `%s | ${title}`,
+			default: `Home | ${title}`,
+		},
+	}
+}
 
 /**
  * Dashboard layout for the application.

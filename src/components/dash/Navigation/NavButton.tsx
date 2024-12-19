@@ -16,17 +16,21 @@ export default function NavButton({
 	children,
 	href,
 	name,
+	collapsed,
 }: {
 	children?: React.ReactNode;
 	href: string;
 	name: string;
+	collapsed: boolean;
 }) {
 	return (
 		<Link
-			className="bg-gray-800 hover:bg-gray-700 transition-all w-full px-5 min-h-16 py-2 flex gap-5 flex-nowrap items-center"
+			className="bg-gray-800 hover:bg-gray-700 transition-all w-full px-5 min-h-16 py-2 flex gap-5 flex-nowrap items-center justify-center"
 			href={href}>
 			{children}
-			<p className="flex-grow">{name}</p>
+			{!collapsed && (
+				<p className="flex-grow whitespace-nowrap">{name}</p>
+			)}
 		</Link>
 	);
 }

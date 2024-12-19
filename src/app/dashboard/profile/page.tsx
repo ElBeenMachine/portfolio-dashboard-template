@@ -4,6 +4,7 @@
 
 import { auth, signOut } from "@/lib/auth";
 import { Metadata } from "next";
+import SignOutButton from "./SignOutButton";
 
 /**
  * Export the metadata for the page
@@ -28,15 +29,7 @@ export default async function ProfilePage() {
 				Welcome to your profile, {session?.user?.name?.split(" ")[0]}!
 			</p>
 
-			{session && (
-				<form
-					action={async () => {
-						"use server";
-						await signOut({ redirectTo: "/", redirect: true });
-					}}>
-					<button type="submit">Sign out</button>
-				</form>
-			)}
+			{session && <SignOutButton />}
 		</main>
 	);
 }
