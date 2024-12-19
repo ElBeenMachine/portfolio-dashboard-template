@@ -12,7 +12,7 @@ import { NextResponse } from "next/server";
  */
 export default auth((req) => {
 	// Prepare the redirect link
-	const redirect = `${req.nextUrl.protocol}//${req.nextUrl.host}/api/auth/signin?redirectTo=${req.nextUrl.pathname}`;
+	const redirect = `${req.nextUrl.protocol}//${req.nextUrl.host}/auth/login?redirectTo=${req.nextUrl.pathname}`;
 
 	// If the user is not authenticated, redirect to the sign in page.
 	if (!req.auth) return NextResponse.redirect(redirect);

@@ -15,7 +15,7 @@ function ProfileSkeleton() {
 	);
 }
 
-export default function ProfileLink() {
+export default function ProfileLink({ collapsed }: { collapsed: boolean }) {
 	// Get the user's session
 	const { data: session, status } = useSession();
 
@@ -26,7 +26,8 @@ export default function ProfileLink() {
 	return (
 		<NavButton
 			href="/dashboard/profile"
-			name={`${session?.user?.name}`}>
+			name={`${session?.user?.name}`}
+			collapsed={collapsed}>
 			<img
 				src={`${session?.user?.image}`}
 				alt="User image"

@@ -23,5 +23,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 			return !!auth;
 		},
 	},
+	session: {
+		// Seconds - How long until an idle session expires and is no longer valid.
+		maxAge: 1 * 60 * 60, // 1 Hour
+	},
 	trustHost: true,
 });
