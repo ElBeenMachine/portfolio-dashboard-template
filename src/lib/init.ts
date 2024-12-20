@@ -5,10 +5,12 @@
  */
 
 // Initialise the database
-import { initDB } from "./db/local";
-const init = initDB();
+import { dbPath, initDB } from "./db/local";
 
-// Log the result of the database initialization
-if (init) {
-	console.log("Local database initialized successfully");
-}
+// Run the database initialization
+console.log("\n----------------------------------------- Initialising Database -----------------------------------------\n");
+console.log(`Database loaded at: ${dbPath}\n`);
+console.log("Initializing database\n");
+initDB();
+console.log("\nDatabase initialized");
+console.log("\n---------------------------------------------------------------------------------------------------------\n");

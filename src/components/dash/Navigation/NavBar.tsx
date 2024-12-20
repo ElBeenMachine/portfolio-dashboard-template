@@ -40,17 +40,12 @@ const contentTypesMap: { [key: string]: NavContentType } = {
 export default function NavBar() {
 	const [collapsed, setCollapsed] = useState(false);
 	const [types, setTypes] = useState<string[]>([]);
-	const [logo, setLogo] = useState<string>("");
 
 	// Get the available content types from the database
 	useEffect(() => {
 		try {
-			fetch("/api/config/content-types/all").then((res) => res.json()).then((data) => {
+			fetch("/api/config/content-types").then((res) => res.json()).then((data) => {
 				setTypes(data.contentTypes);
-			});
-
-			fetch("/api/config/global-logo").then((res) => res.json()).then((data) => {
-				setLogo(data.logo);
 			});
 		} catch (error) {
 			console.error(error);
@@ -58,7 +53,6 @@ export default function NavBar() {
 
 		return () => {
 			setTypes([]);
-			setLogo("");
 		}
 	}, []);
 
@@ -72,16 +66,14 @@ export default function NavBar() {
 					collapsed={collapsed}
 					setCollapsed={setCollapsed}
 				/>
-				{logo && (
-					<img
-						src={logo}
-						alt="Dashboard Logo"
-						className={
-							(collapsed ? "w-8 h-8" : "w-12 h-12") +
-							" transition-all"
-						}
-					/>
-				)}
+				<img
+					src={"/api/public/dashboard-logo"}
+					alt="Dashboard Logo"
+					className={
+						(collapsed ? "w-8 h-8" : "w-12 h-12") +
+						" transition-all"
+					}
+				/>
 			</div>
 			<div className="flex-grow">
 				<NavButton

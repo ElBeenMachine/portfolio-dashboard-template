@@ -9,7 +9,7 @@ import fs from "fs";
 import Database from "better-sqlite3";
 
 // Define the path to the local database
-export let dbPath = "/data/db/config.db";
+export let dbPath = "/app/data/db/config.db";
 
 // Determine the path based on the environment
 if (process.env.NODE_ENV !== "production") {
@@ -18,6 +18,11 @@ if (process.env.NODE_ENV !== "production") {
 
 	// Set the database path to the development path
 	dbPath = path.join(process.cwd(), "data/db/config.db");
+} else {
+	const dir = path.dirname(dbPath);
+	if (!fs.existsSync(dir)) {
+		fs.mkdirSync(dir, { recursive: true });
+	}
 }
 
 /**
@@ -32,17 +37,22 @@ export const db = new Database(dbPath, {
  * Initialize the database
  */
 export const initDB = () => {
-	// Load the init SQL statement from ./sql/init.sql
-	const initSQL = fs
-		.readFileSync(path.join(__dirname, "./sql/init.sql"))
-		.toString();
+	// Load in the sql init directory
+	const initDir = path.join(process.cwd(), "src/lib/db/local/init/");
+	
+	// Loop through the directory and run each SQL file
+	const initSQL = fs.readdirSync(initDir).map((file) => {
+		const sql = fs.readFileSync(path.join(initDir, file)).toString();
+		return [file, sql];
+	});
 
-	// Run the init SQL statement
-	try {
-		const readQuery = db.exec(initSQL);
-		return readQuery;
-	} catch (error) {
-		console.error(error);
-		throw error;
-	}
+	// Run each SQL file
+	initSQL.forEach((file, index) => {
+		try {
+			console.log(`Step ${index + 1} - Configuring ${file[0].substring(2, file[0].length - 4).trim().toLowerCase()}`);
+			db.prepare(file[1]).run();
+		} catch (error) {
+			if(error instanceof Error) console.error(error.message);
+		}
+	});
 };
