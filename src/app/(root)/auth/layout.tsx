@@ -17,8 +17,8 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
             <head>
                 <PublicEnvScript />
             </head>
-            <body className="antialiased bg-gray-800 text-white">
-                <div className="w-full h-dvh flex items-center justify-center flex-col">
+            <body id="auth-body" className="antialiased text-white">
+                <div className="w-full h-dvh flex items-center justify-center flex-col bg-black/30">
                     {children}
                 </div>
             </body>

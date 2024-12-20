@@ -33,5 +33,9 @@ EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=5s --retries=5 \
     CMD wget --no-verbose --tries=1 --spider http://localhost:3000 || exit 1
 
+# Create the database directory
+RUN mkdir -p /app/data/db
+RUN chmod 777 -R /app/data/db
+
 # Start the Next.js application
 CMD ["npm", "start"]

@@ -20,4 +20,4 @@ export default auth((req) => {
 });
 
 // Match anything under /dashboard and /api routes. Excluding the authentication route from the API.
-export const config = { matcher: ["/dashboard(.*)", "/api/((?!auth).*)"] };
+export const config = { matcher: ["/dashboard(.*)", "/api/((?!auth)(?!public).*)"] };

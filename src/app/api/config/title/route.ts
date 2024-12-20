@@ -3,7 +3,7 @@
  */
 
 import { updateTitle } from "@/lib/db/local/queries";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 /**
  * API Route to update the dashboard title

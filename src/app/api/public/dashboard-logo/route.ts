@@ -3,7 +3,7 @@
  */
 
 import { getLogo } from "@/lib/db/local/queries";
-import { NextResponse } from "next/server";
+import { redirect } from "next/navigation";
 
 /**
  * API Route to get the dashboard icon
@@ -12,5 +12,5 @@ import { NextResponse } from "next/server";
  */
 export async function GET() {
     const { logo } = await getLogo();
-    return NextResponse.json({ logo });
+    redirect(logo);
 }

@@ -2,6 +2,15 @@
  * @author Ollie Beenham
  */
 
+import { Metadata } from "next";
+
+/**
+ * Export the metadata for the page
+ */
+export const metadata: Metadata = {
+	title: "Code Projects",
+};
+
 /**
  * Code projects page
  * 
