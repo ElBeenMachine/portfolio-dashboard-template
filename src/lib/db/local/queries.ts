@@ -5,6 +5,17 @@
 import { db } from ".";
 
 /**
+ * Get the instance ID
+ *
+ * @returns {Promise<{instanceID: string}>} The instance ID
+ */
+export const getInstanceID = async () => {
+	const query = db.prepare("SELECT value FROM config WHERE key = 'instance-id'");
+	const result = (query.get() as { value: string }).value;
+	return { instanceID: result };
+};
+
+/**
  * Get all content types
  *
  * @returns {Promise<{contentTypes: string[]}>} All content types
@@ -60,6 +71,17 @@ export const getAllSettings = async () => {
 	const query = db.prepare("SELECT key, value FROM config");
 	const result = query.all();
 	return result;
+};
+
+/**
+ * Get the current remote database address
+ *
+ * @returns {Promise<{uri: string}>} The URI of the mongodb database
+ */
+export const getMongoURI = async () => {
+	const query = db.prepare("SELECT value FROM config WHERE key = 'mongodb-connection-string'");
+	const result = (query.get() as { value: string }).value;
+	return { uri: result };
 };
 
 /**
