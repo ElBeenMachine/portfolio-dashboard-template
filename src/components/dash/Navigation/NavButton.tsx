@@ -26,11 +26,10 @@ export default function NavButton({
 	return (
 		<Link
 			className="bg-gray-800 hover:bg-gray-700 transition-all w-full px-5 min-h-16 py-2 flex gap-5 flex-nowrap items-center justify-center"
-			href={href}>
+			href={href}
+		>
 			{children}
-			{!collapsed && (
-				<p className="flex-grow whitespace-nowrap">{name}</p>
-			)}
+			{!collapsed && <p className="flex-grow whitespace-nowrap">{name}</p>}
 		</Link>
 	);
 }

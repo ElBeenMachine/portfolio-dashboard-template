@@ -39,7 +39,7 @@ export const db = new Database(dbPath, {
 export const initDB = () => {
 	// Load in the sql init directory
 	const initDir = path.join(process.cwd(), "src/lib/db/local/init/");
-	
+
 	// Loop through the directory and run each SQL file
 	const initSQL = fs.readdirSync(initDir).map((file) => {
 		const sql = fs.readFileSync(path.join(initDir, file)).toString();
@@ -49,10 +49,15 @@ export const initDB = () => {
 	// Run each SQL file
 	initSQL.forEach((file, index) => {
 		try {
-			console.log(`Step ${index + 1} - Configuring ${file[0].substring(2, file[0].length - 4).trim().toLowerCase()}`);
+			console.log(
+				`Step ${index + 1} - Configuring ${file[0]
+					.substring(2, file[0].length - 4)
+					.trim()
+					.toLowerCase()}`
+			);
 			db.prepare(file[1]).run();
 		} catch (error) {
-			if(error instanceof Error) console.error(error.message);
+			if (error instanceof Error) console.error(error.message);
 		}
 	});
 };

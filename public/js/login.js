@@ -4,6 +4,6 @@ const redirect = urlParams.get("redirectTo") || "/dashboard";
 
 // Wait 3 seconds
 setTimeout(() => {
-    // Redirect to log in
-    window.location.href = `/api/auth/signin?redirectTo=${redirect}`;
+	// Redirect to log in
+	window.location.href = `/api/auth/signin?redirectTo=${redirect}`;
 }, 1000);

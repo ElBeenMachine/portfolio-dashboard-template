@@ -10,16 +10,17 @@ import { NextResponse } from "next/server";
  *
  * @returns {Promise<NextResponse>} A response containing the result of the query
  */
-export async function POST( request: Request ) {
-    // Get the body
-    const body = await request.json();
+export async function POST(request: Request) {
+	// Get the body
+	const body = await request.json();
 
-    // Check if the title is provided
-    if(!body.title) return NextResponse.json({ error: new Error("No title provided") }, { status: 400 });
+	// Check if the title is provided
+	if (!body.title)
+		return NextResponse.json({ error: new Error("No title provided") }, { status: 400 });
 
-    // Update the title
-    const response = await updateTitle(body.title);
+	// Update the title
+	const response = await updateTitle(body.title);
 
-    // Return the update response
-    return NextResponse.json({ status: response });
+	// Return the update response
+	return NextResponse.json({ status: response });
 }

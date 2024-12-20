@@ -14,15 +14,17 @@ export const metadata: Metadata = {
 
 /**
  * Login page
- * 
+ *
  * @returns {Promise<JSX.Element>} Login page
  */
 export default function loginFlowPage() {
-    // Redirect to the login page
-    return <div className="flex flex-col items-center justify-center gap-10 p-20 bg-white text-black w-1/3 rounded-xl">
-        <img src="/api/public/dashboard-logo" alt="Logo" className="w-16" />
-        <h1 className="text-2xl">Logging You In...</h1>
-        <div className="loader auth"></div>
-        <script src="/js/login.js" async />
-    </div>
+	// Redirect to the login page
+	return (
+		<div className="flex flex-col items-center justify-center gap-10 p-20 bg-white text-black w-1/3 rounded-xl">
+			<img src="/api/public/dashboard-logo" alt="Logo" className="w-16" />
+			<h1 className="text-2xl">Logging You In...</h1>
+			<div className="loader auth"></div>
+			<script src="/js/login.js" async />
+		</div>
+	);
 }

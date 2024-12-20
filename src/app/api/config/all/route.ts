@@ -11,6 +11,6 @@ import { NextResponse } from "next/server";
  * @returns {Promise<NextResponse>} The response containing the settings
  */
 export async function GET() {
-    const settings = await getAllSettings();
-    return NextResponse.json({ settings });
+	const settings = await getAllSettings();
+	return NextResponse.json({ settings });
 }

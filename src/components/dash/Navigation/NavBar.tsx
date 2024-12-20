@@ -15,17 +15,17 @@ import { FaNoteSticky } from "react-icons/fa6";
 
 // Map of content types to their names, icons, and urls
 const contentTypesMap: { [key: string]: NavContentType } = {
-	"literature": {
+	literature: {
 		name: "Literature",
 		icon: <FaPencilAlt className="w-6 h-6" />,
 		url: "/dashboard/literature",
 	},
-	"code": {
+	code: {
 		name: "Code",
 		icon: <FaCode className="w-6 h-6" />,
 		url: "/dashboard/code",
 	},
-	"blog": {
+	blog: {
 		name: "Blog",
 		icon: <FaNoteSticky className="w-6 h-6" />,
 		url: "/dashboard/blog",
@@ -44,42 +44,36 @@ export default function NavBar() {
 	// Get the available content types from the database
 	useEffect(() => {
 		try {
-			fetch("/api/config/content-types").then((res) => res.json()).then((data) => {
-				setTypes(data.contentTypes);
-			});
+			fetch("/api/config/content-types")
+				.then((res) => res.json())
+				.then((data) => {
+					setTypes(data.contentTypes);
+				});
 		} catch (error) {
 			console.error(error);
 		}
 
 		return () => {
 			setTypes([]);
-		}
+		};
 	}, []);
 
 	return (
 		<nav
 			className={`h-dvh bg-gray-800 flex flex-col ${
 				collapsed ? "w-[100px]" : "w-[300px]"
-			} overflow-hidden select-none transition-all text-white`}>
+			} overflow-hidden select-none transition-all text-white`}
+		>
 			<div className="h-24 flex justify-center items-center relative">
-				<NavToggle
-					collapsed={collapsed}
-					setCollapsed={setCollapsed}
-				/>
+				<NavToggle collapsed={collapsed} setCollapsed={setCollapsed} />
 				<img
 					src={"/api/public/dashboard-logo"}
 					alt="Dashboard Logo"
-					className={
-						(collapsed ? "w-8 h-8" : "w-12 h-12") +
-						" transition-all"
-					}
+					className={(collapsed ? "w-8 h-8" : "w-12 h-12") + " transition-all"}
 				/>
 			</div>
 			<div className="flex-grow">
-				<NavButton
-					href="/dashboard"
-					name="Dashboard"
-					collapsed={collapsed}>
+				<NavButton href="/dashboard" name="Dashboard" collapsed={collapsed}>
 					<MdDashboard className="w-6 h-6" />
 				</NavButton>
 				{types.map((type) => (
@@ -87,14 +81,12 @@ export default function NavBar() {
 						key={contentTypesMap[type].name}
 						name={contentTypesMap[type].name}
 						href={contentTypesMap[type].url}
-						collapsed={collapsed}>
+						collapsed={collapsed}
+					>
 						{contentTypesMap[type].icon}
 					</NavButton>
 				))}
-				<NavButton
-					href="/dashboard/settings"
-					name="Settings"
-					collapsed={collapsed}>
+				<NavButton href="/dashboard/settings" name="Settings" collapsed={collapsed}>
 					<MdSettings className="w-6 h-6" />
 				</NavButton>
 			</div>

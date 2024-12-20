@@ -10,7 +10,7 @@ import SignOutButton from "./SignOutButton";
  * Export the metadata for the page
  */
 export const metadata: Metadata = {
-	title: "Profile",
+	title: "My Profile",
 };
 
 /**
@@ -25,9 +25,7 @@ export default async function ProfilePage() {
 	return (
 		<main className="h-[10000px]">
 			<h1 className="text-3xl text-semibold mb-5">Profile</h1>
-			<p>
-				Welcome to your profile, {session?.user?.name?.split(" ")[0]}!
-			</p>
+			<p>Welcome to your profile, {session?.user?.name?.split(" ")[0]}!</p>
 
 			{session && <SignOutButton />}
 		</main>
