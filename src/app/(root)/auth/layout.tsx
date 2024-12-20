@@ -12,16 +12,16 @@ import { PublicEnvScript } from "next-runtime-env";
  * @returns Document layout
  */
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
-    return (
-        <html lang="en">
-            <head>
-                <PublicEnvScript />
-            </head>
-            <body id="auth-body" className="antialiased text-white">
-                <div className="w-full h-dvh flex items-center justify-center flex-col bg-black/30">
-                    {children}
-                </div>
-            </body>
-        </html>
-    );
+	return (
+		<html lang="en">
+			<head>
+				<PublicEnvScript />
+			</head>
+			<body id="auth-body" className="antialiased text-white">
+				<div className="w-full h-dvh flex items-center justify-center flex-col bg-black/30">
+					{children}
+				</div>
+			</body>
+		</html>
+	);
 }

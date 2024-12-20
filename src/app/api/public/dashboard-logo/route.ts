@@ -11,6 +11,6 @@ import { redirect } from "next/navigation";
  * @returns {Promise<NextResponse>} The response containing the logo
  */
 export async function GET() {
-    const { logo } = await getLogo();
-    redirect(logo);
+	const { logo } = await getLogo();
+	redirect(logo);
 }

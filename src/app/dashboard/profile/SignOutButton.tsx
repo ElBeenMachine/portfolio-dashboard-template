@@ -13,7 +13,10 @@ import { signOut } from "next-auth/react";
  */
 export default function SignOutButton() {
 	return (
-		<button onClick={() => signOut({ redirect: true, redirectTo: "/" })}>
+		<button
+			className="bg-gray-800 hover:bg-gray-600 px-5 py-3 text-white rounded-md transition-all mt-5"
+			onClick={() => signOut({ redirect: true, redirectTo: "/" })}
+		>
 			Sign Out
 		</button>
 	);

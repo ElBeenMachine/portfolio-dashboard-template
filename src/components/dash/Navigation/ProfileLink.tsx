@@ -24,10 +24,7 @@ export default function ProfileLink({ collapsed }: { collapsed: boolean }) {
 
 	// If the session is not loading, show the user's profile
 	return (
-		<NavButton
-			href="/dashboard/profile"
-			name={`${session?.user?.name}`}
-			collapsed={collapsed}>
+		<NavButton href="/dashboard/profile" name={`${session?.user?.name}`} collapsed={collapsed}>
 			<img
 				src={`${session?.user?.image}`}
 				alt="User image"

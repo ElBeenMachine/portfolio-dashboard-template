@@ -30,16 +30,10 @@ export default function Breadcrumbs() {
 
 	return (
 		<header className="w-full flex items-center flex-nowrap bg-[#f7f7f7] shadow-md fixed top-0 z-10 h-24">
-			<ul
-				className="flex flex-nowrap gap-3 w-full text-md px-5 h-max"
-				id="breadcrumbs">
+			<ul className="flex flex-nowrap gap-3 w-full text-md px-5 h-max" id="breadcrumbs">
 				{links.map((link, index) => (
-					<li
-						key={link.name}
-						className="flex gap-3">
-						<Link
-							href={link.url}
-							className="hover:text-black transition-all">
+					<li key={link.name} className="flex gap-3">
+						<Link href={link.url} className="hover:text-black transition-all">
 							{capitalise(link.name)}
 						</Link>
 						{index != links.length - 1 ? <p>&gt;</p> : null}

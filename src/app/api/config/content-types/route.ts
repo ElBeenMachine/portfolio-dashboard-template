@@ -11,7 +11,7 @@ import { NextResponse } from "next/server";
  * @returns {Promise<NextResponse>} The response containing all available content types
  */
 export async function GET() {
-    // Query the local database for all available content types
-    const contentTypes = await getAllContentTypes();
-    return NextResponse.json(contentTypes);
+	// Query the local database for all available content types
+	const contentTypes = await getAllContentTypes();
+	return NextResponse.json(contentTypes);
 }

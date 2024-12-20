@@ -23,7 +23,10 @@ export async function generateMetadata() {
 			template: `%s | ${title}`,
 			default: `Home | ${title}`,
 		},
-	}
+		icons: {
+			icon: `/api/public/dashboard-logo`,
+		},
+	};
 }
 
 /**
@@ -47,9 +50,7 @@ export default async function DashLayout({
 					<NavBar />
 					<main className="w-full h-dvh flex flex-col overflow-auto bg-white text-[#202020]">
 						<Breadcrumbs />
-						<div className="p-5 z-0 mt-24 flex-grow">
-							{children}
-						</div>
+						<div className="p-5 z-0 mt-24 flex-grow">{children}</div>
 					</main>
 				</SessionProvider>
 			</body>

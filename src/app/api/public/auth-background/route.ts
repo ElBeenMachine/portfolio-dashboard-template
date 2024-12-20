@@ -11,6 +11,6 @@ import { redirect } from "next/navigation";
  * @returns {Promise<NextResponse>} The response containing the background
  */
 export async function GET() {
-    const { url } = await getAuthBackground();
-    redirect(url);
+	const { url } = await getAuthBackground();
+	redirect(url);
 }
