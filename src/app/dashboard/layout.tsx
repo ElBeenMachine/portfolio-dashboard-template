@@ -8,9 +8,8 @@ import "@/styles/dashboard.css";
 import { PublicEnvScript } from "next-runtime-env";
 import NavBar from "@/components/dash/Navigation/NavBar";
 import { SessionProvider } from "next-auth/react";
-// import { Metadata } from "next";
 import Breadcrumbs from "@/components/dash/Navigation/Breadcrumbs";
-import { getTitle } from "@/lib/db/local/queries";
+import { getInstanceID, getTitle } from "@/lib/db/local/queries";
 
 /**
  * Metadata for the dashboard layout.
@@ -40,6 +39,7 @@ export default async function DashLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	const { instanceID } = await getInstanceID();
 	return (
 		<html lang="en">
 			<head>
@@ -51,6 +51,9 @@ export default async function DashLayout({
 					<main className="w-full h-dvh flex flex-col overflow-auto bg-white text-[#202020]">
 						<Breadcrumbs />
 						<div className="p-5 z-0 mt-24 flex-grow">{children}</div>
+						<p className="text-center text-xs text-gray-500 py-2">
+							Instance ID: {instanceID}
+						</p>
 					</main>
 				</SessionProvider>
 			</body>
