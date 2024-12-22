@@ -1,0 +1,12 @@
+.modal-content {
+	animation: forwards 0.3s slideIn;
+}
+
+@keyframes slideIn {
+	from {
+		transform: scale(0);
+	}
+	to {
+		transform: translateY(1);
+	}
+}
