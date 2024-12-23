@@ -11,6 +11,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Modal from "@/components/Modal";
 import Project from "@/types/Project";
+import { toast } from "react-toastify";
 
 export default function ProjectForm({ project }: { project: Project }) {
 	// Destructure the project object
@@ -59,21 +60,24 @@ export default function ProjectForm({ project }: { project: Project }) {
 			},
 		};
 
-		// Create the new project
-		fetch("/api/projects/update", {
-			method: "POST",
-			body: JSON.stringify(body),
-			headers: {
-				"Content-Type": "application/json",
-			},
-		}).then(async (response) => {
-			if (!response.ok) {
-				console.error("Failed to update project");
-				return;
-			}
+		return new Promise((resolve, reject) => {
+			// Create the new project
+			fetch("/api/projects/update", {
+				method: "POST",
+				body: JSON.stringify(body),
+				headers: {
+					"Content-Type": "application/json",
+				},
+			}).then(async (response) => {
+				if (!response.ok) {
+					console.error("Failed to save");
+					reject("Failed to save");
+				}
 
-			setIsOpen(false);
-			router.refresh();
+				setIsOpen(false);
+				router.refresh();
+				resolve("Success");
+			});
 		});
 	}
 
@@ -83,21 +87,24 @@ export default function ProjectForm({ project }: { project: Project }) {
 			_id: project._id,
 		};
 
-		// Delete the project
-		fetch("/api/projects/delete", {
-			method: "DELETE",
-			body: JSON.stringify(body),
-			headers: {
-				"Content-Type": "application/json",
-			},
-		}).then(async (response) => {
-			if (!response.ok) {
-				console.error("Failed to delete project");
-				return;
-			}
+		return new Promise((resolve, reject) => {
+			// Create the new project
+			fetch("/api/projects/delete", {
+				method: "DELETE",
+				body: JSON.stringify(body),
+				headers: {
+					"Content-Type": "application/json",
+				},
+			}).then(async (response) => {
+				if (!response.ok) {
+					console.error("Failed to delete project");
+					reject("Failed to delete project");
+				}
 
-			setIsOpen(false);
-			router.push("/dashboard");
+				setIsOpen(false);
+				router.push("/dashboard");
+				resolve("Success");
+			});
 		});
 	}
 
@@ -179,7 +186,13 @@ export default function ProjectForm({ project }: { project: Project }) {
 				<button
 					id={"documentSaveButton"}
 					className="bg-gray-800 hover:bg-gray-500 transition-all text-white px-4 py-2 rounded-md hover:bg-gray-600transition-all"
-					onClick={handleSave}
+					onClick={() =>
+						toast.promise(handleSave(), {
+							pending: "Saving project...",
+							success: "Project saved",
+							error: "Failed to save project",
+						})
+					}
 				>
 					Save
 				</button>
@@ -207,7 +220,13 @@ export default function ProjectForm({ project }: { project: Project }) {
 						</button>
 						<button
 							className="bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded"
-							onClick={handleDelete}
+							onClick={() =>
+								toast.promise(handleDelete(), {
+									pending: "Deleting project...",
+									success: "Project deleted",
+									error: "Failed to delete project",
+								})
+							}
 						>
 							I'm Sure
 						</button>

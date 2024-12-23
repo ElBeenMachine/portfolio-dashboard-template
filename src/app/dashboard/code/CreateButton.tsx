@@ -6,6 +6,7 @@
 import Modal from "@/components/Modal";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function CreateButton() {
 	const [isOpen, setIsOpen] = useState(false);
@@ -13,21 +14,24 @@ export default function CreateButton() {
 	const router = useRouter();
 
 	function onSubmit() {
-		// Create the new project
-		fetch("/api/projects/create", {
-			method: "POST",
-			body: JSON.stringify({ title: titleRef.current?.value, type: "code" }),
-			headers: {
-				"Content-Type": "application/json",
-			},
-		}).then(async (response) => {
-			if (!response.ok) {
-				console.error("Failed to create project");
-				return;
-			}
+		return new Promise((resolve, reject) => {
+			// Create the new project
+			fetch("/api/projects/create", {
+				method: "POST",
+				body: JSON.stringify({ title: titleRef.current?.value, type: "code" }),
+				headers: {
+					"Content-Type": "application/json",
+				},
+			}).then(async (response) => {
+				if (!response.ok) {
+					console.error("Failed to create project");
+					reject("Failed to create project");
+				}
 
-			setIsOpen(false);
-			router.refresh();
+				setIsOpen(false);
+				router.refresh();
+				resolve("Success");
+			});
 		});
 	}
 
@@ -52,7 +56,13 @@ export default function CreateButton() {
 					<div className="flex justify-end mt-4">
 						<button
 							className="bg-gray-800 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
-							onClick={onSubmit}
+							onClick={() =>
+								toast.promise(onSubmit(), {
+									pending: "Creating project...",
+									success: "Project created",
+									error: "Failed to create project",
+								})
+							}
 						>
 							Create
 						</button>
