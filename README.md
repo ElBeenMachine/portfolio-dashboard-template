@@ -18,8 +18,8 @@ As this project develops, so will my programming ability and by extension, the q
 
 ## To Do
 
-- [] Write documentation
-- [] Create onboarding experience
-- [] Make mobile-friendly
-- [] Allow local authentication
-- [] Configure dynamic authentication providers (currently restricted to Entra)
+- [ ] Write documentation
+- [ ] Create onboarding experience
+- [ ] Make mobile-friendly
+- [ ] Allow local authentication
+- [ ] Configure dynamic authentication providers (currently restricted to Entra)
