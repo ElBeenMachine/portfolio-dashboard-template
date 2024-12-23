@@ -2,7 +2,7 @@
  * @author Ollie Beenham
  */
 
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { IoMdArrowDropleft } from "react-icons/io";
 
 /**
@@ -19,20 +19,11 @@ export default function NavToggle({
 	collapsed: boolean;
 	setCollapsed: Dispatch<SetStateAction<boolean>>;
 }) {
-	// Load in the nav collapsed state
-	useEffect(() => {
-		const navState = localStorage.getItem("navCollapsed");
-		if (navState) {
-			setCollapsed(JSON.parse(navState));
-		}
-	}, [setCollapsed]);
-
 	/**
 	 *
 	 * @param {string} state The state to set
 	 */
 	function saveState(state: boolean) {
-		localStorage.setItem("navCollapsed", JSON.stringify(state));
 		setCollapsed(state);
 	}
 

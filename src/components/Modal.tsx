@@ -26,8 +26,8 @@ export default function Modal({
 }) {
 	return (
 		open && (
-			<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10">
-				<div className="modal-content bg-white p-4 rounded-lg min-w-[300px]">
+			<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
+				<div className="modal-content bg-white p-6 rounded-lg min-w-[300px]">
 					<div id="modal-header" className="flex justify-between items-center mb-5">
 						<h2 className="text-xl mr-16">{title || "Modal"}</h2>
 						<button

@@ -22,7 +22,6 @@ export async function POST(request: NextRequest) {
 
 	// Log the project
 	const { project } = result;
-	console.log(project);
 
 	// Return the response
 	return Response.json({ status: "success", _id: project.insertedId });

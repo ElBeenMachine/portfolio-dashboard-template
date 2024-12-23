@@ -48,7 +48,7 @@ export default async function DashLayout({
 			<body className={"flex w-full flex-nowrap"}>
 				<SessionProvider>
 					<NavBar />
-					<main className="w-full h-dvh flex flex-col overflow-auto bg-white text-[#202020]">
+					<main className="flex-grow h-dvh flex flex-col overflow-auto bg-white text-[#202020] relative">
 						<Breadcrumbs />
 						<div className="p-5 z-0 mt-24 flex-grow">{children}</div>
 						<p className="text-center text-xs text-gray-500 py-2">
