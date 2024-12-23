@@ -7,6 +7,7 @@
 import { useEffect, useRef } from "react";
 import SettingsSection from "./SettingsSection";
 import { StringInput } from "./inputs";
+import { toast } from "react-toastify";
 
 export default function GeneralSettings() {
 	const mongoRef = useRef<HTMLInputElement>(null);
@@ -18,40 +19,60 @@ export default function GeneralSettings() {
 	 * Update general settings
 	 */
 	function updateGeneralSettings() {
-		// Update the title
-		fetch("/api/config/title", {
-			method: "POST",
-			body: JSON.stringify({ title: titleRef.current?.value }),
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
+		return new Promise((resolve, reject) => {
+			// Update the title
+			fetch("/api/config/title", {
+				method: "POST",
+				body: JSON.stringify({ title: titleRef.current?.value }),
+				headers: {
+					"Content-Type": "application/json",
+				},
+			}).then((res) => {
+				if (!res.ok) {
+					reject("Unable to save settings");
+				}
+			});
 
-		// Update the MongoDB URI
-		fetch("/api/config/database", {
-			method: "POST",
-			body: JSON.stringify({ uri: mongoRef.current?.value }),
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
+			// Update the MongoDB URI
+			fetch("/api/config/database", {
+				method: "POST",
+				body: JSON.stringify({ uri: mongoRef.current?.value }),
+				headers: {
+					"Content-Type": "application/json",
+				},
+			}).then((res) => {
+				if (!res.ok) {
+					reject("Unable to save settings");
+				}
+			});
 
-		// Update the logo
-		fetch("/api/config/dashboard-logo", {
-			method: "POST",
-			body: JSON.stringify({ url: logoRef.current?.value }),
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
+			// Update the logo
+			fetch("/api/config/dashboard-logo", {
+				method: "POST",
+				body: JSON.stringify({ url: logoRef.current?.value }),
+				headers: {
+					"Content-Type": "application/json",
+				},
+			}).then((res) => {
+				if (!res.ok) {
+					reject("Unable to save settings");
+				}
+			});
 
-		// Update the authentication background
-		fetch("/api/config/auth-background", {
-			method: "POST",
-			body: JSON.stringify({ url: authBgRef.current?.value }),
-			headers: {
-				"Content-Type": "application/json",
-			},
+			// Update the authentication background
+			fetch("/api/config/auth-background", {
+				method: "POST",
+				body: JSON.stringify({ url: authBgRef.current?.value }),
+				headers: {
+					"Content-Type": "application/json",
+				},
+			}).then((res) => {
+				if (!res.ok) {
+					reject("Unable to save settings");
+				}
+			});
+
+			resolve("Settings updated");
 		});
 	}
 
@@ -142,7 +163,13 @@ export default function GeneralSettings() {
 			{/* Update button */}
 			<button
 				className="bg-gray-800 hover:bg-gray-600 transition-all w-max text-white px-5 py-3 rounded-md"
-				onClick={updateGeneralSettings}
+				onClick={() =>
+					toast.promise(updateGeneralSettings(), {
+						pending: "Updating settings...",
+						success: "Settings updated",
+						error: "Failed to update settings",
+					})
+				}
 			>
 				Update
 			</button>

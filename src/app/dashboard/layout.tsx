@@ -6,10 +6,11 @@ import "@/styles/default.css";
 import "@/styles/dashboard.css";
 
 import { PublicEnvScript } from "next-runtime-env";
-import NavBar from "@/components/dash/Navigation/NavBar";
+import NavBar from "@/components/navigation/NavBar";
 import { SessionProvider } from "next-auth/react";
-import Breadcrumbs from "@/components/dash/Navigation/Breadcrumbs";
+import Breadcrumbs from "@/components/navigation/Breadcrumbs";
 import { getInstanceID, getTitle } from "@/lib/db/local/queries";
+import { ToastContainer } from "react-toastify";
 
 /**
  * Metadata for the dashboard layout.
@@ -46,6 +47,7 @@ export default async function DashLayout({
 				<PublicEnvScript />
 			</head>
 			<body className={"flex w-full flex-nowrap"}>
+				<ToastContainer position="bottom-right" />
 				<SessionProvider>
 					<NavBar />
 					<main className="flex-grow h-dvh flex flex-col overflow-auto bg-white text-[#202020] relative">
