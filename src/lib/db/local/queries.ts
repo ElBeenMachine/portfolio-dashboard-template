@@ -79,9 +79,15 @@ export const getAllSettings = async () => {
  * @returns {Promise<{uri: string}>} The URI of the mongodb database
  */
 export const getMongoURI = async () => {
-	const query = db.prepare("SELECT value FROM config WHERE key = 'mongodb-connection-string'");
-	const result = (query.get() as { value: string }).value;
-	return { uri: result };
+	try {
+		const query = db.prepare(
+			"SELECT value FROM config WHERE key = 'mongodb-connection-string'"
+		);
+		const result = (query.get() as { value: string }).value;
+		return { uri: result };
+	} catch {
+		return { uri: "" };
+	}
 };
 
 /**

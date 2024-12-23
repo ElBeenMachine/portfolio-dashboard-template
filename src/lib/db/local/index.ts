@@ -66,13 +66,18 @@ export const initDB = () => {
 	console.log("");
 
 	// See if there is an instance id in the configuration table
-	const query = db.prepare("SELECT value FROM config WHERE key = 'instance-id'");
-	const instanceID = (query.get() as { value: string }).value;
+	let instanceID;
+	try {
+		const query = db.prepare("SELECT value FROM config WHERE key = 'instance-id'");
+		instanceID = (query.get() as { value: string }).value;
+	} catch {
+		console.error("No instance ID detected, generating one now...\n");
+	}
 
 	// If there isn't, create one
 	if (!instanceID) {
-		console.log("No instance ID detected, generating one now...");
-		const instanceID = v4();
+		// Generate a new instance ID
+		instanceID = v4();
 
 		// Insert the instance ID into the database
 		db.prepare("INSERT INTO config (key, value) VALUES ('instance-id', ?)").run(instanceID);

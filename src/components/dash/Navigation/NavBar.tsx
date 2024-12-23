@@ -41,6 +41,19 @@ export default function NavBar() {
 	const [collapsed, setCollapsed] = useState(false);
 	const [types, setTypes] = useState<string[]>([]);
 
+	// Load the nav collapsed state from localStorage
+	useEffect(() => {
+		const navState = localStorage.getItem("navCollapsed");
+		if (navState) {
+			setCollapsed(JSON.parse(navState));
+		}
+	}, []);
+
+	// Save the nav collapsed state to localStorage whenever it changes
+	useEffect(() => {
+		localStorage.setItem("navCollapsed", JSON.stringify(collapsed));
+	}, [collapsed]);
+
 	// Get the available content types from the database
 	useEffect(() => {
 		try {
@@ -59,38 +72,44 @@ export default function NavBar() {
 	}, []);
 
 	return (
-		<nav
-			className={`h-dvh bg-gray-800 flex flex-col ${
-				collapsed ? "w-[100px]" : "w-[300px]"
-			} overflow-hidden select-none transition-all text-white`}
+		<div
+			className={` ${
+				collapsed ? "min-w-[100px]" : "min-w-[225px] lg:min-w-[300px]"
+			} h-dvh flex flex-col overflow-auto bg-white text-[#202020] transition-all`}
 		>
-			<div className="h-24 flex justify-center items-center relative">
-				<NavToggle collapsed={collapsed} setCollapsed={setCollapsed} />
-				<img
-					src={"/api/public/dashboard-logo"}
-					alt="Dashboard Logo"
-					className={(collapsed ? "w-8 h-8" : "w-12 h-12") + " transition-all"}
-				/>
-			</div>
-			<div className="flex-grow">
-				<NavButton href="/dashboard" name="Dashboard" collapsed={collapsed}>
-					<MdDashboard className="w-6 h-6" />
-				</NavButton>
-				{types.map((type) => (
-					<NavButton
-						key={contentTypesMap[type].name}
-						name={contentTypesMap[type].name}
-						href={contentTypesMap[type].url}
-						collapsed={collapsed}
-					>
-						{contentTypesMap[type].icon}
+			<nav
+				className={`h-dvh bg-gray-800 flex flex-col ${
+					collapsed ? "min-w-[100px]" : "min-w-[225px] lg:min-w-[300px]"
+				} overflow-hidden select-none transition-all text-white fixed`}
+			>
+				<div className="h-24 flex justify-center items-center relative">
+					<NavToggle collapsed={collapsed} setCollapsed={setCollapsed} />
+					<img
+						src={"/api/public/dashboard-logo"}
+						alt="Dashboard Logo"
+						className={(collapsed ? "w-8 h-8" : "w-12 h-12") + " transition-all"}
+					/>
+				</div>
+				<div className="flex-grow">
+					<NavButton href="/dashboard" name="Dashboard" collapsed={collapsed}>
+						<MdDashboard className="w-6 h-6" />
 					</NavButton>
-				))}
-				<NavButton href="/dashboard/settings" name="Settings" collapsed={collapsed}>
-					<MdSettings className="w-6 h-6" />
-				</NavButton>
-			</div>
-			<ProfileLink collapsed={collapsed} />
-		</nav>
+					{types.map((type) => (
+						<NavButton
+							key={contentTypesMap[type].name}
+							name={contentTypesMap[type].name}
+							href={contentTypesMap[type].url}
+							collapsed={collapsed}
+						>
+							{contentTypesMap[type].icon}
+						</NavButton>
+					))}
+					<NavButton href="/dashboard/settings" name="Settings" collapsed={collapsed}>
+						<MdSettings className="w-6 h-6" />
+					</NavButton>
+				</div>
+				<ProfileLink collapsed={collapsed} />
+			</nav>
+		</div>
 	);
 }
