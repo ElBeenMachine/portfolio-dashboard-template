@@ -24,8 +24,8 @@ export default async function CodeProjects() {
 	let projects;
 	try {
 		projects = await getProjectsByType("code");
-	} catch (error) {
-		if (error) return <DatabaseErrorMessage />;
+	} catch {
+		return <DatabaseErrorMessage />;
 	}
 
 	return (

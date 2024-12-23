@@ -70,8 +70,8 @@ export const initDB = () => {
 	try {
 		const query = db.prepare("SELECT value FROM config WHERE key = 'instance-id'");
 		instanceID = (query.get() as { value: string }).value;
-	} catch (error) {
-		if (error) console.error("No instance ID detected, generating one now...\n");
+	} catch {
+		console.error("No instance ID detected, generating one now...\n");
 	}
 
 	// If there isn't, create one
