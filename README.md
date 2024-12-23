@@ -1,36 +1,25 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio Dashboard Template
 
-## Getting Started
+> Disclaimer: This project has been mirrored from my self-hosted GitLab instance, and as such, any issues, branches and merge requests may not be visible or up to date.
 
-First, run the development server:
+## About the Project
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+This project initially started out as a way for me to manage my own portfolio without having to commit a new update each time I worked on a new project or wanted to update an existing one. 
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The idea then developed into making a flexible dashboard, which could be used across a variety of identity providers and forked easily to be used for any portfolio, not just my specific use-case. 
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+This then encouraged me to learn OAuth technologies, and to teach myself how to use a NodeJS library called [Auth.js](https://authjs.dev). 
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## The Future of the Project
 
-## Learn More
+This project is undoubtedly still in the early stages of development, but has acted as a catalyst for my learning across several areas of software engineering. 
 
-To learn more about Next.js, take a look at the following resources:
+As this project develops, so will my programming ability and by extension, the quality of the features implemented. 
 
--   [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
--   [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## To Do
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [] Write documentation
+- [] Create onboarding experience
+- [] Make mobile-friendly
+- [] Allow local authentication
+- [] Configure dynamic authentication providers (currently restricted to Entra)
