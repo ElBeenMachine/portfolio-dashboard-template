@@ -15,7 +15,7 @@ stages:
 variables:
     PROJECT_NAME: "portfolio-dashboard"
     IMAGE_NAME: "$DOCKER_USER/$PROJECT_NAME"
-    NODE_IMGE: "node:23-alpine"
+    NODE_IMAGE: "node:23-alpine"
     DOCKER_HOST: tcp://docker:2375
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
@@ -29,7 +29,7 @@ default:
         - until docker info; do sleep 1; done
         - echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USER --password-stdin
 
-# Define the jobs
+# Get the project version
 get_project_version:
     stage: prepare
     image: $NODE_IMAGE
