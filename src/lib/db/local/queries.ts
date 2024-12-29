@@ -14,8 +14,7 @@ export const getInstanceID = async () => {
 		const query = db.prepare("SELECT value FROM config WHERE key = 'instance-id'");
 		const result = (query.get() as { value: string }).value;
 		return { instanceID: result };
-	} catch (error) {
-		console.error(error);
+	} catch {
 		return { instanceID: "" };
 	}
 };
@@ -30,8 +29,7 @@ export const getAllContentTypes = async () => {
 		const query = db.prepare("SELECT value FROM config WHERE key = 'content-types'");
 		const result = (query.get() as { value: string }).value;
 		return { contentTypes: JSON.parse(result) };
-	} catch (error) {
-		console.error(error);
+	} catch {
 		return { contentTypes: [] };
 	}
 };
@@ -46,8 +44,7 @@ export const getLogo = async () => {
 		const query = db.prepare("SELECT value FROM config WHERE key = 'logo'");
 		const result = (query.get() as { value: string }).value;
 		return { logo: result };
-	} catch (error) {
-		console.error(error);
+	} catch {
 		return { logo: "" };
 	}
 };
@@ -62,8 +59,7 @@ export const updateLogo = async (url: string) => {
 		const query = db.prepare("INSERT OR REPLACE INTO config (key, value) VALUES ('logo', ?)");
 		const result = query.run(url);
 		return result.changes > 0;
-	} catch (error) {
-		console.error(error);
+	} catch {
 		return false;
 	}
 };
@@ -78,8 +74,7 @@ export const getTitle = async () => {
 		const query = db.prepare("SELECT value FROM config WHERE key = 'title'");
 		const result = (query.get() as { value: string }).value;
 		return { title: result };
-	} catch (error) {
-		console.error(error);
+	} catch {
 		return { title: "" };
 	}
 };
@@ -92,8 +87,7 @@ export const getAllSettings = async () => {
 		const query = db.prepare("SELECT key, value FROM config");
 		const result = query.all();
 		return result;
-	} catch (error) {
-		console.error(error);
+	} catch {
 		return null;
 	}
 };
@@ -127,8 +121,7 @@ export const updateMongoURI = async (uri: string) => {
 		);
 		const result = query.run(uri);
 		return result.changes > 0;
-	} catch (error) {
-		console.error(error);
+	} catch {
 		return false;
 	}
 };
@@ -143,8 +136,7 @@ export const updateTitle = async (title: string) => {
 		const query = db.prepare("INSERT OR REPLACE INTO config (key, value) VALUES ('title', ?)");
 		const result = query.run(title);
 		return result.changes > 0;
-	} catch (error) {
-		console.error(error);
+	} catch {
 		return false;
 	}
 };
@@ -159,8 +151,7 @@ export const getAuthBackground = async () => {
 		const query = db.prepare("SELECT value FROM config WHERE key = 'auth-background'");
 		const result = (query.get() as { value: string }).value;
 		return { url: result };
-	} catch (error) {
-		console.error(error);
+	} catch {
 		return { url: "" };
 	}
 };
@@ -177,8 +168,7 @@ export const updateAuthBackground = async (url: string) => {
 		);
 		const result = query.run(url);
 		return result.changes > 0;
-	} catch (error) {
-		console.error(error);
+	} catch {
 		return false;
 	}
 };
