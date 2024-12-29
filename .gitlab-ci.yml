@@ -15,6 +15,7 @@ stages:
 variables:
     PROJECT_NAME: "portfolio-dashboard"
     IMAGE_NAME: "$DOCKER_USER/$PROJECT_NAME"
+    NODE_IMGE: "node:23-alpine"
     DOCKER_HOST: tcp://docker:2375
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
@@ -31,6 +32,7 @@ default:
 # Define the jobs
 get_project_version:
     stage: prepare
+    image: $NODE_IMAGE
     script:
         - export TAG=$(node -p "require('./package.json').version")
         - echo "TAG=$TAG" >> variables.env
@@ -60,8 +62,9 @@ check_existing_image:
 # Lint the code
 lint:
     stage: lint
-    image: node:23-alpine
+    image: $NODE_IMAGE
     script:
+        - npm i
         - npm run lint
     before_script: []
     services: []
