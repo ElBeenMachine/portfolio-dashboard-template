@@ -6,9 +6,9 @@ stages:
     - deploy # TODO
 
 # Define workflow rules
-# workflow:
-#     rules:
-#         - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+workflow:
+    rules:
+        - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 # Define CI variables
 variables:
@@ -81,4 +81,4 @@ build_and_push:
         - job: check_version
     script:
         - docker buildx create --use
-        - docker buildx build --push --platform linux/arm/v7,linux/arm64/v8,linux/amd64 --tag $IMAGE_NAME:$TAG .
+        - docker buildx build --push --platform linux/amd64,linux/arm64,windows/amd64,windows/arm64,darwin/amd64,darwin/arm64  --tag $IMAGE_NAME:$TAG .
