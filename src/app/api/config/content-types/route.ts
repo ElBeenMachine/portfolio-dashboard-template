@@ -11,7 +11,12 @@ import { NextResponse } from "next/server";
  * @returns {Promise<NextResponse>} The response containing all available content types
  */
 export async function GET() {
-	// Query the local database for all available content types
-	const contentTypes = await getAllContentTypes();
-	return NextResponse.json(contentTypes);
+	try {
+		// Query the local database for all available content types
+		const contentTypes = await getAllContentTypes();
+		return NextResponse.json(contentTypes);
+	} catch (error) {
+		console.error(error);
+		return NextResponse.json({ error: "An unexpected server error occurred" }, { status: 500 });
+	}
 }

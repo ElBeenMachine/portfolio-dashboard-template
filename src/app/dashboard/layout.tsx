@@ -16,7 +16,13 @@ import { ToastContainer } from "react-toastify";
  * Metadata for the dashboard layout.
  */
 export async function generateMetadata() {
-	const { title } = await getTitle();
+	let title;
+	try {
+		title = (await getTitle()).title;
+	} catch (error) {
+		console.error(error);
+		title = "Dashboard";
+	}
 
 	return {
 		title: {

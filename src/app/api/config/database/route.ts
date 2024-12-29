@@ -18,9 +18,14 @@ export async function POST(request: Request) {
 	if (!body.uri)
 		return NextResponse.json({ error: new Error("No uri provided") }, { status: 400 });
 
-	// Update the title
-	const response = await updateMongoURI(body.uri);
+	try {
+		// Update the title
+		const response = await updateMongoURI(body.uri);
 
-	// Return the update response
-	return NextResponse.json({ status: response });
+		// Return the update response
+		return NextResponse.json({ status: response });
+	} catch (error) {
+		console.error(error);
+		return NextResponse.json({ error: "An unexpected server error occurred" }, { status: 500 });
+	}
 }

@@ -3,6 +3,7 @@
  */
 
 import { getAuthBackground } from "@/lib/db/local/queries";
+import { NextResponse } from "next/server";
 import { redirect } from "next/navigation";
 
 /**
@@ -11,6 +12,11 @@ import { redirect } from "next/navigation";
  * @returns {Promise<NextResponse>} The response containing the background
  */
 export async function GET() {
-	const { url } = await getAuthBackground();
-	redirect(url);
+	try {
+		const { url } = await getAuthBackground();
+		redirect(url);
+	} catch (error) {
+		console.error(error);
+		return NextResponse.json({ error: "An unexpected server error occurred" }, { status: 500 });
+	}
 }

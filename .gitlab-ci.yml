@@ -1,0 +1,84 @@
+# Define the stages
+stages:
+    - lint
+    - build
+    - test # TODO
+    - deploy # TODO
+
+# Define workflow rules
+workflow:
+    rules:
+        - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+# Define CI variables
+variables:
+    PROJECT_NAME: "portfolio-dashboard"
+    IMAGE_NAME: "$DOCKER_USER/$PROJECT_NAME"
+    NODE_IMAGE: "node:23-alpine"
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
+
+# Set default image and services
+default:
+    image: docker:24.0.5
+    services:
+        - docker:24.0.5-dind
+    before_script:
+        - until docker info; do sleep 1; done
+        - echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USER --password-stdin
+
+# Lint the code
+lint:
+    stage: lint
+    image: $NODE_IMAGE
+    script:
+        - npm i
+        - npm run lint
+    before_script: []
+    services: []
+
+# Get the project version
+get_project_version:
+    stage: build
+    image: $NODE_IMAGE
+    needs:
+        - job: lint
+    script:
+        - export TAG=$(node -p "require('./package.json').version")
+        - echo "TAG=$TAG" >> variables.env
+    before_script: []
+    services: []
+    artifacts:
+        reports:
+            dotenv: variables.env
+
+# Check if the version already exists
+check_version:
+    stage: build
+    needs:
+        - job: get_project_version
+          artifacts: true
+    script:
+        - |
+            # Check if the image exists locally or on Docker Hub
+            if docker manifest inspect "$IMAGE_NAME:$TAG" > /dev/null 2>&1; then
+                echo "Docker image $IMAGE_NAME:$TAG already exists."
+                exit 1 # Fail the pipeline
+            else
+                echo "Docker image $IMAGE_NAME:$TAG does not exist."
+                exit 0 # Pass the check stage
+            fi
+    before_script: []
+    services: []
+
+# Build the code
+build_and_push:
+    stage: build
+    needs:
+        - job: get_project_version
+          artifacts: true
+        - job: check_version
+    script:
+        - docker buildx create --use
+        - docker buildx build --push --platform linux/amd64,linux/arm64,windows/amd64,windows/arm64,darwin/amd64,darwin/arm64  --tag $IMAGE_NAME:$TAG .
