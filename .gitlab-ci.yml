@@ -32,7 +32,8 @@ default:
 get_project_version:
     stage: prepare
     script:
-        - echo "Preparing the environment"
+        - export TAG=$(node -p "require('./package.json').version")
+        - echo "TAG=$TAG" >> variables.env
     before_script: []
     services: []
     artifacts:
