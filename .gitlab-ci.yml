@@ -43,7 +43,7 @@ get_project_version:
 check_existing_image:
     stage: prepare
     needs:
-        - job: prepare
+        - job: get_project_version
           artifacts: true
     script:
         - |
