@@ -17,9 +17,14 @@ export async function POST(request: Request) {
 	// Get the url from the body
 	const url = body.url || "/img/default-logo.jpg";
 
-	// Update the title
-	const response = await updateLogo(url);
+	try {
+		// Update the title
+		const response = await updateLogo(url);
 
-	// Return the update response
-	return NextResponse.json({ status: response });
+		// Return the update response
+		return NextResponse.json({ status: response });
+	} catch (error) {
+		console.error(error);
+		return NextResponse.json({ error: "An unexpected server error occurred" }, { status: 500 });
+	}
 }

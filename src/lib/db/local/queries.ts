@@ -10,9 +10,14 @@ import { db } from ".";
  * @returns {Promise<{instanceID: string}>} The instance ID
  */
 export const getInstanceID = async () => {
-	const query = db.prepare("SELECT value FROM config WHERE key = 'instance-id'");
-	const result = (query.get() as { value: string }).value;
-	return { instanceID: result };
+	try {
+		const query = db.prepare("SELECT value FROM config WHERE key = 'instance-id'");
+		const result = (query.get() as { value: string }).value;
+		return { instanceID: result };
+	} catch (error) {
+		console.error(error);
+		return { instanceID: "" };
+	}
 };
 
 /**
@@ -21,9 +26,14 @@ export const getInstanceID = async () => {
  * @returns {Promise<{contentTypes: string[]}>} All content types
  */
 export const getAllContentTypes = async () => {
-	const query = db.prepare("SELECT value FROM config WHERE key = 'content-types'");
-	const result = (query.get() as { value: string }).value;
-	return { contentTypes: JSON.parse(result) };
+	try {
+		const query = db.prepare("SELECT value FROM config WHERE key = 'content-types'");
+		const result = (query.get() as { value: string }).value;
+		return { contentTypes: JSON.parse(result) };
+	} catch (error) {
+		console.error(error);
+		return { contentTypes: [] };
+	}
 };
 
 /**
@@ -32,9 +42,14 @@ export const getAllContentTypes = async () => {
  * @returns {Promise<{logo: string}>} The logo
  */
 export const getLogo = async () => {
-	const query = db.prepare("SELECT value FROM config WHERE key = 'logo'");
-	const result = (query.get() as { value: string }).value;
-	return { logo: result };
+	try {
+		const query = db.prepare("SELECT value FROM config WHERE key = 'logo'");
+		const result = (query.get() as { value: string }).value;
+		return { logo: result };
+	} catch (error) {
+		console.error(error);
+		return { logo: "" };
+	}
 };
 
 /**
@@ -59,18 +74,28 @@ export const updateLogo = async (url: string) => {
  * @returns {Promise<{title: string}>} The title
  */
 export const getTitle = async () => {
-	const query = db.prepare("SELECT value FROM config WHERE key = 'title'");
-	const result = (query.get() as { value: string }).value;
-	return { title: result };
+	try {
+		const query = db.prepare("SELECT value FROM config WHERE key = 'title'");
+		const result = (query.get() as { value: string }).value;
+		return { title: result };
+	} catch (error) {
+		console.error(error);
+		return { title: "" };
+	}
 };
 
 /**
  * Get all of the stored settings in the config table
  */
 export const getAllSettings = async () => {
-	const query = db.prepare("SELECT key, value FROM config");
-	const result = query.all();
-	return result;
+	try {
+		const query = db.prepare("SELECT key, value FROM config");
+		const result = query.all();
+		return result;
+	} catch (error) {
+		console.error(error);
+		return null;
+	}
 };
 
 /**
@@ -130,9 +155,14 @@ export const updateTitle = async (title: string) => {
  * @returns {Promise<{url: string}>} The background image of the authentication page
  */
 export const getAuthBackground = async () => {
-	const query = db.prepare("SELECT value FROM config WHERE key = 'auth-background'");
-	const result = (query.get() as { value: string }).value;
-	return { url: result };
+	try {
+		const query = db.prepare("SELECT value FROM config WHERE key = 'auth-background'");
+		const result = (query.get() as { value: string }).value;
+		return { url: result };
+	} catch (error) {
+		console.error(error);
+		return { url: "" };
+	}
 };
 
 /**
