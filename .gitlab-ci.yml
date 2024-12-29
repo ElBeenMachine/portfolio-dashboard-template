@@ -1,6 +1,5 @@
 # Define the stages
 stages:
-    - prepare
     - lint
     - build
     - test
@@ -29,36 +28,6 @@ default:
         - until docker info; do sleep 1; done
         - echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USER --password-stdin
 
-# Get the project version
-get_project_version:
-    stage: prepare
-    image: $NODE_IMAGE
-    script:
-        - export TAG=$(node -p "require('./package.json').version")
-        - echo "TAG=$TAG" >> variables.env
-    before_script: []
-    services: []
-    artifacts:
-        reports:
-            dotenv: variables.env
-
-# Check for existing images
-check_existing_image:
-    stage: prepare
-    needs:
-        - job: get_project_version
-          artifacts: true
-    script:
-        - |
-            # Check if the image exists locally or on Docker Hub
-            if docker manifest inspect "$IMAGE_NAME:$TAG" > /dev/null 2>&1; then
-                echo "Docker image $IMAGE_NAME:$TAG already exists."
-                exit 1 # Fail the pipeline
-            else
-                echo "Docker image $IMAGE_NAME:$TAG does not exist."
-                exit 0 # Pass the check stage
-            fi
-
 # Lint the code
 lint:
     stage: lint
@@ -69,9 +38,42 @@ lint:
     before_script: []
     services: []
 
+# Get the project version
+get_project_version:
+    stage: build
+    image: $NODE_IMAGE
+    script:
+        - export TAG=$(node -p "require('./package.json').version")
+        - echo "TAG=$TAG" >> variables.env
+    before_script: []
+    services: []
+    artifacts:
+        reports:
+            dotenv: variables.env
+
+# Check if the version already exists
+check_version:
+    stage: build
+    script:
+        - |
+            # Check if the image exists locally or on Docker Hub
+            if docker manifest inspect "$IMAGE_NAME:$TAG" > /dev/null 2>&1; then
+                echo "Docker image $IMAGE_NAME:$TAG already exists."
+                exit 1 # Fail the pipeline
+            else
+                echo "Docker image $IMAGE_NAME:$TAG does not exist."
+                exit 0 # Pass the check stage
+            fi
+    before_script: []
+    services: []
+
 # Build the code
 build:
     stage: build
+    needs:
+        - job: get_project_version
+          artifacts: true
+        - job: check_version
     script:
         - docker buildx create --use
     before_script: []
