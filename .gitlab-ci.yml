@@ -42,6 +42,8 @@ lint:
 get_project_version:
     stage: build
     image: $NODE_IMAGE
+    needs:
+        - job: lint
     script:
         - export TAG=$(node -p "require('./package.json').version")
         - echo "TAG=$TAG" >> variables.env
@@ -54,6 +56,9 @@ get_project_version:
 # Check if the version already exists
 check_version:
     stage: build
+    needs:
+        - job: get_project_version
+          artifacts: true
     script:
         - |
             # Check if the image exists locally or on Docker Hub
@@ -68,7 +73,7 @@ check_version:
     services: []
 
 # Build the code
-build:
+build_and_push:
     stage: build
     needs:
         - job: get_project_version
