@@ -18,10 +18,10 @@ get_project_version:
 # Create a release
 create_release:
     stage: release
-    image: registry.gitlab.com/gitlab-org/release-cli:latest
     needs:
         - job: get_project_version
           artifacts: true
+    image: registry.gitlab.com/gitlab-org/release-cli:latest
     release:
         name: Release $VERSION
         tag_name: $VERSION
