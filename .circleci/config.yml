@@ -33,7 +33,7 @@ jobs:
 
     Build_Test:
         docker:
-            - image: cimg/node:23.1
+            - image: cimg/base
         steps:
             - checkout
             - run:
