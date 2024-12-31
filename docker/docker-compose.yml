@@ -1,0 +1,19 @@
+# Volumes
+volumes:
+    dashboard-data:
+
+services:
+    dashboard:
+        build:
+            context: ../
+            dockerfile: Dockerfile
+        ports:
+            - "3000:3000"
+        volumes:
+            - dashboard-data:/app/data
+    mongo:
+        image: mongo:latest
+        restart: always
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: username
+            MONGO_INITDB_ROOT_PASSWORD: password

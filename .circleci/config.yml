@@ -1,88 +1,25 @@
 version: 2.1
 
+parameters:
+    image-tag:
+        type: string
+        default: "current"
+
+# Create a testing job to run on the testing pipeline to run jest
+workflows:
+    test_workflow:
+        jobs:
+            - test
+
 jobs:
-    lint:
+    test:
         docker:
-            - image: circleci/node:23
+            - image: cimg/node:23.1
         steps:
             - checkout
             - run:
                   name: Install dependencies
                   command: npm install
             - run:
-                  name: Run linter
-                  command: npm run lint
-
-    get_project_version:
-        docker:
-            - image: circleci/node:23
-        steps:
-            - checkout
-            - run:
-                  name: Get project version
-                  command: |
-                      export TAG=$(node -p "require('./package.json').version")
-                      echo "TAG=$TAG" >> variables.env
-            - persist_to_workspace:
-                  root: .
-                  paths:
-                      - variables.env
-
-    check_version:
-        docker:
-            - image: circleci/docker:24.0.5
-        steps:
-            - checkout
-            - attach_workspace:
-                  at: .
-            - run:
-                  name: Check if version exists
-                  command: |
-                      source variables.env
-                      if docker manifest inspect "$DOCKER_USER/$PROJECT_NAME:$TAG" > /dev/null 2>&1; then
-                        echo "Docker image $DOCKER_USER/$PROJECT_NAME:$TAG already exists."
-                        exit 1
-                      else
-                        echo "Docker image $DOCKER_USER/$PROJECT_NAME:$TAG does not exist."
-                      fi
-
-    build_and_push:
-        docker:
-            - image: circleci/docker:24.0.5
-        steps:
-            - checkout
-            - attach_workspace:
-                  at: .
-            - run:
-                  name: Build and push Docker image
-                  command: |
-                      source variables.env
-                      docker buildx create --use
-                      docker buildx build --push --platform linux/amd64,linux/arm64 --tag "$DOCKER_USER/$PROJECT_NAME:$TAG" .
-
-workflows:
-    version: 2
-    build_and_deploy:
-        jobs:
-            - lint:
-                  filters:
-                      branches:
-                          ignore: production
-            - get_project_version:
-                  requires:
-                      - lint
-                  filters:
-                      branches:
-                          only: production
-            - check_version:
-                  requires:
-                      - get_project_version
-                  filters:
-                      branches:
-                          only: production
-            - build_and_push:
-                  requires:
-                      - check_version
-                  filters:
-                      branches:
-                          only: production
+                  name: Run tests
+                  command: npm test

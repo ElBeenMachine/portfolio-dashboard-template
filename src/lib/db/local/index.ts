@@ -35,6 +35,19 @@ export const db = new Database(dbPath, {
 });
 
 /**
+ * Check if the database exists
+ *
+ * @throws {Error} If the database does not exist
+ */
+export const checkConfigTable = () => {
+	const query = db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='config'");
+	const result = query.get();
+
+	if (!result) return false;
+	return true;
+};
+
+/**
  * Initialize the database
  */
 export const initDB = () => {

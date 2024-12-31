@@ -19,8 +19,7 @@ export async function generateMetadata() {
 	let title;
 	try {
 		title = (await getTitle()).title;
-	} catch (error) {
-		console.error(error);
+	} catch {
 		title = "Dashboard";
 	}
 

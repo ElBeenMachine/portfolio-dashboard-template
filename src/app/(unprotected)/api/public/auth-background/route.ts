@@ -12,11 +12,13 @@ import { redirect } from "next/navigation";
  * @returns {Promise<NextResponse>} The response containing the background
  */
 export async function GET() {
+	let url = "/img/default-auth-background.jpg";
+
 	try {
-		const { url } = await getAuthBackground();
-		redirect(url);
-	} catch (error) {
-		console.error(error);
+		url = (await getAuthBackground()).url;
+	} catch {
 		return NextResponse.json({ error: "An unexpected server error occurred" }, { status: 500 });
+	} finally {
+		redirect(url);
 	}
 }

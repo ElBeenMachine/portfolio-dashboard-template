@@ -15,8 +15,7 @@ export async function GET() {
 		// Query the local database for all available content types
 		const contentTypes = await getAllContentTypes();
 		return NextResponse.json(contentTypes);
-	} catch (error) {
-		console.error(error);
+	} catch {
 		return NextResponse.json({ error: "An unexpected server error occurred" }, { status: 500 });
 	}
 }
