@@ -1,0 +1,26 @@
+stages:
+    - release
+
+create_release:
+    stage: release
+    image: curlimages/curl:latest
+    script:
+        # Extract version from package.json
+        - VERSION=$(node -p "require('./package.json').version")
+        # Create GitLab release
+        - |
+            curl --header "PRIVATE-TOKEN: $GITLAB_TOKEN" --header "Content-Type: application/json" \
+              --data "{
+                \"name\": \"Release $VERSION\",
+                \"tag_name\": \"$VERSION\",
+                \"description\": \"Release version $VERSION\",
+                \"assets\": {
+                  \"links\": [
+                    {
+                      \"name\": \"Docker Image\",
+                      \"url\": \"https://hub.docker.com/r/$DOCKER_USERNAME/portfolio-dashboard"
+                    }
+                  ]
+                }
+              }" \
+              "https://gitlab.com/api/v4/projects/$CI_PROJECT_ID/releases"

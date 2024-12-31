@@ -120,4 +120,4 @@ jobs:
                   command: |
                       echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
                       docker buildx create --use
-                      docker buildx build --platform linux/amd64,linux/arm64 -t << pipeline.parameters.PROJECT_NAME >>:$TAG -t << pipeline.parameters.PROJECT_NAME >>:latest --push .
+                      docker buildx build --platform linux/amd64,linux/arm64 -t $DOCKER_USERNAME/<< pipeline.parameters.PROJECT_NAME >>:$TAG -t $DOCKER_USERNAME/<< pipeline.parameters.PROJECT_NAME >>:latest --push .
