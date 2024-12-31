@@ -46,6 +46,9 @@ jobs:
                       - v1-dependencies-{{ checksum "package-lock.json" }}
                       - v1-dependencies-
             - run:
+                  name: Set node environment
+                  command: echo "NODE_ENV=production" >> $BASH_ENV
+            - run:
                   name: Create dummy environment
                   command: npm run init
             - run:
