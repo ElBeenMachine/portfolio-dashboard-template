@@ -31,6 +31,8 @@ workflows:
                       branches:
                           only: production
             - Build_And_Push:
+                  requires:
+                      - Version
                   filters:
                       branches:
                           only: production
@@ -79,7 +81,7 @@ jobs:
                   name: Get Project Version
                   command: |
                       export TAG=$(node -p "require('./package.json').version")
-                      echo "TAG=$TAG" >> $BASH_ENV
+                      echo export TAG=$(node -p "require('./package.json').version") >> $BASH_ENV
             - run:
                   name: Check if Version Exists
                   command: |
@@ -89,8 +91,6 @@ jobs:
                       else
                           echo "Docker image $DOCKER_USERNAME/<< pipeline.parameters.PROJECT_NAME >>:$TAG does not exist."
                       fi
-            - run: |
-                  printenv TAG
             - run: |
                   cp $BASH_ENV bash.env
             - persist_to_workspace:
@@ -115,15 +115,6 @@ jobs:
                   at: .
             - run: |
                   cat bash.env >> $BASH_ENV
-            - run:
-                  name: Check if Version Exists
-                  command: |
-                      if docker manifest inspect "$DOCKER_USERNAME/<< pipeline.parameters.PROJECT_NAME >>:$TAG" > /dev/null 2>&1; then
-                          echo "Docker image $DOCKER_USERNAME/<< pipeline.parameters.PROJECT_NAME >>:$TAG already exists."
-                          exit 1
-                      else
-                          echo "Docker image $DOCKER_USERNAME/<< pipeline.parameters.PROJECT_NAME >>:$TAG does not exist."
-                      fi
             - run:
                   name: Build Docker image
                   command: |
