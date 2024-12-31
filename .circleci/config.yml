@@ -26,6 +26,10 @@ workflows:
                           ignore: production
     publish_workflow:
         jobs:
+            - Version:
+                  filters:
+                      branches:
+                          only: production
             - Build_And_Push:
                   filters:
                       branches:
@@ -79,7 +83,6 @@ jobs:
             - run:
                   name: Check if Version Exists
                   command: |
-                      source variables.env
                       if docker manifest inspect "$DOCKER_USERNAME/<< pipeline.parameters.PROJECT_NAME >>:$TAG" > /dev/null 2>&1; then
                           echo "Docker image $DOCKER_USERNAME/<< pipeline.parameters.PROJECT_NAME >>:$TAG already exists."
                           exit 1
@@ -115,7 +118,6 @@ jobs:
             - run:
                   name: Check if Version Exists
                   command: |
-                      source variables.env
                       if docker manifest inspect "$DOCKER_USERNAME/<< pipeline.parameters.PROJECT_NAME >>:$TAG" > /dev/null 2>&1; then
                           echo "Docker image $DOCKER_USERNAME/<< pipeline.parameters.PROJECT_NAME >>:$TAG already exists."
                           exit 1
@@ -125,7 +127,6 @@ jobs:
             - run:
                   name: Build Docker image
                   command: |
-                      source variables.env
                       echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
                       docker buildx create --use
                       docker buildx build --platform linux/amd64,linux/arm64 -t << pipeline.parameters.PROJECT_NAME >>:$TAG -t << pipeline.parameters.PROJECT_NAME >>:latest --push .
