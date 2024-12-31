@@ -6,8 +6,6 @@ stages:
 get_project_version:
     stage: release
     image: node:23-alpine
-    needs:
-        - job: lint
     script:
         - export VERSION=$(node -p "require('./package.json').version")
         - echo "VERSION=$VERSION" >> variables.env
