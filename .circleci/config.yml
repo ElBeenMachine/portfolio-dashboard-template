@@ -47,7 +47,7 @@ jobs:
                       - v1-dependencies-
             - run:
                   name: Create dummy environment
-                  command: npm run build
+                  command: npm run init
             - run:
                   name: Build
                   command: npm run build
