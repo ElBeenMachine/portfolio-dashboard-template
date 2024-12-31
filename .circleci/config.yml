@@ -1,17 +1,41 @@
 version: 2.1
 
+parameters:
+    PROJECT_NAME:
+        type: string
+        default: portfolio-dashboard
+    NODE_IMAGE:
+        type: string
+        default: "cimg/node:23.1"
+    BASE_IMAGE:
+        type: string
+        default: "cimg/base:2024.12"
+
 workflows:
     test_workflow:
         jobs:
-            - Unit_Tests
+            - Unit_Tests:
+                  filters:
+                      branches:
+                          ignore: production
             - Build_Test:
                   requires:
                       - Unit_Tests
+                  filters:
+                      branches:
+                          ignore: production
+    publish_workflow:
+        jobs:
+            - Build_And_Push:
+                  filters:
+                      branches:
+                          only: production
 
 jobs:
+    # Test to see if the unit tests pass
     Unit_Tests:
         docker:
-            - image: cimg/node:23.1
+            - image: << pipeline.parameters.NODE_IMAGE >>
         steps:
             - checkout
             - restore_cache:
@@ -31,18 +55,49 @@ jobs:
             - store_test_results:
                   path: test-results
 
+    # Test to see if the docker image builds
     Build_Test:
         docker:
-            - image: cimg/base:2024.12
+            - image: << pipeline.parameters.BASE_IMAGE >>
         steps:
             - checkout
             - setup_remote_docker
             - run:
                   name: Build Docker image
-                  command: docker build -t portfolio-dashboard:testing .
+                  command: docker build -t << pipeline.parameters.PROJECT_NAME >>:testing .
+
+    # Build the container image for multiple platforms (below) and push to Docker Hub
+    # Included Architectures
+    #   - linux/amd64
+    #   - linux/arm64
+    Build_And_Push:
+        docker:
+            - image: << pipeline.parameters.BASE_IMAGE >>
+        # environment:
+        #     DOCKER_DRIVER: overlay2
+        #     DOCKER_TLS_CERTDIR: ""
+        steps:
+            - checkout
+            - setup_remote_docker
             - run:
-                  name: Run Docker container
-                  command: docker run -d -p 3000:3000 portfolio-dashboard:testing
+                  name: Get Project Version
+                  command: |
+                      export TAG=$(node -p "require('./package.json').version")
+                      echo "TAG=$TAG" >> variables.env
             - run:
-                  name: Ping container
-                  command: curl -s http://localhost:3000
+                  name: Check if Version Exists
+                  command: |
+                      source variables.env
+                      if docker manifest inspect "$DOCKER_USERNAME/<< pipeline.parameters.PROJECT_NAME >>:$TAG" > /dev/null 2>&1; then
+                          echo "Docker image $DOCKER_USERNAME/<< pipeline.parameters.PROJECT_NAME >>:$TAG already exists."
+                          exit 1
+                      else
+                          echo "Docker image $DOCKER_USERNAME/<< pipeline.parameters.PROJECT_NAME >>:$TAG does not exist."
+                      fi
+            - run:
+                  name: Build Docker image
+                  command: |
+                      source variables.env
+                      echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+                      docker buildx create --use
+                      docker buildx build --platform linux/amd64,linux/arm64 -t << pipeline.parameters.PROJECT_NAME >>:$TAG -t << pipeline.parameters.PROJECT_NAME >>:latest --push .
