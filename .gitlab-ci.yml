@@ -18,13 +18,16 @@ get_project_version:
 # Create a release
 create_release:
     stage: release
+    image: registry.gitlab.com/gitlab-org/release-cli:latest
     needs:
         - job: get_project_version
           artifacts: true
     release:
+        name: Release $VERSION
         tag_name: $VERSION
         description: |
             This is the release for version $VERSION
+        ref: $CI_COMMIT_SHA
         assets:
             links:
                 - name: "Docker Image"
