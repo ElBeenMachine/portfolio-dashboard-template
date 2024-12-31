@@ -21,23 +21,11 @@ create_release:
     needs:
         - job: get_project_version
           artifacts: true
-
-    image: curlimages/curl:latest
-    script:
-        # Create GitLab release
-        - |
-            curl --header "PRIVATE-TOKEN: $GITLAB_TOKEN" --header "Content-Type: application/json" \
-              --data "{
-                \"name\": \"Release $VERSION\",
-                \"tag_name\": \"$VERSION\",
-                \"description\": \"Release version $VERSION\",
-                \"assets\": {
-                  \"links\": [
-                    {
-                      \"name\": \"Docker Image\",
-                      \"url\": \"https://hub.docker.com/r/$DOCKER_USERNAME/portfolio-dashboard"
-                    }
-                  ]
-                }
-              }" \
-              "https://gitlab.com/api/v4/projects/$CI_PROJECT_ID/releases"
+    release:
+        tag_name: $VERSION
+        description: |
+            This is the release for version $VERSION
+        assets:
+            links:
+                - name: "Docker Image"
+                  url: https://hub.docker.com/r/$DOCKER_USER/portfolio-dashboard
