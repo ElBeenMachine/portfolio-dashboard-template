@@ -14,8 +14,19 @@ RUN npm ci
 # Copy the rest of the application code to the working directory
 COPY . .
 
+# Create the database directory
+RUN mkdir -p /app/data/db
+RUN chmod 777 -R /app/data/db
+
+# Initialise the database for the build
+ENV NODE_ENV=production
+RUN npm run init
+
 # Build the Next.js application
 RUN npx next build
+
+# Delete the database file
+RUN rm -rf /app/data/db/config.db
 
 # Stage 2: Run the application
 FROM node:20-alpine
@@ -32,10 +43,6 @@ EXPOSE 3000
 # Set up the healthcheck
 HEALTHCHECK --interval=30s --timeout=5s --retries=5 \
     CMD wget --no-verbose --tries=1 --spider http://localhost:3000 || exit 1
-
-# Create the database directory
-RUN mkdir -p /app/data/db
-RUN chmod 777 -R /app/data/db
 
 # Start the Next.js application
 CMD ["npm", "start"]

@@ -14,8 +14,7 @@ export async function GET() {
 	try {
 		const settings = await getAllSettings();
 		return NextResponse.json({ settings });
-	} catch (error) {
-		console.error(error);
+	} catch {
 		return NextResponse.json({ error: "An unexpected server error occurred" }, { status: 500 });
 	}
 }

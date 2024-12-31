@@ -24,8 +24,7 @@ export async function POST(request: Request) {
 
 		// Return the update response
 		return NextResponse.json({ status: response });
-	} catch (error) {
-		console.error(error);
+	} catch {
 		return NextResponse.json({ error: "An unexpected server error occurred" }, { status: 500 });
 	}
 }

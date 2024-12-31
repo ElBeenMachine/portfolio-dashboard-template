@@ -12,11 +12,13 @@ import { NextResponse } from "next/server";
  * @returns {Promise<NextResponse>} The response containing the logo
  */
 export async function GET() {
+	let logo = "/img/default-logo.jpg";
+
 	try {
-		const { logo } = await getLogo();
-		redirect(logo);
-	} catch (error) {
-		console.error(error);
+		logo = (await getLogo()).logo;
+	} catch {
 		return NextResponse.json({ error: "An unexpected server error occurred" }, { status: 500 });
+	} finally {
+		redirect(logo);
 	}
 }
