@@ -4,7 +4,7 @@ stages:
 
 # Get the project version
 get_project_version:
-    stage: build
+    stage: release
     image: node:23-alpine
     needs:
         - job: lint
