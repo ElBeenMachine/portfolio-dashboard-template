@@ -1,10 +1,5 @@
 version: 2.1
 
-parameters:
-    image-tag:
-        type: string
-        default: "current"
-
 workflows:
     test_workflow:
         jobs:
@@ -39,17 +34,11 @@ jobs:
     Build_Test:
         docker:
             - image: cimg/node:23.1
-        environment:
-            NODE_ENV: production
         steps:
             - checkout
-            - restore_cache:
-                  keys:
-                      - v1-dependencies-{{ checksum "package-lock.json" }}
-                      - v1-dependencies-
             - run:
-                  name: Create dummy environment
-                  command: npm run init
+                  name: Build Docker image
+                  command: docker build -t portfolio-dashboard:testing .
             - run:
-                  name: Build
-                  command: npm run build
+                  name: Run Docker container
+                  command: docker run -d -p 3000:3000 portfolio-dashboard:testing
