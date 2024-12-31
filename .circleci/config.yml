@@ -36,6 +36,7 @@ jobs:
             - image: cimg/base:2024.12
         steps:
             - checkout
+            - setup_remote_docker
             - run:
                   name: Build Docker image
                   command: docker build -t portfolio-dashboard:testing .
