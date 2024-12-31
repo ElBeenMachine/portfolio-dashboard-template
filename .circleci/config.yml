@@ -80,6 +80,7 @@ jobs:
             - run:
                   name: Get Project Version
                   command: |
+                      export TAG=$(node -p "require('./package.json').version")
                       echo export TAG=$(node -p "require('./package.json').version") >> $BASH_ENV
             - run:
                   name: Check if Version Exists
