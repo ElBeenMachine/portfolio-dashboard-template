@@ -1,12 +1,31 @@
+# Define the stages
 stages:
     - release
 
+# Get the project version
+get_project_version:
+    stage: build
+    image: node:23-alpine
+    needs:
+        - job: lint
+    script:
+        - export VERSION=$(node -p "require('./package.json').version")
+        - echo "VERSION=$VERSION" >> variables.env
+    before_script: []
+    services: []
+    artifacts:
+        reports:
+            dotenv: variables.env
+
+# Create a release
 create_release:
     stage: release
+    needs:
+        - job: get_project_version
+          artifacts: true
+
     image: curlimages/curl:latest
     script:
-        # Extract version from package.json
-        - VERSION=$(node -p "require('./package.json').version")
         # Create GitLab release
         - |
             curl --header "PRIVATE-TOKEN: $GITLAB_TOKEN" --header "Content-Type: application/json" \
