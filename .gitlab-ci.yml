@@ -1,0 +1,40 @@
+# Define the stages
+stages:
+    - release
+
+# Get the project version
+get_project_version:
+    stage: release
+    image: node:23-alpine
+    script:
+        - export VERSION=$(node -p "require('./package.json').version")
+        - echo "VERSION=$VERSION" >> variables.env
+    before_script: []
+    services: []
+    artifacts:
+        reports:
+            dotenv: variables.env
+    rules:
+        - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+# Create a release
+create_release:
+    stage: release
+    needs:
+        - job: get_project_version
+          artifacts: true
+    image: registry.gitlab.com/gitlab-org/release-cli:latest
+    script:
+        - echo "Creating release $VERSION"
+    release:
+        name: Release $VERSION
+        tag_name: $VERSION
+        description: |
+            This is the release for version $VERSION
+        ref: $CI_COMMIT_SHA
+        assets:
+            links:
+                - name: "Docker Image"
+                  url: https://hub.docker.com/r/$DOCKER_USER/portfolio-dashboard
+    rules:
+        - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
