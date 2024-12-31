@@ -66,6 +66,35 @@ jobs:
                   name: Build Docker image
                   command: docker build -t << pipeline.parameters.PROJECT_NAME >>:testing .
 
+    Version:
+        docker:
+            - image: << pipeline.parameters.NODE_IMAGE >>
+        steps:
+            - checkout
+            - run:
+                  name: Get Project Version
+                  command: |
+                      export TAG=$(node -p "require('./package.json').version")
+                      echo "TAG=$TAG" >> $BASH_ENV
+            - run:
+                  name: Check if Version Exists
+                  command: |
+                      source variables.env
+                      if docker manifest inspect "$DOCKER_USERNAME/<< pipeline.parameters.PROJECT_NAME >>:$TAG" > /dev/null 2>&1; then
+                          echo "Docker image $DOCKER_USERNAME/<< pipeline.parameters.PROJECT_NAME >>:$TAG already exists."
+                          exit 1
+                      else
+                          echo "Docker image $DOCKER_USERNAME/<< pipeline.parameters.PROJECT_NAME >>:$TAG does not exist."
+                      fi
+            - run: |
+                  printenv TAG
+            - run: |
+                  cp $BASH_ENV bash.env
+            - persist_to_workspace:
+                  root: .
+                  paths:
+                      - bash.env
+
     # Build the container image for multiple platforms (below) and push to Docker Hub
     # Included Architectures
     #   - linux/amd64
@@ -79,11 +108,10 @@ jobs:
         steps:
             - checkout
             - setup_remote_docker
-            - run:
-                  name: Get Project Version
-                  command: |
-                      export TAG=$(node -p "require('./package.json').version")
-                      echo "TAG=$TAG" >> variables.env
+            - attach_workspace:
+                  at: .
+            - run: |
+                  cat bash.env >> $BASH_ENV
             - run:
                   name: Check if Version Exists
                   command: |
