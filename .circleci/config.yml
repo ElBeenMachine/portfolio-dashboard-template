@@ -9,7 +9,9 @@ workflows:
     test_workflow:
         jobs:
             - Unit_Tests
-            - Build_Test
+            - Build_Test:
+                  requires:
+                      - Unit_Tests
 
 jobs:
     Unit_Tests:
@@ -46,5 +48,3 @@ jobs:
             - run:
                   name: Build
                   command: npm run build
-        needs:
-            - Unit_Tests
