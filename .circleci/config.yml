@@ -5,14 +5,17 @@ parameters:
         type: string
         default: "current"
 
-# Create a testing job to run on the testing pipeline to run jest
 workflows:
     test_workflow:
         jobs:
-            - test
+            - Test
+    # deploy_workflow:
+    # jobs:
+    # - Build
+    # - Deploy
 
 jobs:
-    test:
+    Test:
         docker:
             - image: cimg/node:23.1
         steps:
@@ -25,3 +28,5 @@ jobs:
                   command: npm test
             - store_test_results:
                   path: test-results
+
+    # Build:
