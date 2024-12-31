@@ -31,6 +31,8 @@ workflows:
                       branches:
                           only: production
             - Build_And_Push:
+                  requires:
+                      - Version
                   filters:
                       branches:
                           only: production
@@ -89,8 +91,6 @@ jobs:
                       else
                           echo "Docker image $DOCKER_USERNAME/<< pipeline.parameters.PROJECT_NAME >>:$TAG does not exist."
                       fi
-            - run: |
-                  printenv TAG
             - run: |
                   cp $BASH_ENV bash.env
             - persist_to_workspace:
