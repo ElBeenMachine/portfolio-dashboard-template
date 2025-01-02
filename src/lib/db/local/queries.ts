@@ -194,3 +194,20 @@ export const updateAuthBackground = async (url: string) => {
 		throw new Error("Failed to update auth background");
 	}
 };
+
+/**
+ * Get the onboarded state of the dashboard
+ *
+ * @returns {Promise<{onboarded: boolean}>} The onboarded state of the dashboard
+ */
+export const getOnboardedState = async () => {
+	if (!checkConfigTable()) throw new Error("Database does not exist");
+
+	try {
+		const query = db.prepare("SELECT value FROM config WHERE key = 'onboarded'");
+		const result = (query.get() as { value: string }).value;
+		return result === "true";
+	} catch {
+		throw new Error("Onboarded state not found");
+	}
+};

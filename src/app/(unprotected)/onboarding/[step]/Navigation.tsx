@@ -4,29 +4,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-const pages = [
-	{
-		href: "/onboarding/1",
-		title: "Step 1",
-	},
-	{
-		href: "/onboarding/2",
-		title: "Step 2",
-	},
-	{
-		href: "/onboarding/3",
-		title: "Step 3",
-	},
-	{
-		href: "/onboarding/4",
-		title: "Step 4",
-	},
-];
-
-export default function OnboardingNavigation() {
-	const path = usePathname();
-	const currentPath = parseInt(path.split("/")[2]);
-
+export default function OnboardingNavigation({
+	pages,
+	pageNo,
+	setPageNo,
+}: {
+	pages: { id: number; href: string; title: string }[];
+	pageNo: number;
+	setPageNo: (pageNo: number) => void;
+}) {
 	return (
 		<div
 			className="w-full absolute bottom-0 left-0 flex items-center justify-center p-10"
@@ -34,8 +20,11 @@ export default function OnboardingNavigation() {
 		>
 			<div className="w-1/3 flex justify-center items-center gap-5">
 				<div className="w-9 flex items-center justify-center">
-					{currentPath > 1 && (
-						<Link href={`/onboarding/${currentPath - 1}`}>
+					{pageNo > 1 && (
+						<Link
+							href={`/onboarding/${pageNo - 1}`}
+							onClick={() => setPageNo(pageNo - 1)}
+						>
 							<FaChevronLeft className="text-white text-2xl mr-10" />
 						</Link>
 					)}
@@ -45,16 +34,20 @@ export default function OnboardingNavigation() {
 					<div className="w-9 flex items-center justify-center" key={index}>
 						<Link
 							className={`h-3 rounded-full bg-white transition-all ${
-								path === page.href ? "w-full" : "w-3 hover:scale-150 "
+								pageNo === index + 1 ? "w-full" : "w-3 hover:scale-150 "
 							}`}
 							href={page.href}
+							onClick={() => setPageNo(index + 1)}
 						></Link>
 					</div>
 				))}
 
 				<div className="w-9 flex items-center justify-center">
-					{currentPath < pages.length && (
-						<Link href={`/onboarding/${currentPath + 1}`}>
+					{pageNo < pages.length && (
+						<Link
+							href={`/onboarding/${pageNo + 1}`}
+							onClick={() => setPageNo(pageNo + 1)}
+						>
 							<FaChevronRight className="text-white text-2xl transform ml-10" />
 						</Link>
 					)}
