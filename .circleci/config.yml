@@ -26,16 +26,31 @@ workflows:
 
                   mapping: |
                       __tests__/.* RUN_TESTS true
+
                       jest.config.ts RUN_TESTS true
+
+                      public/.* RUN_TESTS true
                       public/.* RUN_PUBLISH true
+
                       src/.* RUN_PUBLISH true
+                      src/.* RUN_TESTS true
+
                       .dockerignore RUN_PUBLISH true
-                      Dockerfile RUN_PUBLISH true
+
+                      Dockerfile RUN_TESTS true
+                      Dockerfile RUN_TESTS true
+
                       next.config.ts RUN_PUBLISH true
+
+                      package.json RUN_TESTS true
                       package.json RUN_PUBLISH true
+                      package-lock.json RUN_TESTS true
                       package-lock.json RUN_PUBLISH true
+
                       postcss.config.mjs RUN_PUBLISH true
+
                       tailwind.config.ts RUN_PUBLISH true
+
                       tsconfig.json RUN_PUBLISH true
 
                   base-revision: production
