@@ -4,4 +4,4 @@ Merging %{source_branch} into %{target_branch}
 
 ## Issues
 
-<!-- List Related Issue URLs here -->
+<!--  Related issue URLs will automatically be placed here -->
