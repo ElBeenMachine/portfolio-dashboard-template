@@ -1,123 +1,42 @@
 version: 2.1
+setup: true
 
-parameters:
-    PROJECT_NAME:
-        type: string
-        default: portfolio-dashboard
-    NODE_IMAGE:
-        type: string
-        default: "cimg/node:23.1"
-    BASE_IMAGE:
-        type: string
-        default: "cimg/base:2024.12"
+orbs:
+    path-filtering: circleci/path-filtering@1
 
 workflows:
-    test_workflow:
+    always-run:
         jobs:
-            - Unit_Tests:
-                  filters:
-                      branches:
-                          ignore: production
-            - Build_Test:
-                  requires:
-                      - Unit_Tests
-                  filters:
-                      branches:
-                          ignore: production
-    publish_workflow:
-        jobs:
-            - Version:
-                  filters:
-                      branches:
-                          only: production
-            - Build_And_Push:
-                  requires:
-                      - Version
-                  filters:
-                      branches:
-                          only: production
+            - path-filtering/filter:
+                  name: check-updated-files
 
-jobs:
-    # Test to see if the unit tests pass
-    Unit_Tests:
-        docker:
-            - image: << pipeline.parameters.NODE_IMAGE >>
-        steps:
-            - checkout
-            - restore_cache:
-                  keys:
-                      - v1-dependencies-{{ checksum "package-lock.json" }}
-                      - v1-dependencies-
-            - run:
-                  name: Install dependencies
-                  command: npm install
-            - save_cache:
-                  paths:
-                      - node_modules
-                  key: v1-dependencies-{{ checksum "package-lock.json" }}
-            - run:
-                  name: Run tests
-                  command: npm test
-            - store_test_results:
-                  path: test-results
+                  # Filter for changes
+                  # - __tests__/** (Testing pipeline only)
+                  # - jest.config.ts (Testing pipeline only)
+                  # - public/**
+                  # - src/**
+                  # - .dockerignore
+                  # - Dockerfile
+                  # - next.config.ts
+                  # - package.json
+                  # - package-lock.json
+                  # - postcss.config.mjs
+                  # - tailwind.config.ts
+                  # - tsconfig.json
 
-    # Test to see if the docker image builds
-    Build_Test:
-        docker:
-            - image: << pipeline.parameters.BASE_IMAGE >>
-        steps:
-            - checkout
-            - setup_remote_docker
-            - run:
-                  name: Build Docker image
-                  command: docker build -t << pipeline.parameters.PROJECT_NAME >>:testing .
+                  mapping: |
+                      __tests__/**/* RUN_TESTS true
+                      jest.config.ts RUN_TESTS true
+                      public/**/* RUN_PUBLISH true
+                      src/**/* RUN_PUBLISH true
+                      .dockerignore RUN_PUBLISH true
+                      Dockerfile RUN_PUBLISH true
+                      next.config.ts RUN_PUBLISH true
+                      package.json RUN_PUBLISH true
+                      package-lock.json RUN_PUBLISH true
+                      postcss.config.mjs RUN_PUBLISH true
+                      tailwind.config.ts RUN_PUBLISH true
+                      tsconfig.json RUN_PUBLISH true
 
-    Version:
-        docker:
-            - image: << pipeline.parameters.NODE_IMAGE >>
-        steps:
-            - checkout
-            - run:
-                  name: Get Project Version
-                  command: |
-                      export TAG=$(node -p "require('./package.json').version")
-                      echo export TAG=$(node -p "require('./package.json').version") >> $BASH_ENV
-            - run:
-                  name: Check if Version Exists
-                  command: |
-                      if docker manifest inspect "$DOCKER_USERNAME/<< pipeline.parameters.PROJECT_NAME >>:$TAG" > /dev/null 2>&1; then
-                          echo "Docker image $DOCKER_USERNAME/<< pipeline.parameters.PROJECT_NAME >>:$TAG already exists."
-                          exit 1
-                      else
-                          echo "Docker image $DOCKER_USERNAME/<< pipeline.parameters.PROJECT_NAME >>:$TAG does not exist."
-                      fi
-            - run: |
-                  cp $BASH_ENV bash.env
-            - persist_to_workspace:
-                  root: .
-                  paths:
-                      - bash.env
-
-    # Build the container image for multiple platforms (below) and push to Docker Hub
-    # Included Architectures
-    #   - linux/amd64
-    #   - linux/arm64
-    Build_And_Push:
-        docker:
-            - image: << pipeline.parameters.BASE_IMAGE >>
-        # environment:
-        #     DOCKER_DRIVER: overlay2
-        #     DOCKER_TLS_CERTDIR: ""
-        steps:
-            - checkout
-            - setup_remote_docker
-            - attach_workspace:
-                  at: .
-            - run: |
-                  cat bash.env >> $BASH_ENV
-            - run:
-                  name: Build Docker image
-                  command: |
-                      echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-                      docker buildx create --use
-                      docker buildx build --platform linux/amd64,linux/arm64 -t $DOCKER_USERNAME/<< pipeline.parameters.PROJECT_NAME >>:$TAG -t $DOCKER_USERNAME/<< pipeline.parameters.PROJECT_NAME >>:latest --push .
+                  base-revision: production
+                  config-path: .circleci/continue_config.yml
