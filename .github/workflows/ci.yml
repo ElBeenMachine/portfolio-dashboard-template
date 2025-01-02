@@ -48,7 +48,7 @@ jobs:
                   assets: |
                       {
                         "links": [
-                          { "name": "Docker Image", "url": "https://hub.docker.com/r/$DOCKER_USER/portfolio-dashboard" }
+                          { "name": "Docker Image", "url": "https://hub.docker.com/r/beenhamo/portfolio-dashboard" }
                         ]
                       }
     create_release:
@@ -68,6 +68,6 @@ jobs:
                   body: |
                       This is the release for version ${{ needs.get_project_version.outputs.VERSION }}.
 
-                      [Docker Image](https://hub.docker.com/r/$DOCKER_USER/portfolio-dashboard)
+                      [Docker Image](https://hub.docker.com/r/beenhamo/portfolio-dashboard)
                   draft: false
                   prerelease: false
