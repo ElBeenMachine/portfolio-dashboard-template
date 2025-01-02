@@ -2,6 +2,7 @@ import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import Home from "@/app/(unprotected)/page";
 
+// Homepage test
 describe("Home", () => {
 	it("Renders a heading", () => {
 		render(<Home />);
