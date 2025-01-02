@@ -25,10 +25,10 @@ workflows:
                   # - tsconfig.json
 
                   mapping: |
-                      __tests__/**/* RUN_TESTS true
+                      __tests__/.* RUN_TESTS true
                       jest.config.ts RUN_TESTS true
-                      public/**/* RUN_PUBLISH true
-                      src/**/* RUN_PUBLISH true
+                      public/.* RUN_PUBLISH true
+                      src/.* RUN_PUBLISH true
                       .dockerignore RUN_PUBLISH true
                       Dockerfile RUN_PUBLISH true
                       next.config.ts RUN_PUBLISH true
