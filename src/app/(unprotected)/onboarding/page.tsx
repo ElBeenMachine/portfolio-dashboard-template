@@ -1,11 +1,16 @@
+import { getOnboardedState } from "@/lib/db/local/queries";
 import { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
 	title: "Onboarding",
 };
 
-export default function OnboardingHome() {
+export default async function OnboardingHome() {
+	const onboardingState = await getOnboardedState();
+	if (onboardingState) return redirect("/");
+
 	return (
 		<div className="flex flex-col items-center justify-center h-screen p-10">
 			<div className="flex flex-col items-center justify-center gap-5">

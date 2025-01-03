@@ -8,8 +8,9 @@ import { PublicEnvScript } from "next-runtime-env";
 import NavBar from "@/components/navigation/NavBar";
 import { SessionProvider } from "next-auth/react";
 import Breadcrumbs from "@/components/navigation/Breadcrumbs";
-import { getInstanceID, getTitle } from "@/lib/db/local/queries";
+import { getInstanceID, getOnboardedState, getTitle } from "@/lib/db/local/queries";
 import { ToastContainer } from "react-toastify";
+import { redirect } from "next/navigation";
 
 /**
  * Metadata for the dashboard layout.
@@ -44,6 +45,9 @@ export default async function DashLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	const onboardedState = await getOnboardedState();
+	if (!onboardedState) return redirect("/onboarding");
+
 	const { instanceID } = await getInstanceID();
 	return (
 		<html lang="en">

@@ -6,8 +6,12 @@ import Username from "./Steps/Username";
 import Password from "./Steps/Password";
 import DatabaseConnection from "./Steps/DatabaseConnection";
 import OnboardingBullets from "./Bullets";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 export default function OnboardingForm() {
+	const router = useRouter();
+
 	const [pageNo, setPageNo] = useState<number>(0);
 
 	const [firstName, setFirstName] = useState<string>("");
@@ -20,7 +24,44 @@ export default function OnboardingForm() {
 
 	const [connectionString, setConnectionString] = useState<string>("");
 
-	function completeOnboarding() {}
+	function completeOnboarding() {
+		const onboardingData = {
+			firstName,
+			lastName,
+			username,
+			password,
+			connectionString,
+		};
+
+		console.log(onboardingData);
+
+		toast
+			.promise(
+				new Promise((resolve, reject) => {
+					fetch("/api/public/pass-onboarding", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify(onboardingData),
+					}).then((res) => {
+						if (res.status === 200) {
+							resolve("Onboarding complete");
+						} else {
+							reject("An unexpected server error occurred");
+						}
+					});
+				}),
+				{
+					pending: "Completing onboarding...",
+					success: "Onboarding complete",
+					error: "An unexpected server error occurred",
+				}
+			)
+			.then(() => {
+				router.push("/");
+			});
+	}
 
 	const pages = [
 		{

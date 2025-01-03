@@ -211,3 +211,22 @@ export const getOnboardedState = async () => {
 		throw new Error("Onboarded state not found");
 	}
 };
+
+/**
+ * Set the onboarded state of the dashboard
+ *
+ * @param {boolean} onboarded The new onboarded state of the dashboard
+ */
+export const setOnboardedState = async (onboarded: boolean) => {
+	if (!checkConfigTable()) throw new Error("Database does not exist");
+
+	try {
+		const query = db.prepare(
+			"INSERT OR REPLACE INTO config (key, value) VALUES ('onboarded', ?)"
+		);
+		const result = query.run(onboarded ? "true" : "false");
+		return result.changes > 0;
+	} catch {
+		throw new Error("Failed to update onboarded state");
+	}
+};
