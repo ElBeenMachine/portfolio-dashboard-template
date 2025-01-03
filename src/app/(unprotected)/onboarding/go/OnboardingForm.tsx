@@ -34,33 +34,19 @@ export default function OnboardingForm() {
 		};
 
 		console.log(onboardingData);
-
-		toast
-			.promise(
-				new Promise((resolve, reject) => {
-					fetch("/api/public/pass-onboarding", {
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
-						},
-						body: JSON.stringify(onboardingData),
-					}).then((res) => {
-						if (res.status === 200) {
-							resolve("Onboarding complete");
-						} else {
-							reject("An unexpected server error occurred");
-						}
-					});
-				}),
-				{
-					pending: "Completing onboarding...",
-					success: "Onboarding complete",
-					error: "An unexpected server error occurred",
-				}
-			)
-			.then(() => {
-				router.push("/");
-			});
+		fetch("/api/public/pass-onboarding", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(onboardingData),
+		}).then((res) => {
+			if (res.status === 200) {
+				router.push("/dashboard");
+			} else {
+				alert("An unexpected server error occurred");
+			}
+		});
 	}
 
 	const pages = [
