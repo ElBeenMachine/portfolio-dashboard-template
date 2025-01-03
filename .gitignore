@@ -45,3 +45,5 @@ next-env.d.ts
 # Development
 /data
 docker/docker-compose-prod.yml
+test-results/**/*
+.swc

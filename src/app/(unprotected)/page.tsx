@@ -2,37 +2,24 @@
  * @author Ollie Beenham
  */
 
-import Link from "next/link";
+import { getOnboardedState } from "@/lib/db/local/queries";
+import { redirect } from "next/navigation";
 
 /**
  * Landing page for the application
  *
  * @returns {JSX.Element} Home page
  */
-export default function Home() {
-	return (
-		<div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-			<main className="flex flex-col gap-8 row-start-2 items-center justify-center">
-				<img
-					src="/api/public/dashboard-logo"
-					alt="Dashboard Logo"
-					className="w-24 h-24 sm:w-32 sm:h-32 mb-10"
-				/>
+export default async function Home() {
+	const onboardedState = await getOnboardedState();
 
-				<h1 className="text-center sm:text-left text-4xl sm:text-5xl font-bold">
-					Welcome to your Portfolio Dashboard!
-				</h1>
-
-				<div className="flex gap-4 items-center flex-col sm:flex-row">
-					<Link
-						className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-						href="/dashboard"
-						rel="noopener noreferrer"
-					>
-						Visit Dashboard
-					</Link>
-				</div>
-			</main>
-		</div>
-	);
+	/**
+	 * If the user has onboarded, redirect them to the dashboard,
+	 * otherwise, redirect them to the onboarding page
+	 */
+	if (onboardedState) {
+		redirect("/dashboard");
+	} else {
+		redirect("/onboarding");
+	}
 }

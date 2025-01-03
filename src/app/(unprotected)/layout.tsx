@@ -36,7 +36,9 @@ export default function RootLayout({
 			<head>
 				<PublicEnvScript />
 			</head>
-			<body className={"antialiased"}>{children}</body>
+			<body className={"antialiased"}>
+				<div className="w-full h-dvh bg-gray-800 text-white">{children}</div>
+			</body>
 		</html>
 	);
 }
