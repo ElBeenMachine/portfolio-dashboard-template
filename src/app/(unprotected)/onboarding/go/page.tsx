@@ -8,7 +8,9 @@ export const metadata: Metadata = {
 export default function OnboardingStep() {
 	return (
 		<div className="flex flex-col items-center justify-center h-screen">
-			<OnboardingForm />
+			<div className="w-1/2 flex flex-col">
+				<OnboardingForm />
+			</div>
 		</div>
 	);
 }

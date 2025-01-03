@@ -3,7 +3,6 @@
  */
 
 import { getOnboardedState } from "@/lib/db/local/queries";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
 /**

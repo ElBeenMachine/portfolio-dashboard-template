@@ -3,7 +3,6 @@
  */
 
 import "@/styles/default.css";
-import "@/styles/dashboard.css";
 
 import { PublicEnvScript } from "next-runtime-env";
 import NavBar from "@/components/navigation/NavBar";

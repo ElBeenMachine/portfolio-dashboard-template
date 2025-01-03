@@ -22,3 +22,21 @@ export const createDBConnection = async () => {
 	const client = new MongoClient(uri);
 	return { client, instanceID };
 };
+
+/**
+ * Test a connection string
+ *
+ * @param {string} connectionString The connection string to test
+ * @returns {Promise<boolean>} Whether the connection string is valid
+ */
+export const testConnectionString = async (connectionString: string) => {
+	try {
+		const client = new MongoClient(connectionString);
+		await client.connect();
+		await client.close();
+		return true;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+};

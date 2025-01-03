@@ -1,11 +1,11 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
-import Home from "@/app/(unprotected)/page";
+import OnboardingHome from "@/app/(unprotected)/onboarding/page";
 
 // Homepage test
 describe("Home", () => {
 	it("Renders a heading", () => {
-		render(<Home />);
+		render(<OnboardingHome />);
 
 		const heading = screen.getByRole("heading", { level: 1 });
 
