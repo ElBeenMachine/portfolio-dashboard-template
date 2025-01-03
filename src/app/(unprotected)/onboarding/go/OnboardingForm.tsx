@@ -6,7 +6,6 @@ import Username from "./Steps/Username";
 import Password from "./Steps/Password";
 import DatabaseConnection from "./Steps/DatabaseConnection";
 import OnboardingBullets from "./Bullets";
-import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
 export default function OnboardingForm() {
