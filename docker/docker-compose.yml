@@ -11,6 +11,12 @@ services:
             - "3000:3000"
         volumes:
             - dashboard-data:/app/data
+        environment:
+            - AUTH_MICROSOFT_ENTRA_ID_ID
+            - AUTH_MICROSOFT_ENTRA_ID_ISSUER
+            - AUTH_MICROSOFT_ENTRA_ID_SECRET
+            - AUTH_SECRET
+            - AUTH_URL
     mongo:
         image: mongo:latest
         restart: always
