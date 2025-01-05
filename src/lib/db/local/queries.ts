@@ -97,10 +97,12 @@ export const getAllSettings = async () => {
 
 	try {
 		const query = db.prepare("SELECT key, value FROM config");
-		const result = query.all();
+		const result = query.all() as { key: string; value: string }[];
 
 		// Convert the result to an object
-		const settings = {};
+		const settings: { [key: string]: string } = {};
+
+		// Add each setting to the object, madking the database URI in the process
 		result.forEach((setting) => {
 			// If the setting is the database URI, mask it
 			if (setting.key === "mongodb-connection-string")
@@ -117,9 +119,11 @@ export const getAllSettings = async () => {
 /**
  * Get the current remote database address
  *
+ * @param {boolean} masked Whether to return a masked version of the URI (default: false).
+ *
  * @returns {Promise<{uri: string}>} The URI of the mongodb database
  */
-export const getMongoURI = async (masked: boolean) => {
+export const getMongoURI = async (masked: boolean = false) => {
 	if (!checkConfigTable()) throw new Error("Database does not exist");
 
 	try {
