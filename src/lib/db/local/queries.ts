@@ -98,7 +98,17 @@ export const getAllSettings = async () => {
 	try {
 		const query = db.prepare("SELECT key, value FROM config");
 		const result = query.all();
-		return result;
+
+		// Convert the result to an object
+		const settings = {};
+		result.forEach((setting) => {
+			// If the setting is the database URI, mask it
+			if (setting.key === "mongodb-connection-string")
+				settings[setting.key] = maskMongoURI(setting.value);
+			else settings[setting.key] = setting.value;
+		});
+
+		return settings;
 	} catch {
 		throw new Error("Failed to get settings");
 	}
@@ -109,7 +119,7 @@ export const getAllSettings = async () => {
  *
  * @returns {Promise<{uri: string}>} The URI of the mongodb database
  */
-export const getMongoURI = async () => {
+export const getMongoURI = async (masked: boolean) => {
 	if (!checkConfigTable()) throw new Error("Database does not exist");
 
 	try {
@@ -117,10 +127,38 @@ export const getMongoURI = async () => {
 			"SELECT value FROM config WHERE key = 'mongodb-connection-string'"
 		);
 		const result = (query.get() as { value: string }).value;
+
+		// If masked is requested, return a masked version of the URI
+		if (masked) return { uri: maskMongoURI(result) };
+
+		// Otherwise return plaintext
 		return { uri: result };
 	} catch {
 		throw new Error("MongoDB URI not found");
 	}
+};
+
+/**
+ * Mask the MongoDB URI
+ *
+ * @param {string} uri The URI of the mongodb database
+ * @returns {string} The masked URI
+ */
+const maskMongoURI = (uri: string) => {
+	// Extract the protocol, credentials, and host
+	const [protocolAndCredentials, host] = uri.split("@");
+
+	// If there are no credentials, return the URI
+	if (!host) return uri;
+
+	// Split and mask the credentials
+	const [protocol, credentials] = protocolAndCredentials.split("//");
+	const [username, password] = credentials.split(":");
+	const maskedUsername = "*****";
+	const maskedPassword = "*****";
+
+	// Return the masked URI
+	return `${protocol}//${maskedUsername}:${maskedPassword}@${host}`;
 };
 
 /**
