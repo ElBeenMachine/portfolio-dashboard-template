@@ -152,13 +152,11 @@ const maskMongoURI = (uri: string) => {
 	if (!host) return uri;
 
 	// Split and mask the credentials
-	const [protocol, credentials] = protocolAndCredentials.split("//");
-	const [username, password] = credentials.split(":");
 	const maskedUsername = "*****";
 	const maskedPassword = "*****";
 
 	// Return the masked URI
-	return `${protocol}//${maskedUsername}:${maskedPassword}@${host}`;
+	return `${protocolAndCredentials.split("//")[0]}//${maskedUsername}:${maskedPassword}@${host}`;
 };
 
 /**
