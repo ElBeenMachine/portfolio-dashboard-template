@@ -24,7 +24,7 @@ export default function loginFlowPage() {
 			<img src="/api/public/dashboard-logo" alt="Logo" className="w-16" />
 			<h1 className="text-2xl">Logging You In...</h1>
 			<div className="loader auth"></div>
-			<script src="/js/login.js" async />
+			{/* <script src="/js/login.js" async /> */}
 		</div>
 	);
 }

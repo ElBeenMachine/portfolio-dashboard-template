@@ -12,7 +12,7 @@ import { PublicEnvScript } from "next-runtime-env";
 export const metadata: Metadata = {
 	title: {
 		template: "%s | Dashboard App",
-		default: "Home | Dashboard App",
+		default: "Onboarding | Dashboard App",
 	},
 	icons: {
 		icon: `/api/public/dashboard-logo`,
