@@ -13,10 +13,9 @@ export const mongoURI = env("MONGO_URI") as string;
  *
  * @returns {Promise<{client: MongoClient, instanceID: string}>} The MongoDB client and instance ID
  */
-export const createDBConnection = async (): Promise<{
-	client: MongoClient;
-	instanceID: string;
-}> => {
+export const createDBConnection = async () => {
+	if (env("DOCKER_BUILD")) return { client: null, instanceID: null };
+
 	// Get the instance ID
 	const instanceID = await getInstanceID();
 

@@ -15,7 +15,7 @@ export async function GET() {
 	let logo = "/img/default-logo.jpg";
 
 	try {
-		logo = (await getSetting("dashboardLogo")).value;
+		logo = String((await getSetting("dashboardLogo")).value);
 	} catch {
 		return NextResponse.json({ error: "An unexpected server error occurred" }, { status: 500 });
 	} finally {

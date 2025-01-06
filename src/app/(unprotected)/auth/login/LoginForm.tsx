@@ -1,12 +1,14 @@
 import { signIn } from "@/lib/auth";
-import { useRef } from "react";
 
 export default function LoginForm({ redirect }: { redirect: string }) {
 	return (
 		<form
 			action={async () => {
 				"use server";
-				signIn("local");
+				signIn("local", {
+					redirectTo: redirect,
+					redirect: true,
+				});
 			}}
 			className="w-full flex flex-col gap-5"
 		>

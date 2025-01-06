@@ -13,6 +13,7 @@ import { createDBConnection } from ".";
 export const getAllProjects = async () => {
 	// Get the client and instance ID
 	const { client, instanceID } = await createDBConnection();
+	if (!client) return null;
 
 	try {
 		const db = client.db(instanceID);
@@ -41,6 +42,7 @@ export const getAllProjects = async () => {
 export const getProjectsByType = async (type: string) => {
 	// Get the client and db
 	const { client, instanceID } = await createDBConnection();
+	if (!client) return null;
 
 	try {
 		const db = client.db(instanceID);
@@ -71,6 +73,7 @@ export const getProjectsByType = async (type: string) => {
  */
 export const getProjectByID = async (_id: ObjectId) => {
 	const { client, instanceID } = await createDBConnection();
+	if (!client) return null;
 
 	try {
 		const db = client.db(instanceID);
@@ -93,6 +96,7 @@ export const getProjectByID = async (_id: ObjectId) => {
  */
 export const createBlankProject = async (type: "code" | "literatire" | "blog", title?: string) => {
 	const { client, instanceID } = await createDBConnection();
+	if (!client) return null;
 
 	try {
 		const db = client.db(instanceID);
@@ -124,6 +128,7 @@ export const createBlankProject = async (type: "code" | "literatire" | "blog", t
  */
 export const deleteProjectById = async (_id: ObjectId) => {
 	const { client, instanceID } = await createDBConnection();
+	if (!client) return false;
 
 	try {
 		const db = client.db(instanceID);
@@ -148,6 +153,7 @@ export const deleteProjectById = async (_id: ObjectId) => {
  */
 export const updateProject = async (_id: ObjectId, project: object) => {
 	const { client, instanceID } = await createDBConnection();
+	if (!client) return false;
 
 	try {
 		const db = client.db(instanceID);
@@ -173,6 +179,7 @@ export const updateProject = async (_id: ObjectId, project: object) => {
  */
 export const getSettings = async () => {
 	const { client, instanceID } = await createDBConnection();
+	if (!client) return null;
 
 	try {
 		const db = client.db(instanceID);
@@ -194,8 +201,11 @@ export const getSettings = async () => {
  * @param {string} key The key of the setting to fetch
  * @returns {Promise<string | null>} The setting with the specified key, or null if not found
  */
-export const getSetting = async (key: string): Promise<{ key: string; value: any }> => {
+export const getSetting = async (
+	key: string
+): Promise<{ key: string | null; value: string | boolean | number | null }> => {
 	const { client, instanceID } = await createDBConnection();
+	if (!client) return { key: null, value: null };
 
 	try {
 		// Get the settings collection
@@ -222,8 +232,9 @@ export const getSetting = async (key: string): Promise<{ key: string; value: any
  * @param {any} value The new value of the setting
  * @returns {Promise<boolean>} Whether the setting was updated
  */
-export const updateSetting = async (key: string, value: any) => {
+export const updateSetting = async (key: string, value: string | boolean | number) => {
 	const { client, instanceID } = await createDBConnection();
+	if (!client) return false;
 
 	try {
 		// Get the settings collection

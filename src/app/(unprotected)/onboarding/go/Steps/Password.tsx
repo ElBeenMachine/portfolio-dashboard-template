@@ -39,6 +39,7 @@ export default function Password({
 				type="password"
 				onChange={(e) => setPassword(e.target.value)}
 				className="w-full bg-gray-600 px-5 py-4 rounded-md"
+				autoFocus
 			/>
 			<input
 				placeholder="Confirm Password"
@@ -50,6 +51,7 @@ export default function Password({
 			<button
 				className="self-end px-5 py-3 bg-gray-600 rounded-md hover:bg-gray-500 transition-all"
 				onClick={validatePassword}
+				id="onboarding-next"
 			>
 				Next
 			</button>

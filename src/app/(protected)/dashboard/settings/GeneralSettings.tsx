@@ -10,7 +10,6 @@ import { StringInput } from "./inputs";
 import { toast } from "react-toastify";
 
 export default function GeneralSettings() {
-	const mongoRef = useRef<HTMLInputElement>(null);
 	const titleRef = useRef<HTMLInputElement>(null);
 	const logoRef = useRef<HTMLInputElement>(null);
 	const authBgRef = useRef<HTMLInputElement>(null);
@@ -69,19 +68,23 @@ export default function GeneralSettings() {
 		fetch("/api/config/all")
 			.then((res) => res.json())
 			.then((data) => {
-				let settings: { [key: string]: any } = {};
-				data.settings.forEach((setting: { key: string; value: any }) => {
-					settings[setting.key] = setting.value;
-				});
+				const settings: { [key: string]: string | boolean | number } = {};
+				data.settings.forEach(
+					(setting: { key: string; value: string | boolean | number }) => {
+						settings[setting.key] = setting.value;
+					}
+				);
 
 				// Set the title
-				if (titleRef.current) titleRef.current.value = settings.dashboardTitle || "";
+				if (titleRef.current)
+					titleRef.current.value = String(settings.dashboardTitle) || "";
 
 				// Set the logo
-				if (logoRef.current) logoRef.current.value = settings.dashboardLogo || "";
+				if (logoRef.current) logoRef.current.value = String(settings.dashboardLogo) || "";
 
 				// Set the authentication background
-				if (authBgRef.current) authBgRef.current.value = settings.authBackground || "";
+				if (authBgRef.current)
+					authBgRef.current.value = String(settings.authBackground) || "";
 			});
 	}, []);
 

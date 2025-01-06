@@ -4,7 +4,7 @@ export default function IdentityProviders({ redirect }: { redirect: string }) {
 	return (
 		<div className="w-full">
 			<p className="mb-2 text-gray-400">Or sign in with an identity provider</p>
-			<div className="w-full grid grid-cols-2 gap-5">
+			<div className="w-full grid grid-cols-1 md:grid-cols-2 gap-5">
 				{/* Microsoft OAuth Button */}
 				<a
 					href={`/api/auth/signin?provider=microsoft-entra-id&redirectTo=${redirect}`}

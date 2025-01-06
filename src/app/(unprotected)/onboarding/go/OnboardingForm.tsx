@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PersonalDetails from "./Steps/PersonalDetails";
 import Username from "./Steps/Username";
 import Password from "./Steps/Password";
@@ -46,6 +46,25 @@ export default function OnboardingForm() {
 			}
 		});
 	}
+
+	const handleKeyDown = (event: KeyboardEvent) => {
+		if (event.key === "Enter") {
+			const nextButton = document.getElementById("onboarding-next");
+			if (nextButton) {
+				nextButton.click();
+			}
+		}
+	};
+
+	useEffect(() => {
+		// Add event listener for keydown
+		window.addEventListener("keydown", handleKeyDown);
+
+		// Cleanup event listener on component unmount
+		return () => {
+			window.removeEventListener("keydown", handleKeyDown);
+		};
+	}, []);
 
 	const pages = [
 		{

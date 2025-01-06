@@ -31,10 +31,12 @@ export default function Email({
 				value={email || ""}
 				onChange={(e) => setEmail(e.target.value)}
 				className="w-full bg-gray-600 px-5 py-4 rounded-md"
+				autoFocus
 			/>
 			<button
 				onClick={validateEmail}
 				className="self-end px-5 py-3 bg-gray-600 rounded-md hover:bg-gray-500 transition-all"
+				id="onboarding-next"
 			>
 				Next
 			</button>

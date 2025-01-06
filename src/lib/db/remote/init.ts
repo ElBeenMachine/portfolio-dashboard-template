@@ -8,6 +8,7 @@ import { createDBConnection } from ".";
 export const initRemoteDatabase = async () => {
 	// Connect to the database
 	const { client, instanceID } = await createDBConnection();
+	if (!client) throw new Error("Remote database is null");
 
 	// Create the database if it doesn't exist
 	const db = client.db(instanceID);

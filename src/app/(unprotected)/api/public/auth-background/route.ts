@@ -15,7 +15,7 @@ export async function GET() {
 	let url: string = "";
 
 	try {
-		url = (await getSetting("authBackground")).value;
+		url = String((await getSetting("authBackground")).value);
 	} catch (error) {
 		console.log(error);
 		return NextResponse.json({ error: "An unexpected server error occurred" }, { status: 500 });

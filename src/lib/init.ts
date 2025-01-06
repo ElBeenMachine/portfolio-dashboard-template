@@ -8,6 +8,10 @@ import { maskConnectionString, mongoURI } from "./db/remote";
 import { initRemoteDatabase } from "./db/remote/init";
 
 (async () => {
+	// Determine if app is currently being built
+	if (process.env.DOCKER_BUILD)
+		console.log("Building app, skipping remote database initialization");
+
 	// Run the database initialization
 	console.log(
 		"\n----------------------------------------- Initialising Database -----------------------------------------\n"
@@ -17,9 +21,12 @@ import { initRemoteDatabase } from "./db/remote/init";
 	console.log(`Initializing local database at ${dbPath}`);
 	await initLocalDatabase();
 
-	// Initialise the remote database
-	console.log(`\nInitializing remote database at ${maskConnectionString(mongoURI)}`);
-	await initRemoteDatabase();
+	// If not building, initialise the remote database
+	if (!process.env.DOCKER_BUILD) {
+		// Initialise the remote database
+		console.log(`\nInitializing remote database at ${maskConnectionString(mongoURI)}`);
+		await initRemoteDatabase();
+	}
 
 	console.log(
 		"\n---------------------------------------------------------------------------------------------------------\n"
