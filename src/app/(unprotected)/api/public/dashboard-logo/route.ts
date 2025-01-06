@@ -2,7 +2,7 @@
  * @author Ollie Beenham
  */
 
-import { getLogo } from "@/lib/db/local/queries";
+import { getSetting } from "@/lib/db/remote/queries";
 import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
 
@@ -15,7 +15,7 @@ export async function GET() {
 	let logo = "/img/default-logo.jpg";
 
 	try {
-		logo = (await getLogo()).logo;
+		logo = (await getSetting("dashboardLogo")).value;
 	} catch {
 		return NextResponse.json({ error: "An unexpected server error occurred" }, { status: 500 });
 	} finally {

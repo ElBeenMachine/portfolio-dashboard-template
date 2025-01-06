@@ -3,8 +3,8 @@
  */
 
 import { MongoClient } from "mongodb";
-import { instanceID } from "../local";
 import { env } from "next-runtime-env";
+import { getInstanceID } from "../local/queries";
 
 export const mongoURI = env("MONGO_URI") as string;
 
@@ -17,8 +17,8 @@ export const createDBConnection = async (): Promise<{
 	client: MongoClient;
 	instanceID: string;
 }> => {
-	// Test the connection
-	await testConnectionString(mongoURI);
+	// Get the instance ID
+	const instanceID = await getInstanceID();
 
 	// Create and return a new MongoDB client
 	const client = new MongoClient(mongoURI);
@@ -32,25 +32,6 @@ export const createDBConnection = async (): Promise<{
  * @returns {string} The masked URI
  */
 export const maskConnectionString = (uri: string): string => {
+	if (!uri) return "";
 	return uri.replace(/\/\/(.*?):(.*?)@/, "//user:password@");
-};
-
-/**
- * Test a connection string
- *
- * @param {string} connectionString The connection string to test
- */
-export const testConnectionString = async (connectionString: string) => {
-	// If no connection string is provided, throw an error
-	if (!connectionString)
-		throw new Error(
-			"No connection string provided, please ensure the MONGO_URI environment variable is set."
-		);
-
-	// Create the database client
-	const client = new MongoClient(connectionString);
-
-	// Attempt to connect to the database
-	await client.connect();
-	await client.close();
 };

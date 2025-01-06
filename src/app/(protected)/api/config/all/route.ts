@@ -2,7 +2,7 @@
  * @author Ollie Beenham
  */
 
-import { getAllSettings } from "@/lib/db/local/queries";
+import { getSettings } from "@/lib/db/remote/queries";
 import { NextResponse } from "next/server";
 
 /**
@@ -12,7 +12,7 @@ import { NextResponse } from "next/server";
  */
 export async function GET() {
 	try {
-		const settings = await getAllSettings();
+		const settings = await getSettings();
 		return NextResponse.json({ settings });
 	} catch {
 		return NextResponse.json({ error: "An unexpected server error occurred" }, { status: 500 });

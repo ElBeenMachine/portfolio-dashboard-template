@@ -2,7 +2,7 @@
  * @author Ollie Beenham
  */
 
-import { getAllContentTypes } from "@/lib/db/local/queries";
+import { getSetting } from "@/lib/db/remote/queries";
 import { NextResponse } from "next/server";
 
 /**
@@ -13,7 +13,7 @@ import { NextResponse } from "next/server";
 export async function GET() {
 	try {
 		// Query the local database for all available content types
-		const contentTypes = await getAllContentTypes();
+		const contentTypes = (await getSetting("contentTypes")).value;
 		return NextResponse.json(contentTypes);
 	} catch {
 		return NextResponse.json({ error: "An unexpected server error occurred" }, { status: 500 });

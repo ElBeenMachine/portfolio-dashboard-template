@@ -32,7 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 			<head>
 				<PublicEnvScript />
 			</head>
-			<body id="auth-body" className="antialiased text-white max-h-dvh">
+			<body className="antialiased text-white max-h-dvh">
 				<div className="w-full flex items-center justify-center flex-col">{children}</div>
 			</body>
 		</html>

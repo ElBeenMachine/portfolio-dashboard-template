@@ -4,7 +4,6 @@ import { useState } from "react";
 import PersonalDetails from "./Steps/PersonalDetails";
 import Username from "./Steps/Username";
 import Password from "./Steps/Password";
-import DatabaseConnection from "./Steps/DatabaseConnection";
 import OnboardingBullets from "./Bullets";
 import Email from "./Steps/Email";
 import { useRouter } from "next/navigation";
@@ -24,15 +23,12 @@ export default function OnboardingForm() {
 	const [password, setPassword] = useState<string>("");
 	const [confirmPassword, setConfirmPassword] = useState<string>("");
 
-	const [connectionString, setConnectionString] = useState<string>("");
-
 	function completeOnboarding() {
 		const onboardingData = {
 			firstName,
 			lastName,
 			username,
 			password,
-			connectionString,
 		};
 
 		console.log(onboardingData);
@@ -84,15 +80,6 @@ export default function OnboardingForm() {
 					setPassword={setPassword}
 					confirmPassword={confirmPassword}
 					setConfirmPassword={setConfirmPassword}
-					nextAction={() => setPageNo(pageNo + 1)}
-				/>
-			),
-		},
-		{
-			content: (
-				<DatabaseConnection
-					connectionString={connectionString}
-					setConnectionString={setConnectionString}
 					nextAction={completeOnboarding}
 				/>
 			),

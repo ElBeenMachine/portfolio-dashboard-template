@@ -2,10 +2,10 @@
  * @author Ollie Beenham
  */
 
-import { getTitle } from "@/lib/db/local/queries";
 import { Metadata } from "next";
 import LoginForm from "./LoginForm";
 import IdentityProviders from "./IdentityProviders";
+import { getSetting } from "@/lib/db/remote/queries";
 
 /**
  * Metadata for the login page.
@@ -29,7 +29,7 @@ export default async function Login({
 	const redirectURL = ((await searchParams)?.redirectTo as string) || "/";
 
 	// Get the app name
-	const appName = (await getTitle()).title;
+	const appName = (await getSetting("dashboardTitle")).value;
 
 	// Redirect to the login page
 	return (

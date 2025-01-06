@@ -2,7 +2,7 @@
  * @author Ollie Beenham
  */
 
-import { getOnboardedState } from "@/lib/db/local/queries";
+import { getSetting } from "@/lib/db/remote/queries";
 import { redirect } from "next/navigation";
 
 /**
@@ -11,7 +11,7 @@ import { redirect } from "next/navigation";
  * @returns {JSX.Element} Home page
  */
 export default async function Home() {
-	const onboardedState = await getOnboardedState();
+	const onboardedState = (await getSetting("onboarded")).value;
 
 	/**
 	 * If the user has onboarded, redirect them to the dashboard,

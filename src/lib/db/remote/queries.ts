@@ -5,24 +5,6 @@
 import { ObjectId } from "mongodb";
 import { createDBConnection } from ".";
 
-async function connectToDB() {
-	try {
-		// Get the client and instance ID
-		const { client, instanceID } = await createDBConnection();
-
-		// Get the database
-		const db = client.db(instanceID);
-
-		return { client, db };
-	} catch (error) {
-		// Log the error
-		console.error(error);
-
-		// Throw generic error message
-		throw new Error("Database error, check server logs for more information.");
-	}
-}
-
 /**
  * Get all projects from the database
  *
@@ -58,9 +40,10 @@ export const getAllProjects = async () => {
  */
 export const getProjectsByType = async (type: string) => {
 	// Get the client and db
-	const { client, db } = await connectToDB();
+	const { client, instanceID } = await createDBConnection();
 
 	try {
+		const db = client.db(instanceID);
 		const collection = db.collection("projects");
 
 		const projects = await collection
@@ -177,6 +160,83 @@ export const updateProject = async (_id: ObjectId, project: object) => {
 		return result.modifiedCount === 1;
 	} catch (error) {
 		console.error(error);
+		return false;
+	} finally {
+		await client.close();
+	}
+};
+
+/**
+ * Get all settings from the database
+ *
+ * @returns {Promise<any[]>} All settings
+ */
+export const getSettings = async () => {
+	const { client, instanceID } = await createDBConnection();
+
+	try {
+		const db = client.db(instanceID);
+		const collection = db.collection("settings");
+
+		const settings = await collection.find().toArray();
+		return settings;
+	} catch (error) {
+		console.error(error);
+		return null;
+	} finally {
+		await client.close();
+	}
+};
+
+/**
+ * Get a setting from the database
+ *
+ * @param {string} key The key of the setting to fetch
+ * @returns {Promise<string | null>} The setting with the specified key, or null if not found
+ */
+export const getSetting = async (key: string): Promise<{ key: string; value: any }> => {
+	const { client, instanceID } = await createDBConnection();
+
+	try {
+		// Get the settings collection
+		const db = client.db(instanceID);
+		const collection = db.collection("settings");
+
+		// Query the collection using the key
+		const setting = await collection.findOne({ key });
+
+		// Return the value if found, or null if not
+		return setting ? { key, value: setting.value } : { key, value: null };
+	} catch (error) {
+		console.error("Error fetching setting:", error);
+		return { key, value: null };
+	} finally {
+		await client.close();
+	}
+};
+
+/**
+ * Update a setting in the database
+ *
+ * @param {string} key The key of the setting to update
+ * @param {any} value The new value of the setting
+ * @returns {Promise<boolean>} Whether the setting was updated
+ */
+export const updateSetting = async (key: string, value: any) => {
+	const { client, instanceID } = await createDBConnection();
+
+	try {
+		// Get the settings collection
+		const db = client.db(instanceID);
+		const collection = db.collection("settings");
+
+		// Query the collection using the key
+		const setting = await collection.updateOne({ key }, { $set: { value } });
+
+		// Return true if updated, or false if not
+		return setting.modifiedCount === 1;
+	} catch (error) {
+		console.error("Error updating setting:", error);
 		return false;
 	} finally {
 		await client.close();

@@ -3,7 +3,7 @@
 	"version": "0.0.7",
 	"private": true,
 	"scripts": {
-		"dev": "npm run init && doppler run next dev",
+		"dev": "doppler run -- npm run init && doppler run -- next dev",
 		"build": "next build",
 		"start": "npm run init && next start",
 		"lint": "next lint",
@@ -29,7 +29,6 @@
 		"@testing-library/dom": "^10.4.0",
 		"@testing-library/jest-dom": "^6.6.3",
 		"@testing-library/react": "^16.1.0",
-		"@types/bcryptjs": "^2.4.6",
 		"@types/better-sqlite3": "^7.6.12",
 		"@types/jest": "^29.5.14",
 		"@types/node": "^20",

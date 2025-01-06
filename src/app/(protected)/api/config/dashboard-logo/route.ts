@@ -2,7 +2,7 @@
  * @author Ollie Beenham
  */
 
-import { updateLogo } from "@/lib/db/local/queries";
+import { updateSetting } from "@/lib/db/remote/queries";
 import { NextResponse } from "next/server";
 
 /**
@@ -19,7 +19,7 @@ export async function POST(request: Request) {
 
 	try {
 		// Update the title
-		const response = await updateLogo(url);
+		const response = await updateSetting("dashboardLogo", url);
 
 		// Return the update response
 		return NextResponse.json({ status: response });
