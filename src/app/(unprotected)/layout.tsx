@@ -7,12 +7,12 @@ import { Metadata } from "next";
 import { PublicEnvScript } from "next-runtime-env";
 
 /**
- * Metadata for the authentication layout.
+ * Metadata for the root layout.
  */
 export const metadata: Metadata = {
 	title: {
 		template: "%s | Dashboard App",
-		default: "Auth | Dashboard App",
+		default: "Home | Dashboard App",
 	},
 	icons: {
 		icon: `/api/public/dashboard-logo`,
@@ -21,21 +21,19 @@ export const metadata: Metadata = {
 };
 
 /**
- * Root layout for the authentication pages of the application.
+ * Root layout for the application.
  *
  * @param {React.ReactNode} children Child elements
  * @returns Document layout
  */
-export default function AuthLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang="en">
 			<head>
 				<PublicEnvScript />
 			</head>
 			<body id="auth-body" className="antialiased text-white max-h-dvh">
-				<div className="w-full h-dvh flex items-center justify-center flex-col bg-black/30">
-					{children}
-				</div>
+				<div className="w-full flex items-center justify-center flex-col">{children}</div>
 			</body>
 		</html>
 	);

@@ -39,8 +39,21 @@ export const db = new Database(dbPath, {
  *
  * @returns {boolean} - Whether the config table exists
  */
-export const checkConfigTable = () => {
+export const checkConfigTable = (): boolean => {
 	const query = db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='config'");
+	const result = query.get();
+
+	if (!result) return false;
+	return true;
+};
+
+/**
+ * Check if the users table exists
+ *
+ * @returns {boolean} - Whether the users table exists
+ */
+export const checkUsersTable = (): boolean => {
+	const query = db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='users'");
 	const result = query.get();
 
 	if (!result) return false;
