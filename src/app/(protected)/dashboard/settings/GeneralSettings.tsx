@@ -86,33 +86,22 @@ export default function GeneralSettings() {
 
 				// Set the MongoDB connection string
 				if (mongoRef.current) {
-					mongoRef.current.value =
-						settings.find(
-							(setting: { key: string }) =>
-								setting.key === "mongodb-connection-string"
-						)?.value || "";
+					mongoRef.current.value = settings["mongodb-connection-string"] || "";
 				}
 
 				// Set the title
 				if (titleRef.current) {
-					titleRef.current.value =
-						settings.find((setting: { key: string }) => setting.key === "title")
-							?.value || "";
+					titleRef.current.value = settings["title"] || "";
 				}
 
 				// Set the logo
 				if (logoRef.current) {
-					logoRef.current.value =
-						settings.find((setting: { key: string }) => setting.key === "logo")
-							?.value || "";
+					logoRef.current.value = settings["logo"] || "";
 				}
 
 				// Set the authentication background
 				if (authBgRef.current) {
-					authBgRef.current.value =
-						settings.find(
-							(setting: { key: string }) => setting.key === "auth-background"
-						)?.value || "";
+					authBgRef.current.value = settings["auth-background"] || "";
 				}
 			});
 	}, []);
