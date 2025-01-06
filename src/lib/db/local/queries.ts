@@ -2,7 +2,7 @@
  * @author Ollie Beenham
  */
 
-import { db, checkConfigTable, checkUsersTable } from ".";
+import { db } from ".";
 
 /**
  * Get the instance ID
@@ -116,73 +116,6 @@ export const getAllSettings = async () => {
 		return settings;
 	} catch {
 		throw new Error("Failed to get settings");
-	}
-};
-
-/**
- * Get the current remote database address
- *
- * @param {boolean} masked Whether to return a masked version of the URI (default: false).
- *
- * @returns {Promise<{uri: string}>} The URI of the mongodb database
- */
-export const getMongoURI = async (masked: boolean = false) => {
-	if (!checkConfigTable()) throw new Error("Database does not exist");
-
-	try {
-		const query = db.prepare(
-			"SELECT value FROM config WHERE key = 'mongodb-connection-string'"
-		);
-		const result = (query.get() as { value: string }).value;
-
-		// If masked is requested, return a masked version of the URI
-		if (masked) return { uri: maskMongoURI(result) };
-
-		// Otherwise return plaintext
-		return { uri: result };
-	} catch {
-		throw new Error("MongoDB URI not found");
-	}
-};
-
-/**
- * Mask the MongoDB URI
- *
- * @param {string} uri The URI of the mongodb database
- * @returns {string} The masked URI
- */
-const maskMongoURI = (uri: string) => {
-	// Extract the protocol, credentials, and host
-	const [protocolAndCredentials, host] = uri.split("@");
-
-	// If there are no credentials, return the URI
-	if (!host) return uri;
-
-	// Split and mask the credentials
-	const maskedUsername = "*****";
-	const maskedPassword = "*****";
-
-	// Return the masked URI
-	return `${protocolAndCredentials.split("//")[0]}//${maskedUsername}:${maskedPassword}@${host}`;
-};
-
-/**
- * Update the current remote database address
- *
- * @param {string} uri The URI of the mongodb database
- * @returns {Promise<boolean>} Whether the URI was updated
- */
-export const updateMongoURI = async (uri: string) => {
-	if (!checkConfigTable()) throw new Error("Config table does not exist");
-
-	try {
-		const query = db.prepare(
-			"INSERT OR REPLACE INTO config (key, value) VALUES ('mongodb-connection-string', ?)"
-		);
-		const result = query.run(uri);
-		return result.changes > 0;
-	} catch {
-		throw new Error("Failed to update MongoDB URI");
 	}
 };
 
