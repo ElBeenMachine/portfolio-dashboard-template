@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSetting } from "./lib/db/remote/queries";
 
 export async function middleware(request: NextRequest) {
 	// Get the pathname from the request

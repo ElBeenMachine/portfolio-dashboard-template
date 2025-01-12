@@ -6,14 +6,13 @@ import "@/styles/default.css";
 
 import { PublicEnvScript } from "next-runtime-env";
 import NavBar from "@/components/navigation/NavBar";
-import { SessionProvider, useSession } from "next-auth/react";
+import { SessionProvider } from "next-auth/react";
 import Breadcrumbs from "@/components/navigation/Breadcrumbs";
 import { getInstanceID } from "@/lib/db/local/queries";
 import { ToastContainer } from "react-toastify";
 import { redirect } from "next/navigation";
 import { getSetting } from "@/lib/db/remote/queries";
 import { auth } from "@/lib/auth/auth";
-import { headers } from "next/headers";
 
 /**
  * Metadata for the dashboard layout.

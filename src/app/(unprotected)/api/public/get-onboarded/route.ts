@@ -3,7 +3,6 @@
  */
 
 import { getSetting } from "@/lib/db/remote/queries";
-import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
 
 /**
