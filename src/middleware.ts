@@ -7,11 +7,13 @@ export async function middleware(request: NextRequest) {
 	// Only handle the `/` route
 	if (pathname === "/") {
 		// Determine where to redirect the user
-		const protocol = request.headers.get("x-forwarded-proto") || "http";
+		const protocol = process.env.NODE_ENV === "production" ? "https" : "http";
 		const url = new URL(`${protocol}://${request.nextUrl.host}/api/public/get-onboarded`);
 		const result = await fetch(url);
 		const { onboarded } = await result.json();
 		const redirectUrl = !onboarded ? "/onboarding" : "/dashboard";
+
+		console.log(`Redirecting to ${redirectUrl}`);
 
 		// Redirect to the appropriate page
 		return NextResponse.redirect(new URL(redirectUrl, request.url));
