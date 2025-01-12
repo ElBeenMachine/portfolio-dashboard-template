@@ -20,7 +20,7 @@ export async function POST(request: Request) {
 	const body = await request.json();
 
 	// Get the url from the body
-	const url = body.url || "/img/default-auth-background.jpg";
+	const url = body.url || "https://bingw.jasonzeng.dev?resolution=1920x1080&index=random";
 
 	try {
 		// Update the title

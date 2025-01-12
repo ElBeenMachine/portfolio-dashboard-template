@@ -7,11 +7,14 @@
 
 import NextAuth from "next-auth";
 import EntraID from "next-auth/providers/microsoft-entra-id";
+import Google from "next-auth/providers/google";
+
 import { env } from "next-runtime-env";
 
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { createDBConnection } from "../db/remote";
+import GitHub from "next-auth/providers/github";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
 	providers: [
@@ -59,6 +62,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 			clientId: env("AUTH_MICROSOFT_ENTRA_ID_ID"),
 			clientSecret: env("AUTH_MICROSOFT_ENTRA_ID_SECRET"),
 			issuer: env("AUTH_MICROSOFT_ENTRA_ID_ISSUER"),
+		}),
+		Google({
+			clientId: env("AUTH_GOOGLE_ID"),
+			clientSecret: env("AUTH_GOOGLE_SECRET"),
+		}),
+		GitHub({
+			clientId: env("AUTH_GITHUB_ID"),
+			clientSecret: env("AUTH_GITHUB_SECRET"),
 		}),
 	],
 	pages: {

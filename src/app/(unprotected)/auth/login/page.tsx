@@ -33,7 +33,7 @@ export default async function Login({
 
 	// Redirect to the login page
 	return (
-		<div className="flex flex-col items-center justify-center gap-5 p-10 bg-white text-black w-full h-dvh rounded-none sm:rounded-xl sm:w-3/4 md:w-max sm:h-auto transition-all">
+		<div className="flex flex-col items-center justify-center gap-5 p-10 bg-white text-black w-full h-dvh rounded-none sm:rounded-xl sm:w-3/4 md:w-max md:min-w-[400px] sm:h-auto transition-all">
 			<img src="/api/public/dashboard-logo" alt="Logo" className="w-24" />
 
 			<h1 className="text-md text-center font-medium">{appName}</h1>
