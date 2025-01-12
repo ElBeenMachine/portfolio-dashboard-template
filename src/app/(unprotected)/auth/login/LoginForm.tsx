@@ -1,17 +1,25 @@
-import { signIn } from "@/lib/auth/auth";
+"use client";
+
+import { signIn } from "next-auth/react";
 
 export default function LoginForm({ redirect }: { redirect: string }) {
+	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+
+		const form = event.target as HTMLFormElement;
+		const username = (form.elements.namedItem("username") as HTMLInputElement).value;
+		const password = (form.elements.namedItem("password") as HTMLInputElement).value;
+
+		await signIn("credentials", {
+			redirect: true,
+			redirectTo: redirect,
+			username,
+			password,
+		});
+	};
+
 	return (
-		<form
-			action={async () => {
-				"use server";
-				signIn("local", {
-					redirectTo: redirect,
-					redirect: true,
-				});
-			}}
-			className="w-full flex flex-col gap-5"
-		>
+		<form onSubmit={handleSubmit} className="w-full flex flex-col gap-5">
 			<input
 				type="text"
 				name="username"

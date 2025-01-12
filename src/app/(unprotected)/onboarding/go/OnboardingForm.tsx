@@ -29,6 +29,8 @@ export default function OnboardingForm() {
 			lastName,
 			username,
 			password,
+			email,
+			role: "admin",
 		};
 
 		console.log(onboardingData);
