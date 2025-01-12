@@ -2,7 +2,7 @@
  * @author Ollie Beenham
  */
 
-import { auth } from "@/lib/auth";
+import { auth } from "@/lib/auth/auth";
 import { Metadata } from "next";
 import SignOutButton from "./SignOutButton";
 

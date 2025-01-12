@@ -1,9 +1,9 @@
 {
 	"name": "portfolio-dashboard",
-	"version": "0.0.7",
+	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"dev": "npm run init && doppler run next dev",
+		"dev": "doppler run -- npm run init && doppler run -- next dev",
 		"build": "next build",
 		"start": "npm run init && next start",
 		"lint": "next lint",
@@ -11,7 +11,9 @@
 		"test": "jest"
 	},
 	"dependencies": {
+		"@auth/mongodb-adapter": "^3.7.4",
 		"@uiw/react-md-editor": "^4.0.5",
+		"bcryptjs": "^2.4.3",
 		"better-sqlite3": "^11.5.0",
 		"mongodb": "^6.12.0",
 		"next": "^15.1.2",
@@ -28,6 +30,7 @@
 		"@testing-library/dom": "^10.4.0",
 		"@testing-library/jest-dom": "^6.6.3",
 		"@testing-library/react": "^16.1.0",
+		"@types/bcryptjs": "^2.4.6",
 		"@types/better-sqlite3": "^7.6.12",
 		"@types/jest": "^29.5.14",
 		"@types/node": "^20",

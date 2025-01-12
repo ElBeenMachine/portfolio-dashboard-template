@@ -2,9 +2,10 @@
  * @author Ollie Beenham
  */
 
+import { auth } from "@/lib/auth/auth";
 import { updateProject } from "@/lib/db/remote/queries";
 import { ObjectId } from "mongodb";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 /**
  * Update a project by ID
@@ -13,6 +14,10 @@ import { NextRequest } from "next/server";
  * @returns {Response} The response
  */
 export async function POST(request: NextRequest) {
+	// Get the session
+	const session = await auth();
+	if (!session) return NextResponse.json({ error: "Unauthorised request" }, { status: 401 });
+
 	// Get the body
 	const body = await request.json();
 
@@ -20,14 +25,14 @@ export async function POST(request: NextRequest) {
 	const { _id, project } = body;
 
 	// If no id was provided, return a 400 error
-	if (!_id) return Response.json({ error: "No project id provided" }, { status: 400 });
-	if (!project) return Response.json({ error: "No project provided" }, { status: 400 });
+	if (!_id) return NextResponse.json({ error: "No project id provided" }, { status: 400 });
+	if (!project) return NextResponse.json({ error: "No project provided" }, { status: 400 });
 
 	// Update the project
 	const result = await updateProject(new ObjectId(_id), project);
 
-	if (!result) return Response.json({ error: "Failed to update project" }, { status: 500 });
+	if (!result) return NextResponse.json({ error: "Failed to update project" }, { status: 500 });
 
 	// Return the response
-	return Response.json({ status: "success" });
+	return NextResponse.json({ status: "success" });
 }

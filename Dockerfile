@@ -20,7 +20,9 @@ RUN chmod 777 -R /app/data/db
 
 # Initialise the database for the build
 ENV NODE_ENV=production
+ENV DOCKER_BUILD=true
 RUN npm run init
+ENV DOCKER_BUILD=false
 
 # Build the Next.js application
 RUN npx next build
