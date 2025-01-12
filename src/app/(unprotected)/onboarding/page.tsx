@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default async function OnboardingHome() {
 	const onboardingState = (await getSetting("onboarded")).value;
-	if (onboardingState) return redirect("/");
+	if (onboardingState) return redirect("/dashboard");
 
 	return (
 		<div className="flex flex-col items-center justify-center h-screen p-10 bg-gray-800 w-full">
