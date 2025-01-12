@@ -37,22 +37,6 @@ export const checkGoogle = async () => {
 };
 
 /**
- * Check if all required environment variables for Okta OAuth are set
- *
- * @returns {Promise<boolean>} The result of the check
- */
-export const checkOkta = async () => {
-	// Required environment variables
-	const requiredEnvVars = ["AUTH_OKTA_ID", "AUTH_OKTA_SECRET", "AUTH_OKTA_ISSUER"];
-
-	// Check if all required environment variables are set
-	const unsetEnvVars = requiredEnvVars.filter((envVar) => !env(envVar));
-
-	// If all required environment variables are set, return true
-	return unsetEnvVars.length === 0;
-};
-
-/**
  * Check if all required environment variables for GitHub OAuth are set
  *
  * @returns {Promise<boolean>} The result of the check
