@@ -44,7 +44,7 @@ EXPOSE 3000
 
 # Set up the healthcheck
 HEALTHCHECK --interval=30s --timeout=5s --retries=5 \
-    CMD wget --no-verbose --tries=1 --spider http://localhost:3000 || exit 1
+    CMD wget --no-verbose --tries=1 --spider http://localhost:3000/api/healthcheck || exit 1
 
 # Start the Next.js application
 CMD ["npm", "start"]
