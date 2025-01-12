@@ -2,10 +2,15 @@
  * @author Ollie Beenham
  */
 
+import { auth } from "@/lib/auth/auth";
 import { createBlankProject } from "@/lib/db/remote/queries";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
+	// Get the session
+	const session = await auth();
+	if (!session) return NextResponse.json({ error: "Unauthorised request" }, { status: 401 });
+
 	// Get the body
 	const body = await request.json();
 
@@ -14,15 +19,15 @@ export async function POST(request: NextRequest) {
 	const type = body.type;
 
 	// If no type was provided, return a 400 error
-	if (!type) return Response.json({ error: "No project type provided" }, { status: 400 });
+	if (!type) return NextResponse.json({ error: "No project type provided" }, { status: 400 });
 
 	// Create the project
 	const result = await createBlankProject(type, title);
-	if (!result) return Response.json({ error: "Failed to create project" }, { status: 500 });
+	if (!result) return NextResponse.json({ error: "Failed to create project" }, { status: 500 });
 
 	// Log the project
 	const { project } = result;
 
 	// Return the response
-	return Response.json({ status: "success", _id: project.insertedId });
+	return NextResponse.json({ status: "success", _id: project.insertedId });
 }

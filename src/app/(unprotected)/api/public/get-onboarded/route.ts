@@ -3,22 +3,21 @@
  */
 
 import { getSetting } from "@/lib/db/remote/queries";
-import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
 
 /**
- * API Route to get the dashboard icon
+ * API Route to get the onboarded state
  *
- * @returns {Promise<NextResponse>} The response containing the logo
+ * @returns {Promise<NextResponse>} The response containing the onboarded state
  */
 export async function GET() {
-	let logo = "/img/default-logo.jpg";
+	let state = false;
 
 	try {
-		logo = String((await getSetting("dashboardLogo")).value);
+		state = Boolean((await getSetting("onboarded")).value);
 	} catch {
 		return NextResponse.json({ error: "An unexpected server error occurred" }, { status: 500 });
 	} finally {
-		redirect(logo);
+		return NextResponse.json({ onboarded: state });
 	}
 }

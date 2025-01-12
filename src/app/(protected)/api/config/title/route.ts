@@ -2,7 +2,8 @@
  * @author Ollie Beenham
  */
 
-import { updateTitle } from "@/lib/db/local/queries";
+import { auth } from "@/lib/auth/auth";
+import { updateSetting } from "@/lib/db/remote/queries";
 import { NextResponse } from "next/server";
 
 /**
@@ -11,6 +12,10 @@ import { NextResponse } from "next/server";
  * @returns {Promise<NextResponse>} A response containing the result of the query
  */
 export async function POST(request: Request) {
+	// Get the session
+	const session = await auth();
+	if (!session) return NextResponse.json({ error: "Unauthorised request" }, { status: 401 });
+
 	// Get the body
 	const body = await request.json();
 
@@ -20,7 +25,7 @@ export async function POST(request: Request) {
 
 	try {
 		// Update the title
-		const response = await updateTitle(body.title);
+		const response = await updateSetting("dashboardTitle", body.title);
 
 		// Return the update response
 		return NextResponse.json({ status: response });

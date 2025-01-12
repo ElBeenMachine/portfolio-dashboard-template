@@ -51,3 +51,31 @@ body {
 	background-repeat: no-repeat;
 	background-size: cover;
 }
+
+.modal-content {
+	animation: forwards 0.3s slideIn;
+}
+
+@keyframes slideIn {
+	from {
+		transform: scale(0);
+	}
+	to {
+		transform: translateY(1);
+	}
+}
+
+.slideInFromRight {
+	animation: forwards 0.3s slideInFromRight;
+}
+
+@keyframes slideInFromRight {
+	from {
+		transform: translateX(10%);
+		opacity: 0;
+	}
+	to {
+		transform: translateX(0%);
+		opacity: 1;
+	}
+}

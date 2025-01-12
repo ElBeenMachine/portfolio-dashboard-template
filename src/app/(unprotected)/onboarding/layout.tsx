@@ -3,16 +3,16 @@
  */
 
 import "@/styles/default.css";
-import type { Metadata } from "next";
+import { Metadata } from "next";
 import { PublicEnvScript } from "next-runtime-env";
 
 /**
- * Metadata for the root layout.
+ * Metadata for the authentication layout.
  */
 export const metadata: Metadata = {
 	title: {
 		template: "%s | Dashboard App",
-		default: "Home | Dashboard App",
+		default: "Onboarding | Dashboard App",
 	},
 	icons: {
 		icon: `/api/public/dashboard-logo`,
@@ -21,22 +21,22 @@ export const metadata: Metadata = {
 };
 
 /**
- * Root layout for the application.
+ * Root layout for the onboarding pages of the application.
  *
  * @param {React.ReactNode} children Child elements
  * @returns Document layout
  */
-export default function RootLayout({
-	children,
-}: Readonly<{
-	children: React.ReactNode;
-}>) {
+export default function OnboardingLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang="en">
 			<head>
 				<PublicEnvScript />
 			</head>
-			<body className={"antialiased"}>{children}</body>
+			<body id="auth-body" className="antialiased text-white max-h-dvh">
+				<div className="w-full h-dvh flex items-center justify-center flex-col bg-black/30">
+					{children}
+				</div>
+			</body>
 		</html>
 	);
 }

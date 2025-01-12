@@ -7,12 +7,21 @@ services:
         build:
             context: ../
             dockerfile: Dockerfile
+        container_name: dashboard
         ports:
             - "3000:3000"
         volumes:
             - dashboard-data:/app/data
+        environment:
+            - AUTH_MICROSOFT_ENTRA_ID_ID
+            - AUTH_MICROSOFT_ENTRA_ID_ISSUER
+            - AUTH_MICROSOFT_ENTRA_ID_SECRET
+            - AUTH_SECRET
+            - AUTH_URL
+            - MONGO_URI
     mongo:
         image: mongo:latest
+        container_name: database
         restart: always
         environment:
             MONGO_INITDB_ROOT_USERNAME: username

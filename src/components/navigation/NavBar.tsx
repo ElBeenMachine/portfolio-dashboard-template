@@ -60,7 +60,11 @@ export default function NavBar() {
 			fetch("/api/config/content-types")
 				.then((res) => res.json())
 				.then((data) => {
-					setTypes(data.contentTypes);
+					setTypes(
+						data.map((x: { type: string; enabled: boolean }) => {
+							if (x.enabled) return x.type;
+						})
+					);
 				});
 		} catch (error) {
 			console.error(error);

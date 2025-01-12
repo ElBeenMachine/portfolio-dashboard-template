@@ -1,23 +1,25 @@
-/**
- * @author Ollie Beenham
- *
- * Middleware component for authentication, provided by the next-auth (now auth.js) library.
- */
+import { NextRequest, NextResponse } from "next/server";
 
-import { auth } from "@/lib/auth";
-import { NextResponse } from "next/server";
+export async function middleware(request: NextRequest) {
+	// Get the pathname from the request
+	const { pathname } = request.nextUrl;
 
-/**
- * Middleware to redirect to the sign-in page if the user is not authenticated.
- */
-export default auth((req) => {
-	// Prepare the redirect link
-	const redirect = `${req.nextUrl.protocol}//${req.nextUrl.host}/auth/login?redirectTo=${req.nextUrl.pathname}`;
+	// Only handle the `/` route
+	if (pathname === "/") {
+		// Logic to determine the redirection
+		const result = await fetch(new URL("/api/public/get-onboarded", request.url));
+		const { onboarded } = await result.json();
+		const redirectUrl = !onboarded ? "/onboarding" : "/dashboard";
 
-	// If the user is not authenticated, redirect to the sign in page.
-	if (!req.auth) return NextResponse.redirect(redirect);
+		// Redirect to the appropriate page
+		return NextResponse.redirect(new URL(redirectUrl, request.url));
+	}
+
+	// Default response for other routes
 	return NextResponse.next();
-});
+}
 
-// Match anything under /dashboard and /api routes. Excluding the authentication route from the API.
-export const config = { matcher: ["/dashboard(.*)", "/api/((?!auth)(?!public).*)"] };
+// Match only the `/` route
+export const config = {
+	matcher: "/",
+};
