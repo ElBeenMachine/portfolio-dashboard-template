@@ -14,6 +14,7 @@ import { env } from "next-runtime-env";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { createDBConnection } from "../db/remote";
+import GitHub from "next-auth/providers/github";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
 	providers: [
@@ -65,6 +66,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 		Google({
 			clientId: env("AUTH_GOOGLE_ID"),
 			clientSecret: env("AUTH_GOOGLE_SECRET"),
+		}),
+		GitHub({
+			clientId: env("AUTH_GITHUB_ID"),
+			clientSecret: env("AUTH_GITHUB_SECRET"),
 		}),
 	],
 	pages: {
