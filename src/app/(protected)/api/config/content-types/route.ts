@@ -2,6 +2,7 @@
  * @author Ollie Beenham
  */
 
+import { auth } from "@/lib/auth/auth";
 import { getSetting } from "@/lib/db/remote/queries";
 import { NextResponse } from "next/server";
 
@@ -11,6 +12,10 @@ import { NextResponse } from "next/server";
  * @returns {Promise<NextResponse>} The response containing all available content types
  */
 export async function GET() {
+	// Get the session
+	const session = await auth();
+	if (!session) return NextResponse.json({ error: "Unauthorised request" }, { status: 401 });
+
 	try {
 		// Query the local database for all available content types
 		const contentTypes = (await getSetting("contentTypes")).value;
