@@ -1,4 +1,4 @@
-import { signIn } from "@/lib/auth";
+import { signIn } from "@/lib/auth/auth";
 
 export default function LoginForm({ redirect }: { redirect: string }) {
 	return (

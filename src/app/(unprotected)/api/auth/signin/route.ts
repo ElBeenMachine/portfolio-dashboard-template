@@ -2,7 +2,7 @@
  * @author Ollie Beenham
  */
 
-import { signIn } from "@/lib/auth";
+import { signIn } from "@/lib/auth/auth";
 import { NextRequest } from "next/server";
 
 /**

@@ -9,6 +9,11 @@ import NextAuth from "next-auth";
 import EntraID from "next-auth/providers/microsoft-entra-id";
 import { env } from "next-runtime-env";
 
+import { MongoDBAdapter } from "@auth/mongodb-adapter";
+import Credentials from "next-auth/providers/credentials";
+import bcrypt from "bcryptjs";
+import { getInstanceIDSync } from "../db/local/queries";
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
 	providers: [
 		EntraID({
@@ -26,6 +31,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 	session: {
 		// Seconds - How long until an idle session expires and is no longer valid.
 		maxAge: 1 * 60 * 60, // 1 Hour
+		strategy: "jwt",
 	},
 	trustHost: true,
 });

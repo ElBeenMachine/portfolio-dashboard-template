@@ -6,12 +6,14 @@ import "@/styles/default.css";
 
 import { PublicEnvScript } from "next-runtime-env";
 import NavBar from "@/components/navigation/NavBar";
-import { SessionProvider } from "next-auth/react";
+import { SessionProvider, useSession } from "next-auth/react";
 import Breadcrumbs from "@/components/navigation/Breadcrumbs";
 import { getInstanceID } from "@/lib/db/local/queries";
 import { ToastContainer } from "react-toastify";
 import { redirect } from "next/navigation";
 import { getSetting } from "@/lib/db/remote/queries";
+import { auth } from "@/lib/auth/auth";
+import { headers } from "next/headers";
 
 /**
  * Metadata for the dashboard layout.
@@ -46,10 +48,16 @@ export default async function DashLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	// Check to see if the app has been onboarded
 	const onboardedState = (await getSetting("onboarded")).value;
 	if (!onboardedState) return redirect("/onboarding");
 
+	// Get the instance ID
 	const instanceID = await getInstanceID();
+
+	// If the user is not authenticated, redirect to the login page
+	const session = await auth();
+	if (!session) return redirect(`/auth/login`);
 
 	return (
 		<html lang="en">

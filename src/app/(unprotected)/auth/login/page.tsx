@@ -6,6 +6,7 @@ import { Metadata } from "next";
 import LoginForm from "./LoginForm";
 import IdentityProviders from "./IdentityProviders";
 import { getSetting } from "@/lib/db/remote/queries";
+import { headers } from "next/headers";
 
 /**
  * Metadata for the login page.
@@ -26,7 +27,7 @@ export default async function Login({
 	searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
 	// Get the redirect URL from the query string
-	const redirectURL = ((await searchParams)?.redirectTo as string) || "/";
+	let redirectURL = ((await searchParams)?.redirectTo as string) || "/dashboard";
 
 	// Get the app name
 	const appName = (await getSetting("dashboardTitle")).value;
