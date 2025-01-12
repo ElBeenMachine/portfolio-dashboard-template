@@ -45,7 +45,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 				if (!valid) return null;
 
 				// Return the user
-				return user;
+				return {
+					name: user.firstName + " " + user.lastName,
+					email: user.email,
+					image: user.image || "/img/default-profile-image.jpg",
+					id: user._id,
+					username: user.username,
+					role: user.role,
+				};
 			},
 		}),
 		EntraID({
@@ -63,6 +70,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 				token.id = user.id;
 				token.email = user.email;
 				token.name = user.name;
+				token.image = user.image;
 			}
 			return token;
 		},
@@ -71,6 +79,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 				session.user.id = token.id as string;
 				session.user.email = token.email as string;
 				session.user.name = token.name as string;
+				session.user.image = token.image as string;
 			}
 			return session;
 		},

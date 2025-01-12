@@ -33,7 +33,6 @@ export default function OnboardingForm() {
 			role: "admin",
 		};
 
-		console.log(onboardingData);
 		fetch("/api/public/pass-onboarding", {
 			method: "POST",
 			headers: {
