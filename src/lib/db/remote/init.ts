@@ -17,7 +17,7 @@ export const initRemoteDatabase = async () => {
 	await Promise.all([
 		db.createCollection("settings"),
 		db.createCollection("users"),
-		db.createCollection("identityProviders"),
+		db.createCollection("audit"),
 		db.createCollection("projects"),
 	]);
 

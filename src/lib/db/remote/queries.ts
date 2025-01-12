@@ -253,3 +253,28 @@ export const updateSetting = async (key: string, value: string | boolean | numbe
 		await client.close();
 	}
 };
+
+/**
+ * Fetch the recent projects from the database
+ *
+ * @param {number} count The number of recent projects to fetch
+ * @returns {Promise<any[]>} The recent projects
+ */
+export const getRecentProjects = async (count: number) => {
+	const { client, instanceID } = await createDBConnection();
+	if (!client) return null;
+
+	try {
+		const db = client.db(instanceID);
+		const collection = db.collection("projects");
+
+		const projects = await collection.find().sort({ updatedAt: -1 }).limit(count).toArray();
+
+		return projects;
+	} catch (error) {
+		console.error(error);
+		return null;
+	} finally {
+		await client.close();
+	}
+};

@@ -12,6 +12,7 @@ import NavToggle from "./NavToggle";
 import NavContentType from "@/types/navContentType";
 import { FaCode, FaPencilAlt } from "react-icons/fa";
 import { FaNoteSticky } from "react-icons/fa6";
+import { IoMdInfinite } from "react-icons/io";
 
 // Map of content types to their names, icons, and urls
 const contentTypesMap: { [key: string]: NavContentType } = {
@@ -97,6 +98,9 @@ export default function NavBar() {
 				<div className="flex-grow">
 					<NavButton href="/dashboard" name="Dashboard" collapsed={collapsed}>
 						<MdDashboard className="w-6 h-6" />
+					</NavButton>
+					<NavButton href="/dashboard/projects" name="All Projects" collapsed={collapsed}>
+						<IoMdInfinite className="w-6 h-6" />
 					</NavButton>
 					{types.map((type) => (
 						<NavButton
