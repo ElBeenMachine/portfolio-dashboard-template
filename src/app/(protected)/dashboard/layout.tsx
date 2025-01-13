@@ -14,6 +14,10 @@ import { redirect } from "next/navigation";
 import { getSetting } from "@/lib/db/remote/queries";
 import { auth } from "@/lib/auth/auth";
 
+// Get the version from package.json
+import packageJson from "../../../../package.json";
+const { version } = packageJson;
+
 /**
  * Metadata for the dashboard layout.
  */
@@ -67,12 +71,20 @@ export default async function DashLayout({
 				<ToastContainer position="bottom-right" />
 				<SessionProvider>
 					<NavBar />
-					<main className="flex-grow h-dvh flex flex-col overflow-auto bg-white text-[#202020] relative">
+					<main className="flex-grow h-dvh flex flex-col overflow-auto bg-[#F0F0F0] text-[#202020] relative">
 						<Breadcrumbs />
 						<div className="p-5 z-0 mt-24 flex-grow">{children}</div>
-						<p className="text-center text-xs text-gray-500 py-2">
-							Instance ID: {instanceID}
-						</p>
+						<div className="w-full flex flex-col md:flex-row justify-center items-center md:gap-5">
+							<p className="text-center text-xs text-gray-500 md:py-2">
+								Instance ID: {instanceID}
+							</p>
+							<p className="text-center text-xs text-gray-500 py-2 hidden md:block">
+								|
+							</p>
+							<p className="text-center text-xs text-gray-500 md:py-2">
+								Version: {version}
+							</p>
+						</div>
 					</main>
 				</SessionProvider>
 			</body>

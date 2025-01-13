@@ -1,6 +1,13 @@
 # Define the stages
 stages:
+    - sast
     - release
+
+# Configure SAST Workflow
+sast:
+    stage: sast
+include:
+    - template: Security/SAST.gitlab-ci.yml
 
 # Get the project version
 get_project_version:

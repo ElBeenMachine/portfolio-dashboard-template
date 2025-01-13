@@ -4,8 +4,8 @@
 
 import { getProjectsByType } from "@/lib/db/remote/queries";
 import { Metadata } from "next";
-import ProjectsPane from "./projectsPane";
-import CreateButton from "./CreateButton";
+import ProjectsPane from "@/components/projects/projectsPane";
+import CreateButton from "@/components/projects/CreateButton";
 import DatabaseErrorMessage from "@/components/errors/DatabaseError";
 
 /**

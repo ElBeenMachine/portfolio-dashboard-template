@@ -12,6 +12,7 @@ import NavToggle from "./NavToggle";
 import NavContentType from "@/types/navContentType";
 import { FaCode, FaPencilAlt } from "react-icons/fa";
 import { FaNoteSticky } from "react-icons/fa6";
+import { IoMdInfinite } from "react-icons/io";
 
 // Map of content types to their names, icons, and urls
 const contentTypesMap: { [key: string]: NavContentType } = {
@@ -39,7 +40,7 @@ const contentTypesMap: { [key: string]: NavContentType } = {
  */
 export default function NavBar() {
 	const [collapsed, setCollapsed] = useState(false);
-	const [types, setTypes] = useState<string[]>([]);
+	const [types, setTypes] = useState<{ type: string; enabled: boolean }[]>([]);
 
 	// Load the nav collapsed state from localStorage
 	useEffect(() => {
@@ -61,8 +62,8 @@ export default function NavBar() {
 				.then((res) => res.json())
 				.then((data) => {
 					setTypes(
-						data.map((x: { type: string; enabled: boolean }) => {
-							if (x.enabled) return x.type;
+						data.filter((x: { type: string; enabled: boolean }) => {
+							return x.enabled === true;
 						})
 					);
 				});
@@ -98,14 +99,17 @@ export default function NavBar() {
 					<NavButton href="/dashboard" name="Dashboard" collapsed={collapsed}>
 						<MdDashboard className="w-6 h-6" />
 					</NavButton>
+					<NavButton href="/dashboard/projects" name="All Projects" collapsed={collapsed}>
+						<IoMdInfinite className="w-6 h-6" />
+					</NavButton>
 					{types.map((type) => (
 						<NavButton
-							key={contentTypesMap[type].name}
-							name={contentTypesMap[type].name}
-							href={contentTypesMap[type].url}
+							key={contentTypesMap[type.type].name}
+							name={contentTypesMap[type.type].name}
+							href={contentTypesMap[type.type].url}
 							collapsed={collapsed}
 						>
-							{contentTypesMap[type].icon}
+							{contentTypesMap[type.type].icon}
 						</NavButton>
 					))}
 					<NavButton href="/dashboard/settings" name="Settings" collapsed={collapsed}>
