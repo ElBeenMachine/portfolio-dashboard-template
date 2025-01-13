@@ -40,7 +40,7 @@ const contentTypesMap: { [key: string]: NavContentType } = {
  */
 export default function NavBar() {
 	const [collapsed, setCollapsed] = useState(false);
-	const [types, setTypes] = useState<string[]>([]);
+	const [types, setTypes] = useState<{ type: string; enabled: boolean }[]>([]);
 
 	// Load the nav collapsed state from localStorage
 	useEffect(() => {
@@ -62,8 +62,8 @@ export default function NavBar() {
 				.then((res) => res.json())
 				.then((data) => {
 					setTypes(
-						data.map((x: { type: string; enabled: boolean }) => {
-							if (x.enabled) return x.type;
+						data.filter((x: { type: string; enabled: boolean }) => {
+							return x.enabled === true;
 						})
 					);
 				});
@@ -104,12 +104,12 @@ export default function NavBar() {
 					</NavButton>
 					{types.map((type) => (
 						<NavButton
-							key={contentTypesMap[type].name}
-							name={contentTypesMap[type].name}
-							href={contentTypesMap[type].url}
+							key={contentTypesMap[type.type].name}
+							name={contentTypesMap[type.type].name}
+							href={contentTypesMap[type.type].url}
 							collapsed={collapsed}
 						>
-							{contentTypesMap[type].icon}
+							{contentTypesMap[type.type].icon}
 						</NavButton>
 					))}
 					<NavButton href="/dashboard/settings" name="Settings" collapsed={collapsed}>
