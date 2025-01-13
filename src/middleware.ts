@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest) {
-	// Get the pathname from the request
 	const { pathname } = request.nextUrl;
 
-	// Only handle the `/` route
+	// Handle the `/` route
 	if (pathname === "/") {
 		// Determine where to redirect the user
 		const protocol = request.nextUrl.protocol === "https:" ? "https" : "http";
@@ -24,11 +23,20 @@ export async function middleware(request: NextRequest) {
 		return NextResponse.redirect(redirectUrl);
 	}
 
+	// Handle the `/dashboard/editor` route
+	if (pathname === "/dashboard/editor") {
+		// Create the redirect URL
+		const redirectUrl = new URL(`${request.nextUrl.origin}/dashboard/projects`);
+
+		// Redirect to the `/dashboard/projects` page
+		return NextResponse.redirect(redirectUrl);
+	}
+
 	// Default response for other routes
 	return NextResponse.next();
 }
 
-// Match only the `/` route
+// Match the `/` and `/dashboard/editor` routes
 export const config = {
-	matcher: "/",
+	matcher: ["/", "/dashboard/editor"],
 };
