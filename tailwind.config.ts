@@ -11,6 +11,8 @@ const config: Config = {
 			colors: {
 				background: "var(--background)",
 				foreground: "var(--foreground)",
+				accent: "#0560fc",
+				"accent-hover": "#e3e3e3",
 			},
 		},
 	},

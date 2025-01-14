@@ -29,11 +29,13 @@ export default async function CodeProjects() {
 	}
 
 	return (
-		<main>
-			<CreateButton />
+		<div>
 			<h1 className="text-3xl text-semibold mb-5">Code Projects</h1>
-			<p className="mb-5">Welcome to the code projects page!</p>
-			{projects && <ProjectsPane projects={projects} />}
-		</main>
+			<div className="bg-white rounded-lg p-5 relative">
+				<CreateButton />
+				<p className="mb-10">Welcome to the code projects page!</p>
+				{projects && <ProjectsPane projects={projects} />}
+			</div>
+		</div>
 	);
 }

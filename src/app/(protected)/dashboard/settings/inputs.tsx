@@ -23,7 +23,7 @@ export function StringInput({
 }) {
 	return (
 		<input
-			className="border border-solid border-black/25 px-5 py-2 rounded-md focus:border-gray-800 outline-none"
+			className="border border-solid border-black/25 px-5 py-2 rounded-lg focus:border-gray-800 outline-none"
 			type="text"
 			name={name}
 			ref={ref}

@@ -28,7 +28,10 @@ export default async function EditorWindow({ params }: { params: Promise<{ _id: 
 
 	return (
 		<div>
-			<ProjectForm project={plainProject} />
+			<h1 className="text-3xl text-semibold mb-5">Editor</h1>
+			<div className="bg-white rounded-lg p-5 relative">
+				<ProjectForm project={plainProject} />
+			</div>
 		</div>
 	);
 }

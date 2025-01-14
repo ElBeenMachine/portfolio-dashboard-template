@@ -27,18 +27,18 @@ export default function PersonalDetails({
 				placeholder="First Name"
 				value={firstName || ""}
 				onChange={(e) => setFirstName(e.target.value)}
-				className="w-full bg-gray-600 px-5 py-4 rounded-md"
+				className="w-full bg-gray-600 px-5 py-4 rounded-lg"
 				autoFocus
 			/>
 			<input
 				placeholder="Last Name"
 				value={lastName || ""}
 				onChange={(e) => setLastName(e.target.value)}
-				className="w-full bg-gray-600 px-5 py-4 rounded-md"
+				className="w-full bg-gray-600 px-5 py-4 rounded-lg"
 			/>
 			<button
 				onClick={validateName}
-				className="self-end px-5 py-3 bg-gray-600 rounded-md hover:bg-gray-500 transition-all"
+				className="self-end px-5 py-3 bg-gray-600 rounded-lg hover:bg-gray-500 transition-all"
 				id="onboarding-next"
 			>
 				Next

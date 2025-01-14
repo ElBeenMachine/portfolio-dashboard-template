@@ -38,7 +38,7 @@ export default function Password({
 				value={password || ""}
 				type="password"
 				onChange={(e) => setPassword(e.target.value)}
-				className="w-full bg-gray-600 px-5 py-4 rounded-md"
+				className="w-full bg-gray-600 px-5 py-4 rounded-lg"
 				autoFocus
 			/>
 			<input
@@ -46,10 +46,10 @@ export default function Password({
 				value={confirmPassword || ""}
 				type="password"
 				onChange={(e) => setConfirmPassword(e.target.value)}
-				className="w-full bg-gray-600 px-5 py-4 rounded-md"
+				className="w-full bg-gray-600 px-5 py-4 rounded-lg"
 			/>
 			<button
-				className="self-end px-5 py-3 bg-gray-600 rounded-md hover:bg-gray-500 transition-all"
+				className="self-end px-5 py-3 bg-gray-600 rounded-lg hover:bg-gray-500 transition-all"
 				onClick={validatePassword}
 				id="onboarding-next"
 			>

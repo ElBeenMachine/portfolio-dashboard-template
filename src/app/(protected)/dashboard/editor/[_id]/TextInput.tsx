@@ -13,7 +13,7 @@ export default function TextInput({
 		<input
 			id={id}
 			type="text"
-			className="w-full rounded-md border border-gray-300 p-2"
+			className="w-full rounded-lg border border-gray-300 p-2"
 			placeholder={placeholder}
 			ref={ref}
 		/>
