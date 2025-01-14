@@ -1,11 +1,6 @@
 import { getSetting } from "@/lib/db/remote/queries";
-import { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-
-export const metadata: Metadata = {
-	title: "Onboarding",
-};
 
 export default async function OnboardingHome() {
 	const onboardingState = (await getSetting("onboarded")).value;
