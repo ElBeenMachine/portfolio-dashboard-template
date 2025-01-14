@@ -8,17 +8,6 @@ import { getGreeting } from "@/lib/greetings";
 import moment from "moment";
 import Link from "next/link";
 
-function Warning() {
-	return (
-		<div className="w-[calc(100%+40px)] p-2 text-center bg-red-500 -ml-5 -mt-5 mb-5">
-			<p className="text-white">
-				WARNING: Any authenticated user can access and edit portfolio properties. Ensure
-				user and group access is configured in Entra.
-			</p>
-		</div>
-	);
-}
-
 /**
  * Dashboard home page
  *
@@ -33,14 +22,12 @@ export default async function DashboardHome() {
 
 	return (
 		<main>
-			<Warning />
-
 			<h1 className="text-3xl text-semibold mb-5">
 				{getGreeting(session?.user?.name?.split(" ")[0] as string)}
 			</h1>
 
 			<div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-				<div className="p-5 rounded-md bg-white shadow-md col-span-2 col-start-1">
+				<div className="p-5 rounded-md bg-white shadow-md col-span-3 col-start-1">
 					<h2 className="text-xl text-semibold mb-3">Welcome to your dashboard!</h2>
 
 					<p className="text-gray-600">
@@ -49,7 +36,7 @@ export default async function DashboardHome() {
 					</p>
 				</div>
 
-				<div className="p-5 rounded-md row-span-2 shadow-md bg-white col-span-2 lg:col-span-1">
+				<div className="p-5 rounded-md row-span-1 shadow-md bg-white col-span-2 lg:col-span-1">
 					<h2 className="text-xl text-semibold mb-3">Audit Log</h2>
 				</div>
 

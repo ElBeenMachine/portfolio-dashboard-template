@@ -7,7 +7,7 @@ import "@/styles/default.css";
 import { PublicEnvScript } from "next-runtime-env";
 import NavBar from "@/components/navigation/NavBar";
 import { SessionProvider } from "next-auth/react";
-import Breadcrumbs from "@/components/navigation/Breadcrumbs";
+import Header from "@/components/navigation/Header";
 import { getInstanceID } from "@/lib/db/local/queries";
 import { ToastContainer } from "react-toastify";
 import { redirect } from "next/navigation";
@@ -55,6 +55,9 @@ export default async function DashLayout({
 	const onboardedState = (await getSetting("onboarded")).value;
 	if (!onboardedState) return redirect("/onboarding");
 
+	// Get the page title
+	const title = (await getSetting("dashboardTitle")).value;
+
 	// Get the instance ID
 	const instanceID = await getInstanceID();
 
@@ -67,25 +70,34 @@ export default async function DashLayout({
 			<head>
 				<PublicEnvScript />
 			</head>
-			<body className={"flex w-full flex-nowrap"}>
+			<body className={"bg-[#F0F0F0] text-[#202020]"}>
 				<ToastContainer position="bottom-right" />
 				<SessionProvider>
-					<NavBar />
-					<main className="flex-grow h-dvh flex flex-col overflow-auto bg-[#F0F0F0] text-[#202020] relative">
-						<Breadcrumbs />
-						<div className="p-5 z-0 mt-24 flex-grow">{children}</div>
-						<div className="w-full flex flex-col md:flex-row justify-center items-center md:gap-5">
-							<p className="text-center text-xs text-gray-500 md:py-2">
-								Instance ID: {instanceID}
-							</p>
-							<p className="text-center text-xs text-gray-500 py-2 hidden md:block">
-								|
-							</p>
-							<p className="text-center text-xs text-gray-500 md:py-2">
-								Version: {version}
-							</p>
+					<div className="h-dvh w-dvw">
+						<NavBar title={title as string} />
+						<div className="flex flex-col h-dvh justify-start ml-[225px] lg:ml-[350px] pr-4 overflow-hidden transition-all relative">
+							<Header />
+							<main className="flex flex-col flex-grow relative mt-20 overflow-y-auto">
+								{children}
+								<div className="flex-grow"></div>
+								<div className="w-full flex flex-col md:flex-row justify-center items-center md:gap-5">
+									<p className="text-center text-xs text-gray-500 md:py-2">
+										Instance ID: {instanceID}
+									</p>
+									<p className="text-center text-xs text-gray-500 py-2 hidden md:block">
+										|
+									</p>
+									<p className="text-center text-xs text-gray-500 md:py-2">
+										Version: {version}
+									</p>
+								</div>
+							</main>
 						</div>
-					</main>
+					</div>
+					{/* <main className="flex flex-col flex-grow relative">
+							<Breadcrumbs />
+							<div className="p-5 z-0 mt-24 flex-grow">{children}</div>
+						</main> */}
 				</SessionProvider>
 			</body>
 		</html>
