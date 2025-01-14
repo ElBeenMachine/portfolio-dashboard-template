@@ -20,6 +20,9 @@ export const getGreeting = (name: string): string => {
 		timeOfDay = "evening";
 	}
 
+	// If name is not of type string, return a unformatted greeting
+	if (typeof name !== "string") return `Good ${timeOfDay}!`;
+
 	// Return the greeting
 	return `Good ${timeOfDay}, ${capitalise(name)}!`;
 };
