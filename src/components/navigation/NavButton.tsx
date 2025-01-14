@@ -16,20 +16,24 @@ export default function NavButton({
 	children,
 	href,
 	name,
-	collapsed,
+
+	isActive,
 }: {
 	children?: React.ReactNode;
 	href: string;
 	name: string;
-	collapsed: boolean;
+
+	isActive: boolean;
 }) {
 	return (
 		<Link
-			className="bg-gray-800 hover:bg-gray-700 transition-all w-full px-5 min-h-16 py-2 flex gap-5 flex-nowrap items-center justify-center"
+			className={`transition-all w-full px-5 min-h-16 py-2 rounded-3xl flex gap-5 flex-nowrap items-center justify-center ${
+				isActive ? "bg-accent text-white" : "hover:bg-accent-hover "
+			}`}
 			href={href}
 		>
 			{children}
-			{!collapsed && <p className="flex-grow whitespace-nowrap">{name}</p>}
+			<p className="flex-grow whitespace-nowrap">{name}</p>
 		</Link>
 	);
 }

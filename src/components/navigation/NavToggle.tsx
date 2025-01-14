@@ -30,7 +30,7 @@ export default function NavToggle({
 	return (
 		<button
 			onClick={() => saveState(!collapsed)}
-			className={`absolute top-0 right-0 bg-none hover:bg-gray-700 transition-all w-max h-max p-1 flex gap-5 flex-nowrap items-center justify-center `}
+			className={`absolute top-0 left-0 bg-none hover:bg-accent-hover transition-all w-max h-max p-1 flex gap-5 flex-nowrap items-center justify-center z-10`}
 		>
 			<IoMdArrowDropleft className={`${collapsed ? "rotate-180" : null} transition-all`} />
 		</button>
