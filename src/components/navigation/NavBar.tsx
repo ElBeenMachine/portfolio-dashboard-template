@@ -102,16 +102,17 @@ export default function NavBar() {
 					<NavButton href="/dashboard/projects" name="All Projects" collapsed={collapsed}>
 						<IoMdInfinite className="w-6 h-6" />
 					</NavButton>
-					{types.map((type) => (
-						<NavButton
-							key={contentTypesMap[type.type].name}
-							name={contentTypesMap[type.type].name}
-							href={contentTypesMap[type.type].url}
-							collapsed={collapsed}
-						>
-							{contentTypesMap[type.type].icon}
-						</NavButton>
-					))}
+					{types.length > 1 &&
+						types.map((type) => (
+							<NavButton
+								key={contentTypesMap[type.type].name}
+								name={contentTypesMap[type.type].name}
+								href={contentTypesMap[type.type].url}
+								collapsed={collapsed}
+							>
+								{contentTypesMap[type.type].icon}
+							</NavButton>
+						))}
 					<NavButton href="/dashboard/settings" name="Settings" collapsed={collapsed}>
 						<MdSettings className="w-6 h-6" />
 					</NavButton>
