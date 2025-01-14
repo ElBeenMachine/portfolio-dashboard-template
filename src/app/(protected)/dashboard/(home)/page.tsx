@@ -27,6 +27,14 @@ export default async function DashboardHome() {
 			</h1>
 
 			<div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+				<div className="p-5 rounded-md bg-red-500 text-white shadow-md col-span-3 col-start-1">
+					<h2 className="text-md text-medium">
+						Warning: Any authenticated user can access and edit portfolio properties.
+						RBAC is yet to be implemented, so be cautious when assigning group access in
+						your identity provider.
+					</h2>
+				</div>
+
 				<div className="p-5 rounded-md bg-white shadow-md col-span-3 col-start-1">
 					<h2 className="text-xl text-semibold mb-3">Welcome to your dashboard!</h2>
 
@@ -40,7 +48,7 @@ export default async function DashboardHome() {
 					<h2 className="text-xl text-semibold mb-3">Audit Log</h2>
 				</div>
 
-				<div className="p-5 rounded-md row-start-2 col-span-2 shadow-md bg-white">
+				<div className="p-5 rounded-md row-start-3 col-span-2 shadow-md bg-white">
 					<h2 className="text-xl text-semibold mb-1">Recent Projects</h2>
 
 					{projects?.length > 0 && (
