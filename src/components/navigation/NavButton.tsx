@@ -27,7 +27,7 @@ export default function NavButton({
 }) {
 	return (
 		<Link
-			className={`transition-all w-full px-5 min-h-16 py-2 rounded-3xl flex gap-5 flex-nowrap items-center justify-center ${
+			className={`transition-all w-full px-5 min-h-16 py-2 rounded-lg flex gap-5 flex-nowrap items-center justify-center ${
 				isActive ? "bg-accent text-white" : "hover:bg-accent-hover "
 			}`}
 			href={href}

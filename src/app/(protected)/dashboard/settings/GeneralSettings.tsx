@@ -118,7 +118,7 @@ export default function GeneralSettings() {
 
 			{/* Update button */}
 			<button
-				className="bg-gray-800 hover:bg-gray-600 transition-all w-max text-white px-5 py-3 rounded-md"
+				className="bg-gray-800 hover:bg-gray-600 transition-all w-max text-white px-5 py-3 rounded-lg"
 				onClick={() =>
 					toast.promise(updateGeneralSettings(), {
 						pending: "Updating settings...",
