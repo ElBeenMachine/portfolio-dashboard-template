@@ -34,7 +34,7 @@ export default function LoginForm({ redirect }: { redirect: string }) {
 			/>
 			<button
 				type="submit"
-				className="w-full p-2 mt-2 bg-gray-600 text-white rounded-md transition-all hover:bg-gray-800"
+				className="w-full p-2 mt-2 bg-gray-600 text-white rounded-lg transition-all hover:bg-gray-800"
 			>
 				Login
 			</button>

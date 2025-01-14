@@ -19,9 +19,11 @@ export const metadata: Metadata = {
  */
 export default function SettingsPage() {
 	return (
-		<main>
+		<div>
 			<h1 className="text-3xl text-semibold mb-5">Settings</h1>
-			<GeneralSettings />
-		</main>
+			<div className="bg-white rounded-lg p-5 relative">
+				<GeneralSettings />
+			</div>
+		</div>
 	);
 }

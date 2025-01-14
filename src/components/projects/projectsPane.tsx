@@ -39,7 +39,7 @@ function ProjectCard({ project }: { project: Project }) {
 	return (
 		<Link
 			href={`/dashboard/editor/${project._id}`}
-			className="cols-span-1 bg-white shadow-md rounded-md overflow-hidden hover:scale-[1.02] hover:cursor-pointer transition-all"
+			className="cols-span-1 bg-white shadow-md rounded-lg overflow-hidden hover:scale-[1.02] hover:cursor-pointer transition-all"
 		>
 			<img
 				alt={project.name}

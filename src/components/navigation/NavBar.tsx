@@ -6,13 +6,13 @@
 
 import { MdDashboard, MdSettings } from "react-icons/md";
 import NavButton from "./NavButton";
-import ProfileLink from "./ProfileLink";
 import { useEffect, useState } from "react";
-import NavToggle from "./NavToggle";
 import NavContentType from "@/types/navContentType";
 import { FaCode, FaPencilAlt } from "react-icons/fa";
 import { FaNoteSticky } from "react-icons/fa6";
 import { IoMdInfinite } from "react-icons/io";
+import { usePathname } from "next/navigation";
+import SignOut from "./SignOut";
 
 // Map of content types to their names, icons, and urls
 const contentTypesMap: { [key: string]: NavContentType } = {
@@ -38,22 +38,9 @@ const contentTypesMap: { [key: string]: NavContentType } = {
  *
  * @returns {Promise<JSX.Element>} NavBar component
  */
-export default function NavBar() {
-	const [collapsed, setCollapsed] = useState(false);
+export default function NavBar({ title }: { title: string }) {
 	const [types, setTypes] = useState<{ type: string; enabled: boolean }[]>([]);
-
-	// Load the nav collapsed state from localStorage
-	useEffect(() => {
-		const navState = localStorage.getItem("navCollapsed");
-		if (navState) {
-			setCollapsed(JSON.parse(navState));
-		}
-	}, []);
-
-	// Save the nav collapsed state to localStorage whenever it changes
-	useEffect(() => {
-		localStorage.setItem("navCollapsed", JSON.stringify(collapsed));
-	}, [collapsed]);
+	const currentPath = usePathname();
 
 	// Get the available content types from the database
 	useEffect(() => {
@@ -77,48 +64,59 @@ export default function NavBar() {
 	}, []);
 
 	return (
-		<div
-			className={` ${
-				collapsed ? "min-w-[100px]" : "min-w-[225px] lg:min-w-[300px]"
-			} h-dvh flex flex-col overflow-auto bg-white text-[#202020] transition-all`}
+		<nav
+			className={`w-[225px] lg:w-[350px] flex flex-col bg-none text-[#202020] transition-all h-full fixed`}
 		>
-			<nav
-				className={`h-dvh bg-gray-800 flex flex-col ${
-					collapsed ? "min-w-[100px]" : "min-w-[225px] lg:min-w-[300px]"
-				} overflow-hidden select-none transition-all text-white fixed`}
-			>
-				<div className="h-24 flex justify-center items-center relative">
-					<NavToggle collapsed={collapsed} setCollapsed={setCollapsed} />
-					<img
-						src={"/api/public/dashboard-logo"}
-						alt="Dashboard Logo"
-						className={(collapsed ? "w-8 h-8" : "w-12 h-12") + " transition-all"}
-					/>
-				</div>
-				<div className="flex-grow">
-					<NavButton href="/dashboard" name="Dashboard" collapsed={collapsed}>
-						<MdDashboard className="w-6 h-6" />
-					</NavButton>
-					<NavButton href="/dashboard/projects" name="All Projects" collapsed={collapsed}>
-						<IoMdInfinite className="w-6 h-6" />
-					</NavButton>
-					{types.length > 1 &&
-						types.map((type) => (
+			<div className="h-max px-4 flex justify-start items-center relative gap-5 mb-16 mt-4">
+				<img
+					src={"/api/public/dashboard-logo"}
+					alt="Dashboard Logo"
+					className={"w-14 h-14 transition-all"}
+				/>
+				<h2 className="text-xl font-bold">{title}</h2>
+			</div>
+			<div className="flex-grow px-4 flex flex-col gap-2 pb-4">
+				<NavButton
+					href="/dashboard"
+					name="Dashboard"
+					isActive={currentPath === "/dashboard"}
+				>
+					<MdDashboard className="w-6 h-6" />
+				</NavButton>
+				<NavButton
+					href="/dashboard/projects"
+					name="All Projects"
+					isActive={currentPath === "/dashboard/projects"}
+				>
+					<IoMdInfinite className="w-6 h-6" />
+				</NavButton>
+				{types.length > 1 &&
+					types.map((type) => {
+						const contentType = contentTypesMap[type.type];
+						if (!contentType) {
+							return null; // Skip rendering if type is not found
+						}
+						return (
 							<NavButton
-								key={contentTypesMap[type.type].name}
-								name={contentTypesMap[type.type].name}
-								href={contentTypesMap[type.type].url}
-								collapsed={collapsed}
+								key={contentType.name}
+								name={contentType.name}
+								href={contentType.url}
+								isActive={currentPath === contentType.url}
 							>
-								{contentTypesMap[type.type].icon}
+								{contentType.icon}
 							</NavButton>
-						))}
-					<NavButton href="/dashboard/settings" name="Settings" collapsed={collapsed}>
-						<MdSettings className="w-6 h-6" />
-					</NavButton>
-				</div>
-				<ProfileLink collapsed={collapsed} />
-			</nav>
-		</div>
+						);
+					})}
+				<div className="flex-grow"></div>
+				<NavButton
+					href="/dashboard/settings"
+					name="Settings"
+					isActive={currentPath === "/dashboard/settings"}
+				>
+					<MdSettings className="w-6 h-6" />
+				</NavButton>
+				<SignOut />
+			</div>
+		</nav>
 	);
 }

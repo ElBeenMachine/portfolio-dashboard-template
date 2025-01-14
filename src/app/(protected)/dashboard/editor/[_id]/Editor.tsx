@@ -102,7 +102,7 @@ export default function ProjectForm({ project }: { project: Project }) {
 				}
 
 				setIsOpen(false);
-				router.push("/dashboard");
+				router.push("/dashboard/projects");
 				resolve("Success");
 			});
 		});
@@ -174,7 +174,7 @@ export default function ProjectForm({ project }: { project: Project }) {
 				<InputHeading htmlFor="status">Status</InputHeading>
 				<select
 					id="status"
-					className="w-full md:w-auto rounded-md border border-gray-300 p-2"
+					className="w-full md:w-auto rounded-lg border border-gray-300 p-2"
 					ref={statusRef}
 				>
 					<option value="draft">Draft</option>
@@ -185,7 +185,7 @@ export default function ProjectForm({ project }: { project: Project }) {
 			<div className="mt-4 flex gap-2">
 				<button
 					id={"documentSaveButton"}
-					className="bg-gray-800 hover:bg-gray-500 transition-all text-white px-4 py-2 rounded-md hover:bg-gray-600transition-all"
+					className="bg-gray-800 hover:bg-gray-500 transition-all text-white px-4 py-2 rounded-lg hover:bg-gray-600transition-all"
 					onClick={() =>
 						toast.promise(handleSave(), {
 							pending: "Saving project...",
@@ -198,7 +198,7 @@ export default function ProjectForm({ project }: { project: Project }) {
 				</button>
 				<button
 					id={"documentDeleteButton"}
-					className="bg-red-500 text-white px-4 py-2 rounded-md hover:opacity-80 transition-all"
+					className="bg-red-500 text-white px-4 py-2 rounded-lg hover:opacity-80 transition-all"
 					onClick={() => setIsOpen(true)}
 				>
 					Delete

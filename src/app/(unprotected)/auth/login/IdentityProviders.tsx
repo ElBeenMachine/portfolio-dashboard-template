@@ -25,7 +25,7 @@ export default async function IdentityProviders({ redirect }: { redirect: string
 				{isMicrosoftEnabled && (
 					<a
 						href={`/api/auth/signin?provider=microsoft-entra-id&redirectTo=${redirect}`}
-						className={`flex w-full justify-center gap-5 items-center rounded-md bg-gray-100 p-4 hover:bg-gray-200 transition-all col-start-1 ${
+						className={`flex w-full justify-center gap-5 items-center rounded-lg bg-gray-100 p-4 hover:bg-gray-200 transition-all col-start-1 ${
 							providerCount === 3 ? "col-span-2" : ""
 						}`}
 					>
@@ -42,7 +42,7 @@ export default async function IdentityProviders({ redirect }: { redirect: string
 				{isGoogleEnabled && (
 					<a
 						href={`/api/auth/signin?provider=google&redirectTo=${redirect}`}
-						className="flex w-full justify-center gap-5 items-center rounded-md bg-gray-100 p-4 hover:bg-gray-200 transition-all"
+						className="flex w-full justify-center gap-5 items-center rounded-lg bg-gray-100 p-4 hover:bg-gray-200 transition-all"
 					>
 						<img src={"/img/providers/google.webp"} alt="Google Logo" className="w-8" />
 						Google
@@ -53,7 +53,7 @@ export default async function IdentityProviders({ redirect }: { redirect: string
 				{isGitHubEnabled && (
 					<a
 						href={`/api/auth/signin?provider=github&redirectTo=${redirect}`}
-						className="flex w-full justify-center gap-5 items-center rounded-md bg-gray-100 p-4 hover:bg-gray-200 transition-all"
+						className="flex w-full justify-center gap-5 items-center rounded-lg bg-gray-100 p-4 hover:bg-gray-200 transition-all"
 					>
 						<img
 							src={"/img/providers/github.webp"}

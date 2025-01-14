@@ -12,7 +12,7 @@ export default async function OnboardingHome() {
 				<h1 className="text-6xl font-bold">Welcome to Your Dashboard!</h1>
 				<Link
 					href={"/onboarding/go"}
-					className="self-end  px-5 py-3 bg-gray-600 rounded-md hover:bg-gray-500 transition-all"
+					className="self-end  px-5 py-3 bg-gray-600 rounded-lg hover:bg-gray-500 transition-all"
 				>
 					Get Started
 				</Link>
