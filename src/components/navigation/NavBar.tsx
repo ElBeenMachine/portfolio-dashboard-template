@@ -12,6 +12,7 @@ import { FaCode, FaPencilAlt } from "react-icons/fa";
 import { FaNoteSticky } from "react-icons/fa6";
 import { IoMdInfinite } from "react-icons/io";
 import { usePathname } from "next/navigation";
+import SignOut from "./SignOut";
 
 // Map of content types to their names, icons, and urls
 const contentTypesMap: { [key: string]: NavContentType } = {
@@ -66,12 +67,11 @@ export default function NavBar({ title }: { title: string }) {
 		<nav
 			className={`w-[225px] lg:w-[350px] flex flex-col bg-none text-[#202020] transition-all h-full fixed`}
 		>
-			{/* <NavToggle collapsed={collapsed} setCollapsed={setCollapsed} /> */}
-			<div className="h-max px-4 flex justify-start items-center relative gap-5 mb-14 mt-4">
+			<div className="h-max px-4 flex justify-start items-center relative gap-5 mb-16 mt-4">
 				<img
 					src={"/api/public/dashboard-logo"}
 					alt="Dashboard Logo"
-					className={"w-16 h-16 transition-all"}
+					className={"w-14 h-14 transition-all"}
 				/>
 				<h2 className="text-xl font-bold">{title}</h2>
 			</div>
@@ -115,6 +115,7 @@ export default function NavBar({ title }: { title: string }) {
 				>
 					<MdSettings className="w-6 h-6" />
 				</NavButton>
+				<SignOut />
 			</div>
 		</nav>
 	);

@@ -102,7 +102,7 @@ export default function ProjectForm({ project }: { project: Project }) {
 				}
 
 				setIsOpen(false);
-				router.push("/dashboard");
+				router.push("/dashboard/projects");
 				resolve("Success");
 			});
 		});

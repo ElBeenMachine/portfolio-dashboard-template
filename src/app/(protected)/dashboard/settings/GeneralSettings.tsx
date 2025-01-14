@@ -89,7 +89,7 @@ export default function GeneralSettings() {
 	}, []);
 
 	return (
-		<SettingsSection title="General">
+		<SettingsSection>
 			{/* Dashboard Title */}
 			<div className="flex flex-col gap-1">
 				<label>Dashboard Title</label>

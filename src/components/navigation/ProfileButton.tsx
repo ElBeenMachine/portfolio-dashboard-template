@@ -1,10 +1,8 @@
-"use client";
+import { auth } from "@/lib/auth/auth";
 
-import { useSession } from "next-auth/react";
-
-export default function ProfileButton() {
+export default async function ProfileButton() {
 	// Get the user's session
-	const { data: session } = useSession();
+	const session = await auth();
 
 	return (
 		<div className="flex items-center gap-5">

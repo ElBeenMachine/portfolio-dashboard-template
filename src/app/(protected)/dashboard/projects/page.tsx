@@ -8,11 +8,13 @@ export default async function AllProjectsPage() {
 	const projects = result?.projects || [];
 
 	return (
-		<main>
-			<CreateButton />
+		<div>
 			<h1 className="text-3xl text-semibold mb-5">All Projects</h1>
-			<p className="mb-5">You can see all of your projects below.</p>
-			<ProjectsPane projects={projects as Project[]} />
-		</main>
+			<div className="bg-white rounded-lg p-5 relative">
+				<CreateButton />
+				<p className="mb-10">You can see all of your projects below.</p>
+				<ProjectsPane projects={projects as Project[]} />
+			</div>
+		</div>
 	);
 }
