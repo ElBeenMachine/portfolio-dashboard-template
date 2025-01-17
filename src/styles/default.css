@@ -79,3 +79,7 @@ body {
 		opacity: 1;
 	}
 }
+
+li {
+	list-style-type: disc;
+}
