@@ -126,7 +126,7 @@ export const createBlankProject = async (type: "code" | "literatire" | "blog", t
  * @param {ObjectId} _id The id of the project to delete
  * @returns {Promise<boolean>} Whether the project was deleted
  */
-export const deleteProjectById = async (_id: ObjectId) => {
+export const archiveProjectById = async (_id: ObjectId) => {
 	const { client, instanceID } = await createDBConnection();
 	if (!client) return false;
 
@@ -134,8 +134,18 @@ export const deleteProjectById = async (_id: ObjectId) => {
 		const db = client.db(instanceID);
 		const collection = db.collection("projects");
 
-		const result = await collection.deleteOne({ _id });
-		return result.deletedCount === 1;
+		// Move the project to the archived_projects collection
+		const project = await collection.findOne({ _id: new ObjectId(_id) });
+		if (!project) return false;
+
+		// Insert the project into the archived_projects collection
+		const archivedCollection = db.collection("archived_projects");
+		const result = await archivedCollection.insertOne(project);
+		if (!result.acknowledged) return false;
+
+		// Delete the project from the projects collection
+		const deleteResult = await collection.deleteOne({ _id: new ObjectId(_id) });
+		return deleteResult.deletedCount === 1;
 	} catch (error) {
 		console.error(error);
 		return false;

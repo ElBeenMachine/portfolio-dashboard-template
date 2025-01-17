@@ -27,10 +27,6 @@ function ProjectCard({ project }: { project: Project }) {
 			col = "text-gray-500";
 			status = "Draft";
 			break;
-		case "archived":
-			col = "text-red-500";
-			status = "Archived";
-			break;
 		default:
 			col = "black";
 			break;

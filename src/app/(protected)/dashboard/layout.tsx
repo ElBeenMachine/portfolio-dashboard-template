@@ -79,8 +79,8 @@ export default async function DashLayout({
 							<Header />
 							<main className="flex flex-col flex-grow relative mt-20 overflow-y-auto">
 								{children}
-								<div className="flex-grow"></div>
-								<div className="w-full flex flex-col md:flex-row justify-center items-center md:gap-5">
+								<div className="flex-grow mb-2"></div>
+								<div className="w-full flex flex-col md:flex-row justify-center items-center md:gap-5 scroll-py-2">
 									<p className="text-center text-xs text-gray-500 md:py-2">
 										Instance ID: {instanceID}
 									</p>
