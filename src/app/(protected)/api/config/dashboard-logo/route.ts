@@ -3,7 +3,7 @@
  */
 
 import { auth } from "@/lib/auth/auth";
-import { updateSetting } from "@/lib/db/remote/queries";
+import { addAuditTrail, updateSetting } from "@/lib/db/remote/queries";
 import { NextResponse } from "next/server";
 
 /**

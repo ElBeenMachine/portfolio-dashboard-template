@@ -3,7 +3,8 @@
  */
 
 import { auth } from "@/lib/auth/auth";
-import { archiveProjectById } from "@/lib/db/remote/queries";
+import { addAuditTrail, archiveProjectById } from "@/lib/db/remote/queries";
+import Project from "@/types/Project";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
@@ -27,10 +28,17 @@ export async function POST(request: NextRequest) {
 	if (!_id) return NextResponse.json({ error: "No project id provided" }, { status: 400 });
 
 	// Archive the project
-	const result = await archiveProjectById(_id);
+	const result = (await archiveProjectById(_id)) as Project;
 
 	// If the project was not archived, return a 500 error
 	if (!result) return NextResponse.json({ error: "Failed to archive project" }, { status: 500 });
+
+	// Add an audit trail
+	await addAuditTrail({
+		name: session?.user?.name || "Unknown",
+		action: "archive",
+		projects: [result._id],
+	});
 
 	// Return the response
 	return NextResponse.json({ status: "success" });

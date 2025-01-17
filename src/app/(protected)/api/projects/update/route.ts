@@ -3,7 +3,7 @@
  */
 
 import { auth } from "@/lib/auth/auth";
-import { updateProject } from "@/lib/db/remote/queries";
+import { addAuditTrail, updateProject } from "@/lib/db/remote/queries";
 import { ObjectId } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -32,6 +32,13 @@ export async function POST(request: NextRequest) {
 	const result = await updateProject(new ObjectId(_id), project);
 
 	if (!result) return NextResponse.json({ error: "Failed to update project" }, { status: 500 });
+
+	// Add an audit trail
+	await addAuditTrail({
+		name: session?.user?.name || "Unknown",
+		action: "update",
+		projects: [new ObjectId(_id)],
+	});
 
 	// Return the response
 	return NextResponse.json({ status: "success" });
