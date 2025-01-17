@@ -81,7 +81,7 @@ export default function ProjectForm({ project }: { project: Project }) {
 		});
 	}
 
-	function handleDelete() {
+	function handleArchive() {
 		// Define the body
 		const body = {
 			_id: project._id,
@@ -89,16 +89,16 @@ export default function ProjectForm({ project }: { project: Project }) {
 
 		return new Promise((resolve, reject) => {
 			// Create the new project
-			fetch("/api/projects/delete", {
-				method: "DELETE",
+			fetch("/api/projects/archive", {
+				method: "POST",
 				body: JSON.stringify(body),
 				headers: {
 					"Content-Type": "application/json",
 				},
 			}).then(async (response) => {
 				if (!response.ok) {
-					console.error("Failed to delete project");
-					reject("Failed to delete project");
+					console.error("Failed to archive project");
+					reject("Failed to archive project");
 				}
 
 				setIsOpen(false);
@@ -179,7 +179,6 @@ export default function ProjectForm({ project }: { project: Project }) {
 				>
 					<option value="draft">Draft</option>
 					<option value="live">Live</option>
-					<option value="archived">Archived</option>
 				</select>
 			</div>
 			<div className="mt-4 flex gap-2">
@@ -208,8 +207,8 @@ export default function ProjectForm({ project }: { project: Project }) {
 			<Modal open={isOpen} onClose={() => setIsOpen(false)} title="Are you sure?">
 				<div>
 					<p>
-						This action is irreversible. Consider changing the project's status to
-						"Archived" instead.
+						This project will be moved to the archive. Are you sure you want to
+						continue?
 					</p>
 					<div className="flex justify-end mt-4">
 						<button
@@ -221,10 +220,10 @@ export default function ProjectForm({ project }: { project: Project }) {
 						<button
 							className="bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded"
 							onClick={() =>
-								toast.promise(handleDelete(), {
-									pending: "Deleting project...",
-									success: "Project deleted",
-									error: "Failed to delete project",
+								toast.promise(handleArchive(), {
+									pending: "Archiving project...",
+									success: "Project archived",
+									error: "Failed to archive project",
 								})
 							}
 						>
