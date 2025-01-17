@@ -4,7 +4,6 @@
 
 import { ObjectId } from "mongodb";
 import { createDBConnection } from ".";
-import Project from "@/types/Project";
 
 /**
  * Get all projects from the database
