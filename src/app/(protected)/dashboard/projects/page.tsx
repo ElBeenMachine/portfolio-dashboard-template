@@ -1,7 +1,7 @@
 import CreateButton from "@/components/projects/CreateButton";
 import ProjectsPane from "@/components/projects/projectsPane";
 import { getAllProjects } from "@/lib/db/remote/queries";
-import Project from "@/types/Project";
+import Project from "@/types/project.interface";
 
 export default async function AllProjectsPage() {
 	const result = await getAllProjects();

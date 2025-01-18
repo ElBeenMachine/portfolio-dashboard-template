@@ -2,7 +2,7 @@
  * @author Ollie Beenham
  */
 
-import Project from "@/types/Project";
+import Project from "@/types/project.interface";
 import Link from "next/link";
 
 /**

@@ -19,6 +19,7 @@ export const initRemoteDatabase = async () => {
 		db.createCollection("users"),
 		db.createCollection("audit"),
 		db.createCollection("projects"),
+		db.createCollection("archived_projects"),
 	]);
 
 	// Populate with default values if necessary
