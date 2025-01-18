@@ -46,27 +46,6 @@ export default function ProjectForm({ project }: { project: Project }) {
 		};
 	}, [body, description, link, name, status, thumbnail]);
 
-	useEffect(() => {
-		const handleKeyDown = (event: KeyboardEvent) => {
-			if (event.ctrlKey && event.key === "s") {
-				event.preventDefault();
-				if (!isSaveDisabled) {
-					toast.promise(handleSave(), {
-						pending: "Saving project...",
-						success: "Project saved",
-						error: "Failed to save project",
-					});
-				}
-			}
-		};
-
-		window.addEventListener("keydown", handleKeyDown);
-		return () => {
-			window.removeEventListener("keydown", handleKeyDown);
-		};
-	}, [isSaveDisabled]);
-
-	// Create modal
 	const handleSave = async () => {
 		setIsSaveDisabled(true);
 		try {
@@ -96,7 +75,7 @@ export default function ProjectForm({ project }: { project: Project }) {
 
 			setIsOpen(false);
 			router.refresh();
-		} catch (error) {
+		} catch {
 			setIsSaveDisabled(false);
 		}
 	};
@@ -131,6 +110,26 @@ export default function ProjectForm({ project }: { project: Project }) {
 			});
 		});
 	}
+
+	useEffect(() => {
+		const handleKeyDown = (event: KeyboardEvent) => {
+			if (event.ctrlKey && event.key === "s") {
+				event.preventDefault();
+				if (!isSaveDisabled) {
+					toast.promise(handleSave(), {
+						pending: "Saving project...",
+						success: "Project saved",
+						error: "Failed to save project",
+					});
+				}
+			}
+		};
+
+		window.addEventListener("keydown", handleKeyDown);
+		return () => {
+			window.removeEventListener("keydown", handleKeyDown);
+		};
+	});
 
 	return (
 		<div>
