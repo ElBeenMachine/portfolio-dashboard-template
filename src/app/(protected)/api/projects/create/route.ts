@@ -3,7 +3,7 @@
  */
 
 import { auth } from "@/lib/auth/auth";
-import { createBlankProject } from "@/lib/db/remote/queries";
+import { addAuditTrail, createBlankProject } from "@/lib/db/remote/queries";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -27,6 +27,13 @@ export async function POST(request: NextRequest) {
 
 	// Log the project
 	const { project } = result;
+
+	// Add an audit trail
+	await addAuditTrail({
+		name: session?.user?.name || "Unknown",
+		action: "created",
+		project: project.insertedId,
+	});
 
 	// Return the response
 	return NextResponse.json({ status: "success", _id: project.insertedId });

@@ -2,7 +2,7 @@
  * @author Ollie Beenham
  */
 
-import Project from "@/types/Project";
+import Project from "@/types/project.interface";
 import Link from "next/link";
 
 /**
@@ -26,10 +26,6 @@ function ProjectCard({ project }: { project: Project }) {
 		case "draft":
 			col = "text-gray-500";
 			status = "Draft";
-			break;
-		case "archived":
-			col = "text-red-500";
-			status = "Archived";
 			break;
 		default:
 			col = "black";

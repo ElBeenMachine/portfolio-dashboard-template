@@ -3,17 +3,17 @@
  */
 
 import { auth } from "@/lib/auth/auth";
-import { deleteProjectById } from "@/lib/db/remote/queries";
-import { ObjectId } from "mongodb";
+import { addAuditTrail, archiveProjectById } from "@/lib/db/remote/queries";
+import Project from "@/types/project.interface";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
- * Delete a project by ID
+ * Archive a project by ID
  *
  * @param request The request
  * @returns {Response} The response
  */
-export async function DELETE(request: NextRequest) {
+export async function POST(request: NextRequest) {
 	// Get the session
 	const session = await auth();
 	if (!session) return NextResponse.json({ error: "Unauthorised request" }, { status: 401 });
@@ -27,10 +27,18 @@ export async function DELETE(request: NextRequest) {
 	// If no id was provided, return a 400 error
 	if (!_id) return NextResponse.json({ error: "No project id provided" }, { status: 400 });
 
-	// Delete the project
-	const result = await deleteProjectById(new ObjectId(_id));
+	// Archive the project
+	const result = (await archiveProjectById(_id)) as Project;
 
-	if (!result) return NextResponse.json({ error: "Failed to delete project" }, { status: 500 });
+	// If the project was not archived, return a 500 error
+	if (!result) return NextResponse.json({ error: "Failed to archive project" }, { status: 500 });
+
+	// Add an audit trail
+	await addAuditTrail({
+		name: session?.user?.name || "Unknown",
+		action: "archived",
+		project: result._id,
+	});
 
 	// Return the response
 	return NextResponse.json({ status: "success" });

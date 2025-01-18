@@ -8,7 +8,7 @@ export default interface Project {
 	name: string;
 	thumbnail: string;
 	description?: string;
-	status: "live" | "draft" | "archived";
+	status: "live" | "draft";
 	body?: string;
 	type: "code" | "literature" | "blog";
 	link?: string;

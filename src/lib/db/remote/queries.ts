@@ -4,6 +4,7 @@
 
 import { ObjectId } from "mongodb";
 import { createDBConnection } from ".";
+import Audit from "@/types/audit.interface";
 
 /**
  * Get all projects from the database
@@ -121,21 +122,31 @@ export const createBlankProject = async (type: "code" | "literatire" | "blog", t
 };
 
 /**
- * Delete a project by its ID
+ * Archive a project by its ID
  *
- * @param {ObjectId} _id The id of the project to delete
- * @returns {Promise<boolean>} Whether the project was deleted
+ * @param {ObjectId} _id The id of the project to archive
+ * @returns {Promise<boolean>} Whether the project was archived
  */
-export const deleteProjectById = async (_id: ObjectId) => {
+export const archiveProjectById = async (_id: ObjectId) => {
 	const { client, instanceID } = await createDBConnection();
-	if (!client) return false;
+	if (!client) return null;
 
 	try {
 		const db = client.db(instanceID);
 		const collection = db.collection("projects");
 
-		const result = await collection.deleteOne({ _id });
-		return result.deletedCount === 1;
+		// Move the project to the archived_projects collection
+		const project = await collection.findOne({ _id: new ObjectId(_id) });
+		if (!project) return null;
+
+		// Insert the project into the archived_projects collection
+		const archivedCollection = db.collection("archived_projects");
+		const result = await archivedCollection.insertOne(project);
+		if (!result.acknowledged) return null;
+
+		// Archive the project from the projects collection
+		await collection.deleteOne({ _id: new ObjectId(_id) });
+		return project;
 	} catch (error) {
 		console.error(error);
 		return false;
@@ -153,7 +164,7 @@ export const deleteProjectById = async (_id: ObjectId) => {
  */
 export const updateProject = async (_id: ObjectId, project: object) => {
 	const { client, instanceID } = await createDBConnection();
-	if (!client) return false;
+	if (!client) return null;
 
 	try {
 		const db = client.db(instanceID);
@@ -234,7 +245,7 @@ export const getSetting = async (
  */
 export const updateSetting = async (key: string, value: string | boolean | number) => {
 	const { client, instanceID } = await createDBConnection();
-	if (!client) return false;
+	if (!client) return null;
 
 	try {
 		// Get the settings collection
@@ -277,4 +288,60 @@ export const getRecentProjects = async (count: number) => {
 	} finally {
 		await client.close();
 	}
+};
+
+/**
+ * Add an audit trail to the database
+ *
+ * @param audit Audit trail object
+ * @returns Result of the insert operation
+ */
+export const addAuditTrail = async (audit: Audit) => {
+	// Create a timestamp
+	const timestamp = new Date();
+
+	// Get the client and instance ID
+	const { client, instanceID } = await createDBConnection();
+	if (!client) return null;
+
+	// Get the database
+	const db = client.db(instanceID);
+
+	// Get the audit collection
+	const collection = db.collection("audit");
+
+	// Insert the audit trail
+	const result = await collection.insertOne({
+		...audit,
+		timestamp,
+	});
+
+	return result;
+};
+
+/**
+ * Get the audit trail from the database
+ *
+ * @param {number} count The number of audit trail entries to fetch
+ * @returns {Promise<any[]>} The audit trail
+ */
+export const getAuditTrail = async (count: number): Promise<Audit[] | null> => {
+	// Get the client and instance ID
+	const { client, instanceID } = await createDBConnection();
+	if (!client) return null;
+
+	// Get the database
+	const db = client.db(instanceID);
+
+	// Get the audit collection
+	const collection = db.collection("audit");
+
+	// Get the audit trail
+	const audit = (await collection
+		.find()
+		.sort({ timestamp: -1 })
+		.limit(count)
+		.toArray()) as Audit[];
+
+	return audit;
 };

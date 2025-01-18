@@ -28,8 +28,11 @@ export default function CreateButton() {
 					reject("Failed to create project");
 				}
 
+				const responseJSON = await response.json();
+				console.log(responseJSON);
+
 				setIsOpen(false);
-				router.refresh();
+				router.push(`/dashboard/editor/${responseJSON._id}`);
 				resolve("Success");
 			});
 		});
