@@ -4,7 +4,7 @@
 
 import { auth } from "@/lib/auth/auth";
 import { addAuditTrail, archiveProjectById } from "@/lib/db/remote/queries";
-import Project from "@/types/Project";
+import Project from "@/types/project.interface";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
@@ -36,8 +36,8 @@ export async function POST(request: NextRequest) {
 	// Add an audit trail
 	await addAuditTrail({
 		name: session?.user?.name || "Unknown",
-		action: "archive",
-		projects: [result._id],
+		action: "archived",
+		project: result._id,
 	});
 
 	// Return the response

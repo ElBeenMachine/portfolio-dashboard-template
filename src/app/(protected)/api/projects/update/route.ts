@@ -36,8 +36,8 @@ export async function POST(request: NextRequest) {
 	// Add an audit trail
 	await addAuditTrail({
 		name: session?.user?.name || "Unknown",
-		action: "update",
-		projects: [new ObjectId(_id)],
+		action: "updated",
+		project: new ObjectId(_id),
 	});
 
 	// Return the response

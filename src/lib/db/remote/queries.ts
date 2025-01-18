@@ -4,6 +4,7 @@
 
 import { ObjectId } from "mongodb";
 import { createDBConnection } from ".";
+import Audit from "@/types/audit.interface";
 
 /**
  * Get all projects from the database
@@ -289,12 +290,13 @@ export const getRecentProjects = async (count: number) => {
 	}
 };
 
-export const addAuditTrail = async (audit: {
-	name: string;
-	action: string;
-	projects?: ObjectId[];
-	settings?: string[];
-}) => {
+/**
+ * Add an audit trail to the database
+ *
+ * @param audit Audit trail object
+ * @returns Result of the insert operation
+ */
+export const addAuditTrail = async (audit: Audit) => {
 	// Create a timestamp
 	const timestamp = new Date();
 
@@ -315,4 +317,31 @@ export const addAuditTrail = async (audit: {
 	});
 
 	return result;
+};
+
+/**
+ * Get the audit trail from the database
+ *
+ * @param {number} count The number of audit trail entries to fetch
+ * @returns {Promise<any[]>} The audit trail
+ */
+export const getAuditTrail = async (count: number): Promise<Audit[] | null> => {
+	// Get the client and instance ID
+	const { client, instanceID } = await createDBConnection();
+	if (!client) return null;
+
+	// Get the database
+	const db = client.db(instanceID);
+
+	// Get the audit collection
+	const collection = db.collection("audit");
+
+	// Get the audit trail
+	const audit = (await collection
+		.find()
+		.sort({ timestamp: -1 })
+		.limit(count)
+		.toArray()) as Audit[];
+
+	return audit;
 };
