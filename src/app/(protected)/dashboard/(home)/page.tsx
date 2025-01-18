@@ -60,7 +60,7 @@ export default async function DashboardHome() {
 	const projects = (await getRecentProjects(10)) || [];
 
 	// Get the most recent audit log
-	const auditLog = (await getAuditTrail(5)) || [];
+	const auditLog = (await getAuditTrail(10)) || [];
 
 	return (
 		<main>
