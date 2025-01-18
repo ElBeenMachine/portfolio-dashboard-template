@@ -10,7 +10,7 @@ import TextInput from "./TextInput";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Modal from "@/components/Modal";
-import Project from "@/types/Project";
+import Project from "@/types/project.interface";
 import { toast } from "react-toastify";
 
 export default function ProjectForm({ project }: { project: Project }) {
@@ -20,12 +20,14 @@ export default function ProjectForm({ project }: { project: Project }) {
 	// Define the router
 	const router = useRouter();
 	const [isOpen, setIsOpen] = useState(false);
+	const [isSaveDisabled, setIsSaveDisabled] = useState(false);
 
 	// Define the refs
 	const nameRef = useRef<HTMLInputElement>(null);
 	const descriptionRef = useRef<HTMLInputElement>(null);
 	const thumbnailRef = useRef<HTMLInputElement>(null);
 	const [editorBody, setBody] = useState<string>("");
+	const bodyRef = useRef<{ markdown: string } | null>(null);
 	const statusRef = useRef<HTMLSelectElement>(null);
 	const linkRef = useRef<HTMLInputElement>(null);
 
@@ -44,42 +46,64 @@ export default function ProjectForm({ project }: { project: Project }) {
 		};
 	}, [body, description, link, name, status, thumbnail]);
 
-	// Create modal
-
-	function handleSave() {
-		// Define the body
-		const body = {
-			_id: project._id,
-			project: {
-				name: nameRef.current?.value,
-				description: descriptionRef.current?.value,
-				thumbnail: thumbnailRef.current?.value,
-				body: editorBody,
-				status: statusRef.current?.value,
-				link: linkRef.current?.value,
-			},
+	useEffect(() => {
+		const handleKeyDown = (event: KeyboardEvent) => {
+			if (event.ctrlKey && event.key === "s") {
+				event.preventDefault();
+				if (!isSaveDisabled) {
+					toast.promise(handleSave(), {
+						pending: "Saving project...",
+						success: "Project saved",
+						error: "Failed to save project",
+					});
+				}
+			}
 		};
 
-		return new Promise((resolve, reject) => {
+		window.addEventListener("keydown", handleKeyDown);
+		return () => {
+			window.removeEventListener("keydown", handleKeyDown);
+		};
+	}, [isSaveDisabled]);
+
+	// Create modal
+	const handleSave = async () => {
+		setIsSaveDisabled(true);
+		try {
+			console.log(bodyRef.current);
+
+			// Define the body
+			const body = {
+				_id: project._id,
+				project: {
+					name: nameRef.current?.value,
+					description: descriptionRef.current?.value,
+					thumbnail: thumbnailRef.current?.value,
+					body: bodyRef.current?.markdown,
+					status: statusRef.current?.value,
+					link: linkRef.current?.value,
+				},
+			};
+
 			// Create the new project
-			fetch("/api/projects/update", {
+			await fetch("/api/projects/update", {
 				method: "POST",
 				body: JSON.stringify(body),
 				headers: {
 					"Content-Type": "application/json",
 				},
-			}).then(async (response) => {
-				if (!response.ok) {
-					console.error("Failed to save");
-					reject("Failed to save");
-				}
-
-				setIsOpen(false);
-				router.refresh();
-				resolve("Success");
 			});
-		});
-	}
+
+			setIsOpen(false);
+			router.refresh();
+		} catch (error) {
+			setIsSaveDisabled(false);
+		}
+	};
+
+	const handleFieldChange = () => {
+		setIsSaveDisabled(false);
+	};
 
 	function handleArchive() {
 		// Define the body
@@ -112,7 +136,12 @@ export default function ProjectForm({ project }: { project: Project }) {
 		<div>
 			<div>
 				<InputHeading htmlFor="name">Project Name</InputHeading>
-				<TextInput id="name" ref={nameRef} placeholder="My Super Awesome Project!" />
+				<TextInput
+					id="name"
+					ref={nameRef}
+					placeholder="My Super Awesome Project!"
+					onChange={handleFieldChange}
+				/>
 			</div>
 			<div className="mt-4">
 				<InputHeading htmlFor="description">Summary</InputHeading>
@@ -120,6 +149,7 @@ export default function ProjectForm({ project }: { project: Project }) {
 					id="description"
 					ref={descriptionRef}
 					placeholder="A brief summary of the project"
+					onChange={handleFieldChange}
 				/>
 			</div>
 			<div className="mt-4">
@@ -128,11 +158,17 @@ export default function ProjectForm({ project }: { project: Project }) {
 					id="thumbnail"
 					ref={thumbnailRef}
 					placeholder="https://example.com/image.jpg"
+					onChange={handleFieldChange}
 				/>
 			</div>
 			<div className="mt-4">
 				<InputHeading htmlFor="link">Website Link</InputHeading>
-				<TextInput id="link" ref={linkRef} placeholder="https://example.com" />
+				<TextInput
+					id="link"
+					ref={linkRef}
+					placeholder="https://example.com"
+					onChange={handleFieldChange}
+				/>
 			</div>
 
 			<div className="mt-4" data-color-mode="light">
@@ -141,8 +177,14 @@ export default function ProjectForm({ project }: { project: Project }) {
 					textareaProps={{
 						placeholder: "Write your project description here...",
 					}}
+					ref={bodyRef}
 					value={editorBody}
-					onChange={(val) => setBody(val || "")}
+					onChange={(val) => {
+						if (val !== undefined) {
+							setBody(val);
+							handleFieldChange();
+						}
+					}}
 					commands={[
 						commands.bold,
 						commands.italic,
@@ -176,6 +218,7 @@ export default function ProjectForm({ project }: { project: Project }) {
 					id="status"
 					className="w-full md:w-auto rounded-lg border border-gray-300 p-2"
 					ref={statusRef}
+					onChange={handleFieldChange}
 				>
 					<option value="draft">Draft</option>
 					<option value="live">Live</option>
@@ -184,7 +227,9 @@ export default function ProjectForm({ project }: { project: Project }) {
 			<div className="mt-4 flex gap-2">
 				<button
 					id={"documentSaveButton"}
-					className="bg-gray-800 hover:bg-gray-500 transition-all text-white px-4 py-2 rounded-lg hover:bg-gray-600transition-all"
+					className={`bg-gray-800 text-white px-4 py-2 rounded-lg transition-all ${
+						isSaveDisabled ? "cursor-not-allowed opacity-50" : "hover:bg-gray-500"
+					}`}
 					onClick={() =>
 						toast.promise(handleSave(), {
 							pending: "Saving project...",
@@ -192,6 +237,7 @@ export default function ProjectForm({ project }: { project: Project }) {
 							error: "Failed to save project",
 						})
 					}
+					disabled={isSaveDisabled}
 				>
 					Save
 				</button>

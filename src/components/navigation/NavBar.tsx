@@ -7,7 +7,7 @@
 import { MdDashboard, MdSettings } from "react-icons/md";
 import NavButton from "./NavButton";
 import { useEffect, useState } from "react";
-import NavContentType from "@/types/navContentType";
+import NavContentType from "@/types/navContentTypes.interface";
 import { FaCode, FaPencilAlt } from "react-icons/fa";
 import { FaNoteSticky } from "react-icons/fa6";
 import { IoMdInfinite } from "react-icons/io";
