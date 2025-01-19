@@ -8,7 +8,7 @@ export default function searchResults({
 }: {
 	searchRef: React.RefObject<HTMLInputElement>;
 	results: any[];
-	setResults: Function;
+	setResults: (results: any[]) => void;
 }) {
 	return (
 		<div

@@ -7,7 +7,7 @@ export default function SearchInput({
 	setResults,
 	searchRef,
 }: {
-	setResults: Function;
+	setResults: (results: any[]) => void;
 	searchRef: React.RefObject<HTMLInputElement>;
 }) {
 	const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(null);
