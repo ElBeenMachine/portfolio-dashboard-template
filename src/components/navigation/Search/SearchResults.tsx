@@ -8,7 +8,7 @@ export default function searchResults({
 }: {
 	searchRef: React.RefObject<HTMLInputElement>;
 	results: any[];
-	setResults: (results: any[]) => void;
+	setResults: React.Dispatch<React.SetStateAction<any[]>>;
 }) {
 	return (
 		<div

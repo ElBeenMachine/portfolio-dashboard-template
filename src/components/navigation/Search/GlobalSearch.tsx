@@ -5,7 +5,7 @@ import SearchInput from "./SearchInput";
 import SearchResults from "./SearchResults";
 
 export default function GlobalSearch() {
-	const [results, setResults] = useState([]);
+	const [results, setResults] = useState<any[]>([]);
 	const searchRef = useRef<HTMLInputElement>(null);
 
 	return (
