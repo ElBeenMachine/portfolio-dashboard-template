@@ -114,6 +114,12 @@ export default async function DashboardHome() {
 							<p>{moment(audit.timestamp as Date).fromNow()}</p>
 						</div>
 					))}
+
+					{auditLog?.length === 0 && (
+						<div className="w-full flex py-10 px-5 justify-center items-center">
+							<p className="text-gray-500">No actions have been taken yet</p>
+						</div>
+					)}
 				</div>
 
 				<div className="p-5 rounded-lg row-start-3 col-span-5 lg:col-span-2 shadow-md bg-white">

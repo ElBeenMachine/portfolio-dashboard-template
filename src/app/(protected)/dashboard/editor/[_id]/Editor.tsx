@@ -20,7 +20,7 @@ export default function ProjectForm({ project }: { project: Project }) {
 	// Define the router
 	const router = useRouter();
 	const [isOpen, setIsOpen] = useState(false);
-	const [isSaveDisabled, setIsSaveDisabled] = useState(false);
+	const [isSaveDisabled, setIsSaveDisabled] = useState(true);
 
 	// Define the refs
 	const nameRef = useRef<HTMLInputElement>(null);
