@@ -345,3 +345,25 @@ export const getAuditTrail = async (count: number): Promise<Audit[] | null> => {
 
 	return audit;
 };
+
+export const globalSearch = async (query: string, limit: number) => {
+	// Get the client and instance ID
+	const { client, instanceID } = await createDBConnection();
+	if (!client) return null;
+
+	// Get the database
+	const db = client.db(instanceID);
+
+	// Search the projects collection
+	const projects = await db
+		.collection("projects")
+		.find({
+			$text: {
+				$search: query,
+			},
+		})
+		.limit(limit)
+		.toArray();
+
+	return projects;
+};

@@ -2,6 +2,7 @@
  * @author Ollie Beenham
  */
 
+import { MongoServerError } from "mongodb";
 import { createDBConnection } from ".";
 
 // Initialise the remote database
@@ -21,6 +22,25 @@ export const initRemoteDatabase = async () => {
 		db.createCollection("projects"),
 		db.createCollection("archived_projects"),
 	]);
+
+	// Create indexes
+	const projects = db.collection("projects");
+
+	// Create a text index on the "name", "description" and "body" fields
+	try {
+		await projects.createIndex(
+			{ name: "text", description: "text", body: "text" },
+			{ name: "search_index", default_language: "english" }
+		);
+	} catch (e) {
+		if (e instanceof MongoServerError && e.code === 85) {
+			await projects.dropIndex("search_index");
+			await projects.createIndex(
+				{ name: "text", description: "text", body: "text" },
+				{ name: "search_index", default_language: "english" }
+			);
+		}
+	}
 
 	// Populate with default values if necessary
 	const settings = db.collection("settings");
