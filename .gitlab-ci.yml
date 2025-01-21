@@ -71,6 +71,7 @@ create_merge_request_main_to_preprod:
     stage: build
     variables:
         VERSION: $(git describe --tags --abbrev=0)
+        GITLAB_PRIVATE_TOKEN: $GITLAB_PRIVATE_TOKEN
     before_script:
         - apt-get update -y && apt-get install -y jq
     script:
@@ -143,6 +144,7 @@ create_merge_request_preprod_to_prod:
     stage: release
     variables:
         VERSION: $(git describe --tags --abbrev=0)
+        GITLAB_PRIVATE_TOKEN: $GITLAB_PRIVATE_TOKEN
     before_script:
         - apt-get update -y && apt-get install -y jq
     script:
