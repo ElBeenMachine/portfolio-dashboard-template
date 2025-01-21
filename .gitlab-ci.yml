@@ -6,6 +6,7 @@ variables:
 
 # Define the stages
 stages:
+    - always_run
     - documentation
     - test
     - build
@@ -13,12 +14,13 @@ stages:
     - deploy
 
 # Always run pipeline so that when no pipeline is run, the pipeline is still created
-.always_run:
-    stage: test
+always_run:
+    stage: always_run
     script:
         - echo "This is a dummy job to ensure the pipeline is always run"
     rules:
-        - if: $CI_PIPELINE_SOURCE == "push"
+        # Run when other requirements are not met
+        - if: $CI_COMMIT_BRANCH != "main" && $CI_COMMIT_BRANCH != "production" && $CI_COMMIT_BRANCH != "pre-production" && $CI_COMMIT_BRANCH !~ /^feature\/.*$/ && $CI_COMMIT_BRANCH !~ /^fix\/.*$/ && $CI_COMMIT_BRANCH !~ /^docs\/.*$/
 
 # Deploy the documentation
 deploy_documentation:
