@@ -58,9 +58,6 @@ unit_tests:
 
 # Build the project for testing
 build_project:
-    needs:
-        - job: lint_code
-        - job: unit_tests
     stage: build
     image: $DOCKER_IMAGE
     services:
