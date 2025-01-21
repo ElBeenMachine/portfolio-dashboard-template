@@ -76,8 +76,23 @@ create_merge_request_main_to_preprod:
     rules:
         - if: $CI_COMMIT_TAG
 
+# Get release version
+get_release_version:
+    stage: release
+    script:
+        - export VERSION=$(git describe --tags --abbrev=0)
+        - echo "VERSION=$VERSION" >> variables.env
+    before_script: []
+    services: []
+    artifacts:
+        reports:
+            dotenv: variables.env
+
 # Build the project for release
 build_release:
+    needs:
+        - job: get_release_version
+          artifacts: true
     stage: release
     image: $DOCKER_IMAGE
     services:
@@ -113,6 +128,9 @@ create_release_notes:
 create_release:
     needs:
         - job: create_release_notes
+          artifacts: true
+
+        - job: get_release_version
           artifacts: true
 
         - job: build_release
