@@ -52,9 +52,6 @@ deploy_documentation:
     stage: documentation
     script:
         - echo "This is where I would deploy the documentation once configured"
-    rules:
-        - changes:
-              - docs/**/*
     only:
         - main
 
