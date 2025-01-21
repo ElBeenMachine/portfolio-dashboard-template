@@ -24,6 +24,10 @@ ENV DOCKER_BUILD=true
 RUN npm run init
 ENV DOCKER_BUILD=false
 
+# Get the version from the git tag
+ARG VERSION
+ENV VERSION=${VERSION}
+
 # Build the Next.js application
 RUN npx next build
 

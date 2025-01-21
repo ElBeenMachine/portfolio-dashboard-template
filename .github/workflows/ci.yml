@@ -1,48 +1,48 @@
-name: CI - Release
+# name: CI - Release
 
-on:
-    push:
-        branches: [production]
+# on:
+#     push:
+#         branches: [production]
 
-jobs:
-    get_project_version:
-        runs-on: ubuntu-latest
-        outputs:
-            version: ${{ steps.get_project_version.outputs.version }}
-        steps:
-            - uses: actions/checkout@v3
+# jobs:
+#     get_project_version:
+#         runs-on: ubuntu-latest
+#         outputs:
+#             version: ${{ steps.get_project_version.outputs.version }}
+#         steps:
+#             - uses: actions/checkout@v3
 
-            - name: Use Node.js 23
-              uses: actions/setup-node@v3
-              with:
-                  node-version: 23
-                  cache: "npm"
+#             - name: Use Node.js 23
+#               uses: actions/setup-node@v3
+#               with:
+#                   node-version: 23
+#                   cache: "npm"
 
-            - id: get_project_version
-              name: Get project version
-              run: |
-                  npm install
-                  echo version=$(node -p "require('./package.json').version") >> "$GITHUB_OUTPUT"
+#             - id: get_project_version
+#               name: Get project version
+#               run: |
+#                   npm install
+#                   echo version=$(node -p "require('./package.json').version") >> "$GITHUB_OUTPUT"
 
-    create_release:
-        name: Create Release
-        runs-on: ubuntu-latest
-        needs: get_project_version
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
+#     create_release:
+#         name: Create Release
+#         runs-on: ubuntu-latest
+#         needs: get_project_version
+#         steps:
+#             - name: Checkout code
+#               uses: actions/checkout@v4
 
-            - name: Create Release
-              id: create_release
-              uses: comnoco/create-release-action@v2.0.5
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                  tag_name: ${{needs.get_project_version.outputs.VERSION }}
-                  release_name: Version ${{ needs.get_project_version.outputs.VERSION }}
-                  body: |
-                      This is the release for version ${{ needs.get_project_version.outputs.VERSION }}.
+#             - name: Create Release
+#               id: create_release
+#               uses: comnoco/create-release-action@v2.0.5
+#               env:
+#                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#               with:
+#                   tag_name: ${{needs.get_project_version.outputs.VERSION }}
+#                   release_name: Version ${{ needs.get_project_version.outputs.VERSION }}
+#                   body: |
+#                       This is the release for version ${{ needs.get_project_version.outputs.VERSION }}.
 
-                      [Docker Image](https://hub.docker.com/r/beenhamo/portfolio-dashboard)
-                  draft: false
-                  prerelease: false
+#                       [Docker Image](https://hub.docker.com/r/beenhamo/portfolio-dashboard)
+#                   draft: false
+#                   prerelease: false

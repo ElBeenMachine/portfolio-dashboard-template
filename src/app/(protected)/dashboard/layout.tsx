@@ -4,7 +4,7 @@
 
 import "@/styles/default.css";
 
-import { PublicEnvScript } from "next-runtime-env";
+import { env, PublicEnvScript } from "next-runtime-env";
 import NavBar from "@/components/navigation/NavBar";
 import { SessionProvider } from "next-auth/react";
 import Header from "@/components/navigation/Header";
@@ -14,9 +14,7 @@ import { redirect } from "next/navigation";
 import { getSetting } from "@/lib/db/remote/queries";
 import { auth } from "@/lib/auth/auth";
 
-// Get the version from package.json
-import packageJson from "../../../../package.json";
-const { version } = packageJson;
+const version = env("VERSION");
 
 /**
  * Metadata for the dashboard layout.
