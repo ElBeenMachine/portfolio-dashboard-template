@@ -39,9 +39,6 @@ lint_code:
     script:
         - npm install
         - npm run lint
-    rules:
-        - if: $CI_COMMIT_BRANCH =~ /^feature\/.*$/
-        - if: $CI_COMMIT_BRANCH =~ /^fix\/.*$/
 
 # Run unit tests
 unit_tests:
@@ -50,12 +47,12 @@ unit_tests:
     script:
         - npm install
         - npm test
-    rules:
-        - if: $CI_COMMIT_BRANCH =~ /^feature\/.*$/
-        - if: $CI_COMMIT_BRANCH =~ /^fix\/.*$/
 
 # Build the project for testing
 build_project:
+    needs:
+        - job: lint_code
+        - job: unit_tests
     stage: build
     image: $DOCKER_IMAGE
     services:
