@@ -2,6 +2,7 @@
 	"name": "portfolio-dashboard",
 	"version": "0.5.2",
 	"private": true,
+	"repository": "https://gitlab.com/ElBeenMachine/portfolio-dashboard-template",
 	"scripts": {
 		"dev": "doppler run -- npm run init && doppler run -- next dev",
 		"build": "next build",
@@ -42,6 +43,7 @@
 		"jest": "^29.7.0",
 		"jest-environment-jsdom": "^29.7.0",
 		"jest-junit": "^16.0.0",
+		"lerna-changelog-gitlab": "^1.0.3",
 		"postcss": "^8",
 		"tailwindcss": "^3.4.1",
 		"ts-jest": "^29.2.5",

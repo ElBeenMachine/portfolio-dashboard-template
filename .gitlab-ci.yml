@@ -1,7 +1,7 @@
 # Define variables and default images
 variables:
-    NODE_IMAGE: node:23-alpine
-    DOCKER_IMAGE: docker:27
+    NODE_IMAGE: node:alpine
+    DOCKER_IMAGE: docker:24.0.5
     PROJECT_NAME: portfolio-dashboard
 
 # Define the stages
@@ -61,7 +61,7 @@ build_project:
     stage: build
     image: $DOCKER_IMAGE
     services:
-        - docker:27-dind
+        - docker:24.0.5-dind
     script:
         - docker build -t $PROJECT_NAME:testing .
     rules:
@@ -98,7 +98,7 @@ build_release:
     stage: release
     image: $DOCKER_IMAGE
     services:
-        - docker:27-dind
+        - docker:24.0.5-dind
     variables:
         DOCKER_DRIVER: overlay2
         DOCKER_BUILDKIT: 1
@@ -112,6 +112,15 @@ build_release:
         - if: $CI_COMMIT_BRANCH == "pre-production"
 
 # TODO: Automatically generate release notes
+create_release_notes:
+    stage: release
+    script:
+        - git log --oneline $(git describe --tags --abbrev=0 || git rev-list --max-parents=0 HEAD)...HEAD | tr '\n' '\7' | sed 's/\x7/\n\n/g' >> release.md
+    rules:
+        - if: $CI_COMMIT_BRANCH == "pre-production"
+    artifacts:
+        paths:
+            - release.md
 
 # Create a release
 create_release:
