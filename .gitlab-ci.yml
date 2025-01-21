@@ -1,35 +1,109 @@
+# Define variables and default images
+variables:
+    NODE_IMAGE: node:23-alpine
+    DOCKER_IMAGE: docker:stable
+    PROJECT_NAME: portfolio-dashboard
+
 # Define the stages
 stages:
-    - sast
+    - documentation
+    - test
+    - build
     - release
+    - deploy
 
-# Configure SAST Workflow
-sast:
-    stage: sast
-include:
-    - template: Security/SAST.gitlab-ci.yml
+# Deploy the documentation
+deploy_documentation:
+    stage: documentation
+    script:
+        - echo "This is where I would deploy the documentation once configured"
+    rules:
+        - if: $CI_COMMIT_BRANCH == "main"
+        - changes:
+              - docs/**/*
 
-# Get the project version
-get_project_version:
+# Lint the code
+lint_code:
+    stage: test
+    image: $NODE_IMAGE
+    script:
+        - npm install
+        - npm run lint
+    rules:
+        - if: $CI_COMMIT_BRANCH =~ /^feature\/.*$/
+        - if: $CI_COMMIT_BRANCH =~ /^fix\/.*$/
+
+# Run unit tests
+unit_tests:
+    stage: test
+    image: $NODE_IMAGE
+    script:
+        - npm install
+        - npm test
+    rules:
+        - if: $CI_COMMIT_BRANCH =~ /^feature\/.*$/
+        - if: $CI_COMMIT_BRANCH =~ /^fix\/.*$/
+
+# Build the project for testing
+build_project:
+    stage: build
+    image: $DOCKER_IMAGE
+    services:
+        - docker:stable-dind
+    script:
+        - docker build -t $PROJECT_NAME:testing .
+    rules:
+        - if: $CI_COMMIT_BRANCH == "main"
+
+# Get the project version for release
+get_release_version:
     stage: release
     image: node:23-alpine
     script:
+        # Check to see if project tag already exists
+        - |
+            if docker manifest inspect "$DOCKER_USER/$PROJECT_NAME:$TAG" > /dev/null 2>&1; then
+                echo "Docker image $DOCKER_USER/$PROJECT_NAME:$TAG already exists."
+                exit 1
+            else
+                echo "Docker image $DOCKER_USER/$PROJECT_NAME:$TAG does not exist, passing tag to next job."
+            fi
+
+        # Get the project version
         - export VERSION=$(node -p "require('./package.json').version")
         - echo "VERSION=$VERSION" >> variables.env
-    before_script: []
-    services: []
     artifacts:
         reports:
             dotenv: variables.env
     rules:
-        - if: $CI_COMMIT_BRANCH == "production"
+        - if: $CI_COMMIT_BRANCH == "pre-production"
+
+# Build the project for release
+build_release:
+    needs:
+        - job: get_release_version
+          artifacts: true
+    stage: release
+    image: $DOCKER_IMAGE
+    services:
+        - docker:stable-dind
+    before_script:
+        - echo "$DOCKER_TOKEN" | docker login -u $DOCKER_USER --password-stdin
+    script:
+        - docker buildx create --use
+        - docker buildx build --platform linux/amd64,linux/arm64 -t $DOCKER_USER/$PROJECT_NAME:$VERSION -t $DOCKER_USER/$PROJECT_NAME:latest --push .
+    rules:
+        - if: $CI_COMMIT_BRANCH == "pre-production"
+
+# TODO: Automatically generate release notes
 
 # Create a release
 create_release:
-    stage: release
     needs:
-        - job: get_project_version
+        - job: get_release_version
           artifacts: true
+        - job: build_release
+    stage: release
     image: registry.gitlab.com/gitlab-org/release-cli:latest
     script:
         - echo "Creating release $VERSION"
@@ -44,4 +118,18 @@ create_release:
                 - name: "Docker Image"
                   url: https://hub.docker.com/r/$DOCKER_USER/portfolio-dashboard
     rules:
+        - if: $CI_COMMIT_BRANCH == "pre-production"
+
+# Get the proejct version for deployment
+get_deploy_version:
+    stage: deploy
+    image: node:23-alpine
+    script:
+        - export VERSION=$(node -p "require('./package.json').version")
+        - echo "VERSION=$VERSION" >> variables.env
+    artifacts:
+        reports:
+            dotenv: variables.env
+    rules:
         - if: $CI_COMMIT_BRANCH == "production"
+# TODO: Use kubernetes spec to deploy to production environment
