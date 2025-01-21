@@ -12,6 +12,7 @@ stages:
     - build
     - release
     - deploy
+    - mereg
 
 # Always run pipeline so that when no pipeline is run, the pipeline is still created
 always_run:
@@ -21,16 +22,6 @@ always_run:
     rules:
         # Run when other requirements are not met
         - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH != "main" && $CI_COMMIT_BRANCH != "production" && $CI_COMMIT_BRANCH != "pre-production" && $CI_COMMIT_BRANCH !~ /^feature\/.*$/ && $CI_COMMIT_BRANCH !~ /^fix\/.*$/ && $CI_COMMIT_BRANCH !~ /^docs\/.*$/
-
-# Deploy the documentation
-deploy_documentation:
-    stage: documentation
-    script:
-        - echo "This is where I would deploy the documentation once configured"
-    rules:
-        - if: $CI_COMMIT_BRANCH == "main"
-        - changes:
-              - docs/**/*
 
 # Lint the code
 lint_code:
@@ -56,6 +47,17 @@ unit_tests:
         - production
         - pre-production
 
+# Deploy the documentation
+deploy_documentation:
+    stage: documentation
+    script:
+        - echo "This is where I would deploy the documentation once configured"
+    rules:
+        - changes:
+              - docs/**/*
+    only:
+        - main
+
 # Build the project for testing
 build_project:
     stage: build
@@ -66,6 +68,22 @@ build_project:
         - docker build -t $PROJECT_NAME:testing .
     rules:
         - if: $CI_COMMIT_BRANCH == "main"
+
+# Merge the main branch into the pre-production branch
+create_merge_request_main_to_preprod:
+    stage: merge
+    image: alpine:latest
+    script:
+        - apk add --no-cache curl jq
+        - |
+            curl --request POST --header "PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN" \
+            "$GITLAB_API_URL/projects/$GITLAB_PROJECT_ID/merge_requests" \
+            --data "source_branch=main" \
+            --data "target_branch=pre-production" \
+            --data "title=Release New Version" \
+            --data "description=Automated merge request from main to pre-production"
+    rules:
+        - if: $CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"
 
 # Get the project version for release
 get_release_version:
