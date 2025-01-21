@@ -1,7 +1,7 @@
 # Define variables and default images
 variables:
     NODE_IMAGE: node:23-alpine
-    DOCKER_IMAGE: docker:stable
+    DOCKER_IMAGE: docker:27
     PROJECT_NAME: portfolio-dashboard
 
 # Define the stages
@@ -59,7 +59,7 @@ build_project:
     stage: build
     image: $DOCKER_IMAGE
     services:
-        - docker:stable-dind
+        - docker:27-dind
     script:
         - docker build -t $PROJECT_NAME:testing .
     rules:
@@ -96,7 +96,7 @@ build_release:
     stage: release
     image: $DOCKER_IMAGE
     services:
-        - docker:stable-dind
+        - docker:27-dind
     before_script:
         - echo "$DOCKER_TOKEN" | docker login -u $DOCKER_USER --password-stdin
     script:
