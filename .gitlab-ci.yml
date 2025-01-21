@@ -23,7 +23,7 @@ always_run:
         - echo "This is a dummy job to ensure the pipeline is always run"
     rules:
         # Run when other requirements are not met
-        - if: $CI_COMMIT_TAG == null && $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH != "main" && $CI_COMMIT_BRANCH != "production" && $CI_COMMIT_BRANCH != "pre-production" && $CI_COMMIT_BRANCH !~ /^feature\/.*$/ && $CI_COMMIT_BRANCH !~ /^fix\/.*$/ && $CI_COMMIT_BRANCH !~ /^docs\/.*$/
+        - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH != "main" && $CI_COMMIT_BRANCH != "production" && $CI_COMMIT_BRANCH != "pre-production" && $CI_COMMIT_BRANCH !~ /^feature\/.*$/ && $CI_COMMIT_BRANCH !~ /^fix\/.*$/ && $CI_COMMIT_BRANCH !~ /^docs\/.*$/
 
 # Lint the code
 lint_code:
@@ -33,7 +33,7 @@ lint_code:
         - npm install
         - npm run lint
     rules:
-        - if: $CI_COMMIT_TAG == null && $CI_COMMIT_BRANCH != "main" && $CI_COMMIT_BRANCH != "production" && $CI_COMMIT_BRANCH != "pre-production"
+        - if: $CI_COMMIT_BRANCH != "main" && $CI_COMMIT_BRANCH != "production" && $CI_COMMIT_BRANCH != "pre-production"
 
 # Run unit tests
 unit_tests:
@@ -43,7 +43,7 @@ unit_tests:
         - npm install
         - npm test
     rules:
-        - if: $CI_COMMIT_TAG == null && $CI_COMMIT_BRANCH != "main" && $CI_COMMIT_BRANCH != "production" && $CI_COMMIT_BRANCH != "pre-production"
+        - if: $CI_COMMIT_BRANCH != "main" && $CI_COMMIT_BRANCH != "production" && $CI_COMMIT_BRANCH != "pre-production"
 
 # Deploy the documentation
 deploy_documentation:
@@ -64,15 +64,27 @@ build_project:
     rules:
         - if: $CI_COMMIT_BRANCH == "main"
 
+# Change the package.json version to the tag version
+change_package_version:
+    stage: merge
+    image: $NODE_IMAGE
+    script:
+        - npm version $CI_COMMIT_TAG
+        - git push --follow-tags
+    rules:
+        - if: $CI_COMMIT_TAG
+
 # Merge the main branch into the pre-production branch
 create_merge_request_main_to_preprod:
+    needs:
+        - job: change_package_version
     stage: merge
     before_script:
         - apt-get update -y && apt-get install -y jq
     script:
         - sh .gitlab/scripts/merge-to-pre-prod.sh
     rules:
-        - if: $CI_COMMIT_TAG
+        - if: $CI_COMMIT_TAG && $CI_COMMIT_BRANCH == "main"
 
 # Get the project version for release
 get_release_version:
@@ -118,7 +130,7 @@ build_release:
     rules:
         - if: $CI_COMMIT_BRANCH == "pre-production"
 
-# TODO: Automatically generate release notes
+# Automatically generate release notes
 create_release_notes:
     stage: release
     script:
@@ -150,6 +162,16 @@ create_release:
                   url: https://hub.docker.com/r/$DOCKER_USER/portfolio-dashboard
     rules:
         - if: $CI_COMMIT_BRANCH == "pre-production"
+
+# Merge the main branch into the pre-production branch
+create_merge_request_preprod_to_prod:
+    needs:
+        - job: create_release
+    stage: merge
+    before_script:
+        - apt-get update -y && apt-get install -y jq
+    script:
+        - sh .gitlab/scripts/merge-to-prod.sh
 
 # Get the proejct version for deployment
 get_deploy_version:
