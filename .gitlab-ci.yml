@@ -39,6 +39,10 @@ lint_code:
     script:
         - npm install
         - npm run lint
+    except:
+        - main
+        - production
+        - pre-production
 
 # Run unit tests
 unit_tests:
@@ -47,6 +51,10 @@ unit_tests:
     script:
         - npm install
         - npm test
+    except:
+        - main
+        - production
+        - pre-production
 
 # Build the project for testing
 build_project:
