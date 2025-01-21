@@ -12,7 +12,7 @@ req_url="https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/merge_requests?sour
 
 echo $req_url
 
-created_merge_request_response=$(curl -X POST --header "Authorization:Bearer ${GITLAB_PRIVATE_TOKEN}" --header "Content-Type:application/json" -d "${request_body}" "$req")
+created_merge_request_response=$(curl -X POST --header "Authorization:Bearer ${GITLAB_PRIVATE_TOKEN}" --header "Content-Type:application/json" -d "${request_body}" $req_url)
 
 ## Debug
 echo $created_merge_request_response
