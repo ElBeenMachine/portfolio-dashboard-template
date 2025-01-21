@@ -86,11 +86,10 @@ build_release:
         DOCKER_DRIVER: overlay2
         DOCKER_BUILDKIT: 1
         DOCKER_CLI_EXPERIMENTAL: enabled
-        VERSION: $(git describe --tags --abbrev=0)
     before_script:
         - echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USER --password-stdin
-        # - export VERSION=$(git describe --tags --abbrev=0)
     script:
+        - export VERSION=$(git describe --tags --abbrev=0)
         - docker buildx create --use
         - docker buildx build --platform linux/amd64,linux/arm64 -t $DOCKER_USER/$PROJECT_NAME:$VERSION -t $DOCKER_USER/$PROJECT_NAME:latest --push .
     rules:
@@ -99,11 +98,10 @@ build_release:
 # Automatically generate release notes
 create_release_notes:
     stage: release
-    variables:
-        VERSION: $(git describe --tags --abbrev=0)
     script:
-        - echo "Generating release notes"
-        - echo "Changelog for version $VERSION" > release.md
+        - export VERSION=$(git describe --tags --abbrev=0)
+        - echo "Generating release notes for version $VERSION"
+        - echo "# Changelog for version $VERSION" > release.md
         - git log --oneline $(git describe --tags --abbrev=0 || git rev-list --max-parents=0 HEAD)...HEAD | tr '\n' '\7' | sed 's/\x7/\n\n/g' >> release.md
     rules:
         - if: $CI_COMMIT_BRANCH == "pre-production"
@@ -120,9 +118,8 @@ create_release:
         - job: build_release
     stage: release
     image: registry.gitlab.com/gitlab-org/release-cli:latest
-    variables:
-        VERSION: $(git describe --tags --abbrev=0)
     script:
+        - export VERSION=$(git describe --tags --abbrev=0)
         - echo "Creating release $VERSION"
     release:
         name: Version $VERSION
