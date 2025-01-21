@@ -106,7 +106,6 @@ build_release:
     before_script:
         - echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USER --password-stdin
     script:
-        - export VERSION=$(git describe --tags --abbrev=0)
         - docker buildx create --use
         - docker buildx build --platform linux/amd64,linux/arm64 --build-arg VERSION=$VERSION -t $DOCKER_USER/$PROJECT_NAME:$VERSION -t $DOCKER_USER/$PROJECT_NAME:latest --push .
     rules:
