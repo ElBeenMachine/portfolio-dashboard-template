@@ -75,6 +75,8 @@ create_merge_request_main_to_preprod:
         - apt-get update -y && apt-get install -y jq
     script:
         - sh .gitlab/scripts/merge-to-pre-prod.sh
+    rules:
+        - if: $CI_COMMIT_BRANCH == "main" && $CI_COMMIT_TAG
 
 # Build the project for release
 build_release:
@@ -145,4 +147,6 @@ create_merge_request_preprod_to_prod:
         - apt-get update -y && apt-get install -y jq
     script:
         - sh .gitlab/scripts/merge-to-prod.sh
+    rules:
+        - if: $CI_COMMIT_BRANCH == "pre-production" && $CI_COMMIT_TAG
 # TODO: Use kubernetes spec to deploy to production environment
