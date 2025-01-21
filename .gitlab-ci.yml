@@ -3,6 +3,8 @@ variables:
     NODE_IMAGE: node:alpine
     DOCKER_IMAGE: docker:24.0.5
     PROJECT_NAME: portfolio-dashboard
+    GITLAB_API_URL: "https://gitlab.com/api/v4"
+    GITLAB_PROJECT_ID: $CI_PROJECT_ID
 
 # Define the stages
 stages:
@@ -73,12 +75,19 @@ create_merge_request_main_to_preprod:
     script:
         - apk add --no-cache curl jq
         - |
-            curl --request POST --header "PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN" \
-            "$GITLAB_API_URL/projects/$GITLAB_PROJECT_ID/merge_requests" \
-            --data "source_branch=main" \
-            --data "target_branch=pre-production" \
-            --data "title=Release New Version" \
-            --data "description=Automated merge request from main to pre-production"
+            existing_mr=$(curl --header "PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN" \
+              "$GITLAB_API_URL/projects/$GITLAB_PROJECT_ID/merge_requests?source_branch=main&target_branch=pre-production&state=opened" \
+              | jq '. | length')
+            if [ "$existing_mr" -eq "0" ]; then
+              curl --request POST --header "PRIVATE-TOKEN: $GITLAB_PRIVATE_TOKEN" \
+                "$GITLAB_API_URL/projects/$GITLAB_PROJECT_ID/merge_requests" \
+                --data "source_branch=main" \
+                --data "target_branch=pre-production" \
+                --data "title=Merge main into pre-production" \
+                --data "description=Automated merge request from main to pre-production"
+            else
+              echo "Merge request from main to pre-production already exists."
+            fi
     rules:
         - if: $CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"
 
