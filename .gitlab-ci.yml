@@ -68,7 +68,7 @@ build_project:
 
 # Merge the main branch into the pre-production branch
 create_merge_request_main_to_preprod:
-    stage: build
+    stage: merge
     before_script:
         - apt-get update -y && apt-get install -y jq
     script:
@@ -138,7 +138,7 @@ create_release:
 
 # Merge the main branch into the pre-production branch
 create_merge_request_preprod_to_prod:
-    stage: release
+    stage: merge
     before_script:
         - apt-get update -y && apt-get install -y jq
     script:
