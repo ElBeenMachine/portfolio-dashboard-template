@@ -37,13 +37,13 @@ workflows:
             - Version:
                   filters:
                       branches:
-                          only: production
+                          only: pre-production
             - Build_And_Push:
                   requires:
                       - Version
                   filters:
                       branches:
-                          only: production
+                          only: pre-production
 
 jobs:
     # Test to see if the unit tests pass
@@ -80,6 +80,7 @@ jobs:
                   name: Build Docker image
                   command: docker build -t << pipeline.parameters.PROJECT_NAME >>:testing .
 
+    # Get the project version from the package.json file
     Version:
         docker:
             - image: << pipeline.parameters.NODE_IMAGE >>

@@ -22,18 +22,7 @@ get_project_version:
         reports:
             dotenv: variables.env
     rules:
-        - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-          changes:
-              - public/**
-              - src/**
-              - .dockerignore
-              - Dockerfile
-              - next.config.ts
-              - package.json
-              - package-lock.json
-              - postcss.config.mjs
-              - tailwind.config.ts
-              - tsconfig.json
+        - if: $CI_COMMIT_BRANCH == "production"
 
 # Create a release
 create_release:
@@ -55,15 +44,4 @@ create_release:
                 - name: "Docker Image"
                   url: https://hub.docker.com/r/$DOCKER_USER/portfolio-dashboard
     rules:
-        - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-          changes:
-              - public/**
-              - src/**
-              - .dockerignore
-              - Dockerfile
-              - next.config.ts
-              - package.json
-              - package-lock.json
-              - postcss.config.mjs
-              - tailwind.config.ts
-              - tsconfig.json
+        - if: $CI_COMMIT_BRANCH == "production"
