@@ -87,6 +87,8 @@ get_release_version:
     artifacts:
         reports:
             dotenv: variables.env
+    only:
+        - pre-production
 
 # Build the project for release
 build_release:
