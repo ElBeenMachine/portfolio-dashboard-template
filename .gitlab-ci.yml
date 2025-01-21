@@ -18,8 +18,7 @@ stages:
     script:
         - echo "This is a dummy job to ensure the pipeline is always run"
     rules:
-        # Run when other requirements are not met
-        - if: $CI_COMMIT_BRANCH != "main" && $CI_COMMIT_BRANCH != "production" && $CI_COMMIT_BRANCH != "pre-production" && $CI_COMMIT_BRANCH !~ /^feature\/.*$/ && $CI_COMMIT_BRANCH !~ /^fix\/.*$/ && $CI_COMMIT_BRANCH !~ /^docs\/.*$/
+        - if: $CI_PIPELINE_SOURCE == "push"
 
 # Deploy the documentation
 deploy_documentation:
