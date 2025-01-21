@@ -3,7 +3,7 @@
 # Need all remote branches
 git fetch --no-tags
 
-request_body=$(jq -c -r -n --arg title "Deploy Version $(echo $CI_COMMIT_TAG | head -n 1)" '{title: $title}')
+request_body=$(jq -c -r -n --arg title "Deploy Version $VERSION" '{title: $title}')
 
 ## Debug
 # echo $request_body

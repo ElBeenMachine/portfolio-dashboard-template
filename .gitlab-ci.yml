@@ -142,6 +142,7 @@ create_merge_request_preprod_to_prod:
     stage: merge
     before_script:
         - apt-get update -y && apt-get install -y jq
+        - export VERSION=$(git describe --tags --abbrev=0)
     script:
         - sh .gitlab/scripts/merge-to-prod.sh
     rules:
