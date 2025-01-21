@@ -12,7 +12,7 @@ stages:
     - build
     - release
     - deploy
-    - mereg
+    - merge
 
 # Always run pipeline so that when no pipeline is run, the pipeline is still created
 always_run:
