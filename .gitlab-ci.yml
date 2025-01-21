@@ -135,8 +135,7 @@ create_release:
     release:
         name: Release $VERSION
         tag_name: $VERSION
-        description: |
-            This is the release for version $VERSION
+        description: release.md
         ref: $CI_COMMIT_SHA
         assets:
             links:
