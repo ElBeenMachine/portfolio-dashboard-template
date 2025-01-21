@@ -1,6 +1,5 @@
 {
 	"name": "portfolio-dashboard",
-	"version": "0.5.2",
 	"private": true,
 	"repository": "https://gitlab.com/ElBeenMachine/portfolio-dashboard-template",
 	"scripts": {
