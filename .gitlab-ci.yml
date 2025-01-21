@@ -66,25 +66,23 @@ build_project:
 
 # Change the package.json version to the tag version
 change_package_version:
-    stage: merge
+    stage: build
     image: $NODE_IMAGE
     script:
         - npm version $CI_COMMIT_TAG
         - git push --follow-tags
     rules:
-        - if: $CI_COMMIT_TAG
+        - if: $CI_COMMIT_TAG && $CI_COMMIT_BRANCH == "main"
 
 # Merge the main branch into the pre-production branch
 create_merge_request_main_to_preprod:
     needs:
         - job: change_package_version
-    stage: merge
+    stage: build
     before_script:
         - apt-get update -y && apt-get install -y jq
     script:
         - sh .gitlab/scripts/merge-to-pre-prod.sh
-    rules:
-        - if: $CI_COMMIT_TAG && $CI_COMMIT_BRANCH == "main"
 
 # Get the project version for release
 get_release_version:
@@ -167,7 +165,7 @@ create_release:
 create_merge_request_preprod_to_prod:
     needs:
         - job: create_release
-    stage: merge
+    stage: release
     before_script:
         - apt-get update -y && apt-get install -y jq
     script:
