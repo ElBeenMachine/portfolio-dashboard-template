@@ -115,10 +115,11 @@ build_release:
 create_release:
     needs:
         - job: build_release
+        - job: get_release_version
+          artifacts: true
     stage: release
     image: registry.gitlab.com/gitlab-org/release-cli:latest
     script:
-        - export VERSION=$(git describe --tags --abbrev=0)
         - echo "Generating release notes for version $VERSION"
         - echo "# Changelog for version $VERSION" > release.md
         - git log --oneline $(git describe --tags --abbrev=0 || git rev-list --max-parents=0 HEAD)...HEAD | tr '\n' '\7' | sed 's/\x7/\n\n/g' >> release.md
