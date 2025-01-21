@@ -133,7 +133,7 @@ create_release:
     script:
         - echo "Creating release $VERSION"
     release:
-        name: Release $VERSION
+        name: Version $VERSION
         tag_name: $VERSION
         description: release.md
         ref: $CI_COMMIT_SHA
