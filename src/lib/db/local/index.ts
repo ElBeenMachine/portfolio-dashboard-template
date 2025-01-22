@@ -45,6 +45,7 @@ export const initLocalDatabase = async () => {
 		const instanceIDResult = (await db
 			.prepare("SELECT value FROM config WHERE key = 'instance-id'")
 			.get()) as { value: string };
+
 		instanceID = instanceIDResult?.value;
 
 		// If no instance ID, generate and save

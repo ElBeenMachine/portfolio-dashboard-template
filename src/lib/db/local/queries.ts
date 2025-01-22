@@ -2,6 +2,7 @@
  * @author Ollie Beenham
  */
 
+import { env } from "next-runtime-env";
 import { db } from ".";
 
 /**
@@ -10,6 +11,9 @@ import { db } from ".";
  * @returns {Promise<{instanceID: string}>} The instance ID
  */
 export const getInstanceID = async () => {
+	// If the environment variable is set, return that value
+	if (env("INSTANCE_ID")) return env("INSTANCE_ID");
+
 	try {
 		const query = db.prepare("SELECT value FROM config WHERE key = 'instance-id'");
 		const result = (query.get() as { value: string }).value;
@@ -25,6 +29,9 @@ export const getInstanceID = async () => {
  * @returns {string} The instance ID
  */
 export const getInstanceIDSync = () => {
+	// If the environment variable is set, return that value
+	if (env("INSTANCE_ID")) return env("INSTANCE_ID");
+
 	try {
 		const query = db.prepare("SELECT value FROM config WHERE key = 'instance-id'");
 		const result = (query.get() as { value: string }).value;
