@@ -3,7 +3,6 @@
  *
  * A script to run on startup to initialize/update the database
  */
-import { env } from "next-runtime-env";
 import { dbPath, initLocalDatabase } from "./db/local";
 import { maskConnectionString, mongoURI } from "./db/remote";
 import { initRemoteDatabase } from "./db/remote/init";
