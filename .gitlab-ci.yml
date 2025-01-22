@@ -156,8 +156,11 @@ deploy:
     services: []
     before_script: []
     variables:
-        KUBE_CONTEXT: kubernetes-agents:homelab-kubernetes-agent
+        KUBE_CONTEXT: ElBeenMachine/kubernetes-agents:homelab-kubernetes-agent
     script:
+        # Export the version
+        - export VERSION=$(git describe --tags --abbrev=0)
+
         # Deploy the image to the local kubernetes cluster
         - kubectl config use-context $KUBE_CONTEXT
         - kubectl apply -f ./specs/.
