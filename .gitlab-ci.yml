@@ -89,6 +89,7 @@ get_release_version:
             dotenv: variables.env
     only:
         - pre-production
+        - production
 
 # Build the project for release
 build_release:
@@ -151,16 +152,17 @@ create_merge_request_preprod_to_prod:
 
 # Deploy to production environment
 deploy:
+    needs:
+        - job: get_release_version
+          artifacts: true
     stage: deploy
     image: cylab/kubectl
+    environment: production
     services: []
     before_script: []
     variables:
         KUBE_CONTEXT: ElBeenMachine/kubernetes-agents:homelab-kubernetes-agent
     script:
-        # Export the version
-        - export VERSION=$(git describe --tags --abbrev=0)
-
         # Deploy the image to the local kubernetes cluster
         - kubectl config use-context $KUBE_CONTEXT
         - kubectl apply -f ./specs/.
