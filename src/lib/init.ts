@@ -22,8 +22,6 @@ import { initRemoteDatabase } from "./db/remote/init";
 	console.log(`Initializing local database at ${dbPath}`);
 	await initLocalDatabase();
 
-	if (env("INSTANCE_ID")) console.log("\nInstance ID set from environment variable, see below:");
-
 	// If not building, initialise the remote database
 	if (!process.env.DOCKER_BUILD) {
 		// Initialise the remote database

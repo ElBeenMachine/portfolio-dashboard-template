@@ -2,6 +2,7 @@ import path from "path";
 import fs from "fs";
 import Database from "better-sqlite3";
 import { v4 as uuidv4 } from "uuid";
+import { env } from "next-runtime-env";
 
 // Define the path to the local database
 export let dbPath: string;
@@ -41,17 +42,29 @@ export const initLocalDatabase = async () => {
 		// Create the config table if it doesn't exist
 		db.prepare("CREATE TABLE IF NOT EXISTS config (key TEXT PRIMARY KEY, value TEXT)").run();
 
-		// Get instance ID from database
-		const instanceIDResult = (await db
-			.prepare("SELECT value FROM config WHERE key = 'instance-id'")
-			.get()) as { value: string };
+		let instanceID;
 
-		instanceID = instanceIDResult?.value;
+		// If the environment variable exists, override the local database
+		if (env("INSTANCE_ID")) {
+			instanceID = env("INSTANCE_ID");
+			db.prepare("INSERT OR REPLACE INTO config (key, value) VALUES ('instance-id', ?)").run(
+				instanceID
+			);
+		} else {
+			// Get instance ID from database
+			const instanceIDResult = (await db
+				.prepare("SELECT value FROM config WHERE key = 'instance-id'")
+				.get()) as { value: string };
 
-		// If no instance ID, generate and save
-		if (!instanceID) {
-			instanceID = uuidv4();
-			db.prepare("INSERT INTO config (key, value) VALUES ('instance-id', ?)").run(instanceID);
+			instanceID = instanceIDResult?.value;
+
+			// If no instance ID, generate and save
+			if (!instanceID) {
+				instanceID = uuidv4();
+				db.prepare("INSERT INTO config (key, value) VALUES ('instance-id', ?)").run(
+					instanceID
+				);
+			}
 		}
 
 		console.log(`Local database successfully initialized with instance ID: ${instanceID}`);
