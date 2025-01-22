@@ -5,6 +5,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
     name: portfolio-dashboard
+    namespace: portfolio-dashboard
     annotations:
         secrets.doppler.com/reload: "true"
 spec:
@@ -12,28 +13,28 @@ spec:
     selector:
         matchLabels:
             app: portfolio-dashboard
-        template:
-            metadata:
-                labels:
-                    app: portfolio-dashboard
-            spec:
-                containers:
-                    - name: portfolio-dashboard
-                      image: beenhamo/portfolio-dashboard:latest
-                      volumeMounts:
-                          - name: dashboard-data
-                            mountPath: /app/data
-                      imagePullPolicy: Always
-                      envFrom:
-                          - secretRef:
-                                name: doppler-portfolio-dashboard
-                      resources:
-                          requests:
-                              memory: "250Mi"
-                              cpu: "250m"
-                          limits:
-                              memory: "500Mi"
-                              cpu: "500m"
+    template:
+        metadata:
+            labels:
+                app: portfolio-dashboard
+        spec:
+            containers:
+                - name: portfolio-dashboard
+                  image: beenhamo/portfolio-dashboard:latest
+                  volumeMounts:
+                      - name: dashboard-data
+                        mountPath: /app/data
+                  imagePullPolicy: Always
+                  envFrom:
+                      - secretRef:
+                            name: doppler-my-dashboard-prod-secret
+                  resources:
+                      requests:
+                          memory: "250Mi"
+                          cpu: "250m"
+                      limits:
+                          memory: "500Mi"
+                          cpu: "500m"
             volumes:
                 - name: dashboard-data
                   nfs:
