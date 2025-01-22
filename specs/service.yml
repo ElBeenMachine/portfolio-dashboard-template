@@ -1,0 +1,15 @@
+---
+# Kubernetes Service Definition
+
+apiVersion: v1
+kind: Service
+metadata:
+    name: portfolio-dashboard
+spec:
+    type: NodePort
+    selector:
+        app: portfolio-dashboard
+    ports:
+        - port: 3000
+          nodePort: 32181
+          name: http

@@ -148,4 +148,17 @@ create_merge_request_preprod_to_prod:
         - sh .gitlab/scripts/merge-to-prod.sh
     rules:
         - if: $CI_COMMIT_BRANCH == "pre-production"
-# TODO: Use kubernetes spec to deploy to production environment
+
+# Deploy to production environment
+deploy:
+    stage: deploy
+    image: cylab/kubectl
+    services: []
+    before_script: []
+    variables:
+        KUBE_CONTEXT: kubernetes-agents:homelab-kubernetes-agent
+    script:
+        # Deploy the image to the local kubernetes cluster
+        - kubectl config use-context $KUBE_CONTEXT
+        - kubectl apply -f ./specs/.
+        - kubectl set image deployment/$PROJECT_NAME $PROJECT_NAME=$DOCKER_USER/$PROJECT_NAME:$VERSION
