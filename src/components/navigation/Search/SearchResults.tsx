@@ -12,7 +12,7 @@ export default function searchResults({
 }) {
 	return (
 		<div
-			className="fixed top-16 bg-white rounded-lg shadow-lg max-w-2xl overflow-hidden"
+			className="fixed top-16 max-h-[calc(100dvh-75px)] overflow-y-auto bg-white rounded-lg shadow-lg max-w-2xl overflow-hidden"
 			style={{ width: "inherit", maxWidth: "inherit" }}
 		>
 			{results.map((result) => (

@@ -346,7 +346,7 @@ export const getAuditTrail = async (count: number): Promise<Audit[] | null> => {
 	return audit;
 };
 
-export const globalSearch = async (query: string, limit: number) => {
+export const globalSearch = async (query: string) => {
 	// Get the client and instance ID
 	const { client, instanceID } = await createDBConnection();
 	if (!client) return null;
@@ -362,7 +362,6 @@ export const globalSearch = async (query: string, limit: number) => {
 				$search: query,
 			},
 		})
-		.limit(limit)
 		.toArray();
 
 	return projects;

@@ -55,6 +55,7 @@ export default function CreateButton() {
 						type="text"
 						id="title"
 						className="w-full border border-gray-300 rounded p-1"
+						autoFocus
 					/>
 					<div className="flex justify-end mt-4">
 						<button

@@ -20,7 +20,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 	const query = request.nextUrl.searchParams.get("q");
 
 	// Perform a global search
-	const searchResults = await globalSearch(query as string, 10);
+	const searchResults = await globalSearch(query as string);
 
 	return NextResponse.json(searchResults);
 }
