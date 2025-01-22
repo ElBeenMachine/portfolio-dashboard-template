@@ -88,7 +88,6 @@ get_release_version:
         reports:
             dotenv: variables.env
     only:
-        - feature/*
         - pre-production
         - production
 
@@ -168,3 +167,5 @@ deploy:
         - kubectl config use-context $KUBE_CONTEXT
         - kubectl apply -f ./specs/.
         - kubectl set image deployment/$PROJECT_NAME $PROJECT_NAME=$DOCKER_USER/$PROJECT_NAME:$VERSION
+    only:
+        - production
