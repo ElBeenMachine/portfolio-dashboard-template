@@ -157,7 +157,7 @@ deploy:
           artifacts: true
     stage: deploy
     image: cylab/kubectl
-    environment: production
+    environment: Production
     services: []
     before_script: []
     variables:
