@@ -166,6 +166,6 @@ deploy:
         # Deploy the image to the local kubernetes cluster
         - kubectl config use-context $KUBE_CONTEXT
         - kubectl apply -f ./specs/.
-        - kubectl set image deployment/$PROJECT_NAME $PROJECT_NAME=$DOCKER_USER/$PROJECT_NAME:$VERSION
+        - kubectl set image deployment/$PROJECT_NAME $PROJECT_NAME=$DOCKER_USER/$PROJECT_NAME:$VERSION -n $PROJECT_NAME
     only:
         - production
