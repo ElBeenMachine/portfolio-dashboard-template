@@ -33,11 +33,13 @@ export default function searchResults({
 					<div className="ml-4">
 						<h3 className="font-semibold">{result.name}</h3>
 						<p className="text-gray-500">{capitalise(result.type)} Project</p>
-						<p>
-							{result.description.length > 100
-								? `${result.description.substring(0, 100)}...`
-								: result.description}
-						</p>
+						{result.description && (
+							<p>
+								{result.description.length > 100
+									? `${result.description.substring(0, 100)}...`
+									: result.description}
+							</p>
+						)}
 					</div>
 				</Link>
 			))}
