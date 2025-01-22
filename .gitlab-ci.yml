@@ -5,6 +5,10 @@ variables:
     PROJECT_NAME: portfolio-dashboard
     GITLAB_API_URL: "https://gitlab.com/api/v4"
     GITLAB_PROJECT_ID: $CI_PROJECT_ID
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_DRIVER: overlay2
+    DOCKER_BUILDKIT: 1
+    DOCKER_CLI_EXPERIMENTAL: enabled
 
 # Define the stages
 stages:
@@ -100,10 +104,6 @@ build_release:
     image: $DOCKER_IMAGE
     services:
         - docker:24.0.5-dind
-    variables:
-        DOCKER_DRIVER: overlay2
-        DOCKER_BUILDKIT: 1
-        DOCKER_CLI_EXPERIMENTAL: enabled
     before_script:
         - echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USER --password-stdin
     script:
