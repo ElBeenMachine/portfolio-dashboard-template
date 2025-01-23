@@ -3,7 +3,7 @@
  */
 
 import { ObjectId } from "mongodb";
-import { createDBConnection } from ".";
+import { connectToDatabase } from ".";
 import Audit from "@/types/audit.interface";
 
 /**
@@ -12,12 +12,8 @@ import Audit from "@/types/audit.interface";
  * @returns {Promise<{ projects: any[] }>} All projects
  */
 export const getAllProjects = async () => {
-	// Get the client and instance ID
-	const { client, instanceID } = await createDBConnection();
-	if (!client) return null;
-
 	try {
-		const db = client.db(instanceID);
+		const db = await connectToDatabase();
 		const collection = db.collection("projects");
 
 		const projects = await collection
@@ -28,9 +24,6 @@ export const getAllProjects = async () => {
 	} catch (error) {
 		console.error(error);
 		return null;
-	} finally {
-		// Close the client connection
-		await client.close();
 	}
 };
 
@@ -41,12 +34,8 @@ export const getAllProjects = async () => {
  * @returns {Promise<{ projects: any[] }>} All projects of the specified type
  */
 export const getProjectsByType = async (type: string) => {
-	// Get the client and db
-	const { client, instanceID } = await createDBConnection();
-	if (!client) return null;
-
 	try {
-		const db = client.db(instanceID);
+		const db = await connectToDatabase();
 		const collection = db.collection("projects");
 
 		const projects = await collection
@@ -60,9 +49,6 @@ export const getProjectsByType = async (type: string) => {
 	} catch (error) {
 		console.error(error);
 		return null;
-	} finally {
-		// Close the client connection
-		await client.close();
 	}
 };
 
@@ -73,11 +59,8 @@ export const getProjectsByType = async (type: string) => {
  * @returns {Promise<{ project: any }>} The project with the specified ID
  */
 export const getProjectByID = async (_id: ObjectId) => {
-	const { client, instanceID } = await createDBConnection();
-	if (!client) return null;
-
 	try {
-		const db = client.db(instanceID);
+		const db = await connectToDatabase();
 		const collection = db.collection("projects");
 
 		const project = await collection.findOne({ _id });
@@ -96,11 +79,8 @@ export const getProjectByID = async (_id: ObjectId) => {
  * @returns {Promise<{ project: any }>} The created project
  */
 export const createBlankProject = async (type: "code" | "literatire" | "blog", title?: string) => {
-	const { client, instanceID } = await createDBConnection();
-	if (!client) return null;
-
 	try {
-		const db = client.db(instanceID);
+		const db = await connectToDatabase();
 		const collection = db.collection("projects");
 
 		const project = await collection.insertOne({
@@ -116,8 +96,6 @@ export const createBlankProject = async (type: "code" | "literatire" | "blog", t
 	} catch (error) {
 		console.error(error);
 		return null;
-	} finally {
-		await client.close();
 	}
 };
 
@@ -128,11 +106,8 @@ export const createBlankProject = async (type: "code" | "literatire" | "blog", t
  * @returns {Promise<boolean>} Whether the project was archived
  */
 export const archiveProjectById = async (_id: ObjectId) => {
-	const { client, instanceID } = await createDBConnection();
-	if (!client) return null;
-
 	try {
-		const db = client.db(instanceID);
+		const db = await connectToDatabase();
 		const collection = db.collection("projects");
 
 		// Move the project to the archived_projects collection
@@ -150,8 +125,6 @@ export const archiveProjectById = async (_id: ObjectId) => {
 	} catch (error) {
 		console.error(error);
 		return false;
-	} finally {
-		await client.close();
 	}
 };
 
@@ -163,11 +136,8 @@ export const archiveProjectById = async (_id: ObjectId) => {
  * @returns {Promise<boolean>} Whether the project was updated
  */
 export const updateProject = async (_id: ObjectId, project: object) => {
-	const { client, instanceID } = await createDBConnection();
-	if (!client) return null;
-
 	try {
-		const db = client.db(instanceID);
+		const db = await connectToDatabase();
 		const collection = db.collection("projects");
 
 		const result = await collection.updateOne(
@@ -178,8 +148,6 @@ export const updateProject = async (_id: ObjectId, project: object) => {
 	} catch (error) {
 		console.error(error);
 		return false;
-	} finally {
-		await client.close();
 	}
 };
 
@@ -189,11 +157,8 @@ export const updateProject = async (_id: ObjectId, project: object) => {
  * @returns {Promise<any[]>} All settings
  */
 export const getSettings = async () => {
-	const { client, instanceID } = await createDBConnection();
-	if (!client) return null;
-
 	try {
-		const db = client.db(instanceID);
+		const db = await connectToDatabase();
 		const collection = db.collection("settings");
 
 		const settings = await collection.find().toArray();
@@ -201,8 +166,6 @@ export const getSettings = async () => {
 	} catch (error) {
 		console.error(error);
 		return null;
-	} finally {
-		await client.close();
 	}
 };
 
@@ -215,12 +178,8 @@ export const getSettings = async () => {
 export const getSetting = async (
 	key: string
 ): Promise<{ key: string | null; value: string | boolean | number | null }> => {
-	const { client, instanceID } = await createDBConnection();
-	if (!client) return { key: null, value: null };
-
 	try {
-		// Get the settings collection
-		const db = client.db(instanceID);
+		const db = await connectToDatabase();
 		const collection = db.collection("settings");
 
 		// Query the collection using the key
@@ -231,8 +190,6 @@ export const getSetting = async (
 	} catch (error) {
 		console.error("Error fetching setting:", error);
 		return { key, value: null };
-	} finally {
-		await client.close();
 	}
 };
 
@@ -244,12 +201,8 @@ export const getSetting = async (
  * @returns {Promise<boolean>} Whether the setting was updated
  */
 export const updateSetting = async (key: string, value: string | boolean | number) => {
-	const { client, instanceID } = await createDBConnection();
-	if (!client) return null;
-
 	try {
-		// Get the settings collection
-		const db = client.db(instanceID);
+		const db = await connectToDatabase();
 		const collection = db.collection("settings");
 
 		// Query the collection using the key
@@ -260,8 +213,6 @@ export const updateSetting = async (key: string, value: string | boolean | numbe
 	} catch (error) {
 		console.error("Error updating setting:", error);
 		return false;
-	} finally {
-		await client.close();
 	}
 };
 
@@ -272,11 +223,8 @@ export const updateSetting = async (key: string, value: string | boolean | numbe
  * @returns {Promise<any[]>} The recent projects
  */
 export const getRecentProjects = async (count: number) => {
-	const { client, instanceID } = await createDBConnection();
-	if (!client) return null;
-
 	try {
-		const db = client.db(instanceID);
+		const db = await connectToDatabase();
 		const collection = db.collection("projects");
 
 		const projects = await collection.find().sort({ updatedAt: -1 }).limit(count).toArray();
@@ -285,8 +233,6 @@ export const getRecentProjects = async (count: number) => {
 	} catch (error) {
 		console.error(error);
 		return null;
-	} finally {
-		await client.close();
 	}
 };
 
@@ -300,12 +246,8 @@ export const addAuditTrail = async (audit: Audit) => {
 	// Create a timestamp
 	const timestamp = new Date();
 
-	// Get the client and instance ID
-	const { client, instanceID } = await createDBConnection();
-	if (!client) return null;
-
 	// Get the database
-	const db = client.db(instanceID);
+	const db = await connectToDatabase();
 
 	// Get the audit collection
 	const collection = db.collection("audit");
@@ -326,12 +268,8 @@ export const addAuditTrail = async (audit: Audit) => {
  * @returns {Promise<any[]>} The audit trail
  */
 export const getAuditTrail = async (count: number): Promise<Audit[] | null> => {
-	// Get the client and instance ID
-	const { client, instanceID } = await createDBConnection();
-	if (!client) return null;
-
 	// Get the database
-	const db = client.db(instanceID);
+	const db = await connectToDatabase();
 
 	// Get the audit collection
 	const collection = db.collection("audit");
@@ -347,12 +285,8 @@ export const getAuditTrail = async (count: number): Promise<Audit[] | null> => {
 };
 
 export const globalSearch = async (query: string) => {
-	// Get the client and instance ID
-	const { client, instanceID } = await createDBConnection();
-	if (!client) return null;
-
 	// Get the database
-	const db = client.db(instanceID);
+	const db = await connectToDatabase();
 
 	// Search the projects collection
 	const projects = await db

@@ -3,7 +3,7 @@
  */
 
 import { auth } from "@/lib/auth/auth";
-import { createDBConnection } from "@/lib/db/remote";
+import { connectToDatabase } from "@/lib/db/remote";
 import { getRecentProjects } from "@/lib/db/remote/queries";
 import { getAuditTrail } from "@/lib/db/remote/queries";
 import { getGreeting } from "@/lib/greetings";
@@ -18,12 +18,8 @@ import Link from "next/link";
  * @param {Audit} audit The audit object
  */
 async function createProjectAuditMessage(audit: Audit) {
-	// Create a database connection
-	const { client, instanceID } = await createDBConnection();
-	if (!client) return null;
-
 	// Get the projects
-	const db = client.db(instanceID);
+	const db = await connectToDatabase();
 	const collection = db.collection("projects");
 	const archiveCollection = db.collection("archived_projects");
 

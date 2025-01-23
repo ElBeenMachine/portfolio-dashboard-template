@@ -2,27 +2,34 @@
  * @author Ollie Beenham
  */
 
-import { MongoClient } from "mongodb";
+import { Db, MongoClient } from "mongodb";
 import { env } from "next-runtime-env";
-import { getInstanceID } from "../local/queries";
+import { getInstanceIDSync } from "../local/queries";
 
 export const mongoURI = env("MONGO_URI") as string;
 
-/**
- * Connect to the MongoDB instance
- *
- * @returns {Promise<{client: MongoClient, instanceID: string}>} The MongoDB client and instance ID
- */
-export const createDBConnection = async () => {
-	if (env("DOCKER_BUILD")) return { client: null, instanceID: null };
+// If the database URI was not defined, throw an error
+if (!mongoURI) throw new Error("Environment variable MONGO_URI was not defined");
 
-	// Get the instance ID
-	const instanceID = await getInstanceID();
+const instanceID = getInstanceIDSync();
 
-	// Create and return a new MongoDB client
-	const client = new MongoClient(mongoURI);
-	return { client, instanceID };
-};
+let cachedClient: MongoClient | null = null;
+let cachedDb: Db | null = null;
+
+export async function connectToDatabase(): Promise<Db> {
+	if (cachedDb) return cachedDb;
+
+	if (!cachedClient) {
+		// Create a new client
+		cachedClient = new MongoClient(mongoURI);
+
+		// Connect to the client
+		await cachedClient.connect();
+	}
+
+	cachedDb = cachedClient.db(instanceID);
+	return cachedDb!;
+}
 
 /**
  * Mask the MongoDB URI

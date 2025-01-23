@@ -1,1 +1,7 @@
 node_modules
+docs
+specs
+.gitlab
+.github
+__tests__
+docker

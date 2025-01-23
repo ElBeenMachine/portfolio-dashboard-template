@@ -3,16 +3,13 @@
  */
 
 import { MongoServerError } from "mongodb";
-import { createDBConnection } from ".";
+import { connectToDatabase } from ".";
+import { getInstanceIDSync } from "../local/queries";
 
 // Initialise the remote database
 export const initRemoteDatabase = async () => {
-	// Connect to the database
-	const { client, instanceID } = await createDBConnection();
-	if (!client) throw new Error("Remote database is null");
-
 	// Create the database if it doesn't exist
-	const db = client.db(instanceID);
+	const db = await connectToDatabase();
 
 	// Create database collections
 	await Promise.all([
@@ -93,9 +90,8 @@ export const initRemoteDatabase = async () => {
 	const onboarded = await settings.findOne({ key: "onboarded" });
 	if (!onboarded) await settings.insertOne({ key: "onboarded", value: false });
 
-	// Close the connection
-	await client.close();
-
 	// Log the success
-	console.log(`Remote database successfully initialized with instance ID: ${instanceID}`);
+	console.log(
+		`Remote database successfully initialized with instance ID: ${getInstanceIDSync()}`
+	);
 };

@@ -13,7 +13,7 @@ import { env } from "next-runtime-env";
 
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import { createDBConnection } from "../db/remote";
+import { connectToDatabase } from "../db/remote";
 import GitHub from "next-auth/providers/github";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -25,12 +25,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 				password: { label: "Password", type: "password" },
 			},
 			authorize: async (credentials): Promise<any> => {
-				// Get the database
-				const { client, instanceID } = await createDBConnection();
-				if (!client) throw new Error("Remote database is null");
-
 				// Get the database instance
-				const db = client.db(instanceID);
+				const db = await connectToDatabase();
 
 				// Get the users collection
 				const users = db.collection("users");
@@ -116,12 +112,8 @@ export const createAdminUser = async (user: {
 	lastName: string;
 	role: "admin" | "user";
 }) => {
-	// Get the database
-	const { client, instanceID } = await createDBConnection();
-	if (!client) throw new Error("Remote database is null");
-
 	// Get the database instance
-	const db = client.db(instanceID);
+	const db = await connectToDatabase();
 
 	// Get the users collection
 	const users = db.collection("users");
