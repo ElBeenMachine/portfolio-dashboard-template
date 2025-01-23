@@ -4,23 +4,18 @@
 
 import { Db, MongoClient } from "mongodb";
 import { env } from "next-runtime-env";
-import { getInstanceIDSync } from "../local/queries";
+import { getInstanceID } from "../local/queries";
 
 export const mongoURI = env("MONGO_URI") as string;
-
-// If the database URI was not defined, throw an error
-if (!mongoURI) {
-	if (env("DOCKER_BUILD") == "false")
-		throw new Error("Environment variable MONGO_URI was not defined");
-}
-
-const instanceID = getInstanceIDSync();
 
 let cachedClient: MongoClient | null = null;
 let cachedDb: Db | null = null;
 
 export async function connectToDatabase(): Promise<Db | null> {
-	if (env("DOCKER_BUILD")) return null;
+	// If the database URI was not defined, throw an error
+	if (!mongoURI) {
+		if (env("DOCKER_BUILD") == "false") return null;
+	}
 
 	if (cachedDb) return cachedDb;
 
@@ -31,6 +26,9 @@ export async function connectToDatabase(): Promise<Db | null> {
 		// Connect to the client
 		await cachedClient.connect();
 	}
+
+	// Get the instance ID
+	const instanceID = await getInstanceID();
 
 	cachedDb = cachedClient.db(instanceID);
 	return cachedDb!;
