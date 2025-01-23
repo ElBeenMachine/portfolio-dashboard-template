@@ -7,11 +7,14 @@ services:
         build:
             context: ../
             dockerfile: Dockerfile
+            args:
+                - VERSION=0.0.0-test
         container_name: dashboard
         ports:
             - "3000:3000"
         volumes:
             - dashboard-data:/app/data
+
         environment:
             - AUTH_MICROSOFT_ENTRA_ID_ID
             - AUTH_MICROSOFT_ENTRA_ID_ISSUER
