@@ -14,7 +14,7 @@ import Audit from "@/types/audit.interface";
 export const getAllProjects = async () => {
 	try {
 		const db = await connectToDatabase();
-		const collection = db.collection("projects");
+		const collection = db!.collection("projects");
 
 		const projects = await collection
 			.find()
@@ -36,7 +36,7 @@ export const getAllProjects = async () => {
 export const getProjectsByType = async (type: string) => {
 	try {
 		const db = await connectToDatabase();
-		const collection = db.collection("projects");
+		const collection = db!.collection("projects");
 
 		const projects = await collection
 			.find({ type })
@@ -61,7 +61,7 @@ export const getProjectsByType = async (type: string) => {
 export const getProjectByID = async (_id: ObjectId) => {
 	try {
 		const db = await connectToDatabase();
-		const collection = db.collection("projects");
+		const collection = db!.collection("projects");
 
 		const project = await collection.findOne({ _id });
 		return project;
@@ -81,7 +81,7 @@ export const getProjectByID = async (_id: ObjectId) => {
 export const createBlankProject = async (type: "code" | "literatire" | "blog", title?: string) => {
 	try {
 		const db = await connectToDatabase();
-		const collection = db.collection("projects");
+		const collection = db!.collection("projects");
 
 		const project = await collection.insertOne({
 			name: title || "New Project",
@@ -108,14 +108,14 @@ export const createBlankProject = async (type: "code" | "literatire" | "blog", t
 export const archiveProjectById = async (_id: ObjectId) => {
 	try {
 		const db = await connectToDatabase();
-		const collection = db.collection("projects");
+		const collection = db!.collection("projects");
 
 		// Move the project to the archived_projects collection
 		const project = await collection.findOne({ _id: new ObjectId(_id) });
 		if (!project) return null;
 
 		// Insert the project into the archived_projects collection
-		const archivedCollection = db.collection("archived_projects");
+		const archivedCollection = db!.collection("archived_projects");
 		const result = await archivedCollection.insertOne(project);
 		if (!result.acknowledged) return null;
 
@@ -138,7 +138,7 @@ export const archiveProjectById = async (_id: ObjectId) => {
 export const updateProject = async (_id: ObjectId, project: object) => {
 	try {
 		const db = await connectToDatabase();
-		const collection = db.collection("projects");
+		const collection = db!.collection("projects");
 
 		const result = await collection.updateOne(
 			{ _id },
@@ -159,7 +159,7 @@ export const updateProject = async (_id: ObjectId, project: object) => {
 export const getSettings = async () => {
 	try {
 		const db = await connectToDatabase();
-		const collection = db.collection("settings");
+		const collection = db!.collection("settings");
 
 		const settings = await collection.find().toArray();
 		return settings;
@@ -180,7 +180,7 @@ export const getSetting = async (
 ): Promise<{ key: string | null; value: string | boolean | number | null }> => {
 	try {
 		const db = await connectToDatabase();
-		const collection = db.collection("settings");
+		const collection = db!.collection("settings");
 
 		// Query the collection using the key
 		const setting = await collection.findOne({ key });
@@ -203,7 +203,7 @@ export const getSetting = async (
 export const updateSetting = async (key: string, value: string | boolean | number) => {
 	try {
 		const db = await connectToDatabase();
-		const collection = db.collection("settings");
+		const collection = db!.collection("settings");
 
 		// Query the collection using the key
 		const setting = await collection.updateOne({ key }, { $set: { value } });
@@ -225,7 +225,7 @@ export const updateSetting = async (key: string, value: string | boolean | numbe
 export const getRecentProjects = async (count: number) => {
 	try {
 		const db = await connectToDatabase();
-		const collection = db.collection("projects");
+		const collection = db!.collection("projects");
 
 		const projects = await collection.find().sort({ updatedAt: -1 }).limit(count).toArray();
 
@@ -250,7 +250,7 @@ export const addAuditTrail = async (audit: Audit) => {
 	const db = await connectToDatabase();
 
 	// Get the audit collection
-	const collection = db.collection("audit");
+	const collection = db!.collection("audit");
 
 	// Insert the audit trail
 	const result = await collection.insertOne({
@@ -272,7 +272,7 @@ export const getAuditTrail = async (count: number): Promise<Audit[] | null> => {
 	const db = await connectToDatabase();
 
 	// Get the audit collection
-	const collection = db.collection("audit");
+	const collection = db!.collection("audit");
 
 	// Get the audit trail
 	const audit = (await collection
@@ -289,7 +289,7 @@ export const globalSearch = async (query: string) => {
 	const db = await connectToDatabase();
 
 	// Search the projects collection
-	const projects = await db
+	const projects = await db!
 		.collection("projects")
 		.find({
 			$text: {

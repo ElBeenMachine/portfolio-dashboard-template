@@ -20,8 +20,8 @@ import Link from "next/link";
 async function createProjectAuditMessage(audit: Audit) {
 	// Get the projects
 	const db = await connectToDatabase();
-	const collection = db.collection("projects");
-	const archiveCollection = db.collection("archived_projects");
+	const collection = db!.collection("projects");
+	const archiveCollection = db!.collection("archived_projects");
 
 	// Get the project
 	let project: Project;

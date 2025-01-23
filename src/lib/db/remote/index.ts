@@ -9,15 +9,19 @@ import { getInstanceIDSync } from "../local/queries";
 export const mongoURI = env("MONGO_URI") as string;
 
 // If the database URI was not defined, throw an error
-if (!mongoURI && !env("DOCKER_BUILD"))
-	throw new Error("Environment variable MONGO_URI was not defined");
+if (!mongoURI) {
+	if (env("DOCKER_BUILD") == "false")
+		throw new Error("Environment variable MONGO_URI was not defined");
+}
 
 const instanceID = getInstanceIDSync();
 
 let cachedClient: MongoClient | null = null;
 let cachedDb: Db | null = null;
 
-export async function connectToDatabase(): Promise<Db> {
+export async function connectToDatabase(): Promise<Db | null> {
+	if (env("DOCKER_BUILD")) return null;
+
 	if (cachedDb) return cachedDb;
 
 	if (!cachedClient) {

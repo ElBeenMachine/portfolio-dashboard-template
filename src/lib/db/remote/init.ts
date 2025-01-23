@@ -13,15 +13,15 @@ export const initRemoteDatabase = async () => {
 
 	// Create database collections
 	await Promise.all([
-		db.createCollection("settings"),
-		db.createCollection("users"),
-		db.createCollection("audit"),
-		db.createCollection("projects"),
-		db.createCollection("archived_projects"),
+		db!.createCollection("settings"),
+		db!.createCollection("users"),
+		db!.createCollection("audit"),
+		db!.createCollection("projects"),
+		db!.createCollection("archived_projects"),
 	]);
 
 	// Create indexes
-	const projects = db.collection("projects");
+	const projects = db!.collection("projects");
 
 	// Create a text index on the "name", "description" and "body" fields
 	try {
@@ -40,7 +40,7 @@ export const initRemoteDatabase = async () => {
 	}
 
 	// Populate with default values if necessary
-	const settings = db.collection("settings");
+	const settings = db!.collection("settings");
 
 	// Check to see if the dashboard title is set
 	const dashboardTitle = await settings.findOne({ key: "dashboardTitle" });

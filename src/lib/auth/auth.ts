@@ -29,7 +29,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 				const db = await connectToDatabase();
 
 				// Get the users collection
-				const users = db.collection("users");
+				const users = db!.collection("users");
 
 				// Get the user
 				const user = await users.findOne({
@@ -116,7 +116,7 @@ export const createAdminUser = async (user: {
 	const db = await connectToDatabase();
 
 	// Get the users collection
-	const users = db.collection("users");
+	const users = db!.collection("users");
 
 	// Check if the user already exists
 	const existingUser = await users.findOne({ username: user.username });
