@@ -25,3 +25,4 @@ As this project develops, so will my programming ability and by extension, the q
 -   [ ] Make mobile-friendly
 -   [x] Allow local authentication
 -   [x] Configure dynamic authentication providers (currently restricted to Entra)
+-   [ ] Generate release notes
