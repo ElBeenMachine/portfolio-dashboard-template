@@ -34,7 +34,6 @@ fi
 
 # Add markdown formatting
 {
-    echo ""
     echo "## Changes from ${previous_tag} to ${latest_tag}"
     echo ""
     cat release-notes.txt
