@@ -120,10 +120,10 @@ create_release:
           artifacts: true
     stage: release
     image: registry.gitlab.com/gitlab-org/release-cli:latest
-    script:
-        - echo "Generating release notes for version $VERSION"
-        - sh .gitlab/scripts/generate-release-notes.sh
-        - echo "Creating release $VERSION"
+    # script:
+    # - echo "Generating release notes for version $VERSION"
+    # - sh .gitlab/scripts/generate-release-notes.sh
+    # - echo "Creating release $VERSION"
     release:
         name: Version $VERSION
         tag_name: $VERSION
