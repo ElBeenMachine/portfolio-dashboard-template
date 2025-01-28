@@ -47,3 +47,4 @@ next-env.d.ts
 docker/docker-compose-prod.yml
 test-results/**/*
 .swc
+release-notes.md

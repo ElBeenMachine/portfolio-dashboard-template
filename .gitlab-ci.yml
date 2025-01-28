@@ -122,15 +122,12 @@ create_release:
     image: registry.gitlab.com/gitlab-org/release-cli:latest
     script:
         - echo "Generating release notes for version $VERSION"
-        - echo "# Changelog for version $VERSION" > release.md
-        - git log --oneline $(git describe --tags --abbrev=0 || git rev-list --max-parents=0 HEAD)...HEAD | tr '\n' '\7' | sed 's/\x7/\n\n/g' >> release.md
-        - echo "Release notes:"
-        - cat release.md
+        - .gitlab/scripts/generate-release-notes.sh
         - echo "Creating release $VERSION"
     release:
         name: Version $VERSION
         tag_name: $VERSION
-        description: $(cat release.md)
+        description: $(cat release-notes.md)
         ref: $CI_COMMIT_SHA
         assets:
             links:
