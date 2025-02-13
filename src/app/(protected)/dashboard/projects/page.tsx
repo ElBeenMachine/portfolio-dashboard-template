@@ -2,6 +2,14 @@ import CreateButton from "@/components/projects/CreateButton";
 import ProjectsPane from "@/components/projects/projectsPane";
 import { getAllProjects } from "@/lib/db/remote/queries";
 import Project from "@/types/project.interface";
+import { Metadata } from "next";
+
+/**
+ * Export the metadata for the page
+ */
+export const metadata: Metadata = {
+	title: "All Projects",
+};
 
 export default async function AllProjectsPage() {
 	const result = await getAllProjects();
