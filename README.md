@@ -1,7 +1,5 @@
 # Portfolio Dashboard Template
 
-[![CircleCI](https://dl.circleci.com/status-badge/img/circleci/MnChAcFb6sddDf8qTiPDY2/Bq1gWmRkrtw1XvxPr2E2Su/tree/production.svg?style=svg&circle-token=CCIPRJ_QxoXwwfFVY8EkrHkEy8KND_5d27c0a9a9675d330fa6be2c0d78dd0f117403f3)](https://dl.circleci.com/status-badge/redirect/circleci/MnChAcFb6sddDf8qTiPDY2/Bq1gWmRkrtw1XvxPr2E2Su/tree/production)
-
 > Disclaimer: If you are reading this from GitHub, please note that this project has been mirrored from my GitLab account, and as such, any issues, branches and merge requests may not be visible or up to date. To view the GitLab version of this project, please visit [the GitLab repository](https://gitlab.com/ElBeenMachine/portfolio-dashboard-template).
 
 ## About the Project
