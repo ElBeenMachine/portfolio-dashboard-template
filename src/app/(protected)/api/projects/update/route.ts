@@ -28,6 +28,10 @@ export async function POST(request: NextRequest) {
 	if (!_id) return NextResponse.json({ error: "No project id provided" }, { status: 400 });
 	if (!project) return NextResponse.json({ error: "No project provided" }, { status: 400 });
 
+	// If the project image is empty, set it to the default image
+	if (!project.thumbnail || project.thumbnail == "")
+		project.thumbnail = "/img/default-project-image.jpg";
+
 	// Update the project
 	const result = await updateProject(new ObjectId(_id), project);
 
