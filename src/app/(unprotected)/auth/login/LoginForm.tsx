@@ -2,7 +2,13 @@
 
 import { signIn } from "next-auth/react";
 
-export default function LoginForm({ redirect }: { redirect: string }) {
+export default function LoginForm({
+	redirect,
+	error,
+}: {
+	redirect: string;
+	error?: string | null;
+}) {
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 
@@ -32,6 +38,9 @@ export default function LoginForm({ redirect }: { redirect: string }) {
 				placeholder="Password"
 				className="w-full p-2 mt-2 border-b border-solid border-gray-800 outline-none focus:border-gray-300 transition-all"
 			/>
+
+			{error && <p className="text-red-500 text-sm">{error}</p>}
+
 			<button
 				type="submit"
 				className="w-full p-2 mt-2 bg-gray-600 text-white rounded-lg transition-all hover:bg-gray-800"

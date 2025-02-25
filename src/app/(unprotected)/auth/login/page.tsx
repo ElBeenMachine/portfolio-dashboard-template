@@ -27,6 +27,20 @@ export default async function Login({
 	// Get the redirect URL from the query string
 	const redirectURL = ((await searchParams)?.redirectTo as string) || "/dashboard";
 
+	// Get the error if it exists
+	const error = ((await searchParams)?.error as string) || null;
+	let errorMessage = null;
+
+	switch (error) {
+		case "CredentialsSignin":
+			errorMessage = "Invalid email or password";
+			break;
+		case null:
+			break;
+		default:
+			errorMessage = "An unexpected error occurred while trying to log in.";
+	}
+
 	// Get the app name
 	const appName = (await getSetting("dashboardTitle")).value;
 
@@ -38,7 +52,7 @@ export default async function Login({
 			<h1 className="text-md text-center font-medium">{appName}</h1>
 
 			{/* Login Form */}
-			<LoginForm redirect={redirectURL} />
+			<LoginForm redirect={redirectURL} error={errorMessage} />
 
 			{/* IDP Options */}
 			<IdentityProviders redirect={redirectURL} />
