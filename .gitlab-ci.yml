@@ -7,7 +7,7 @@ variables:
     GITLAB_PROJECT_ID: $CI_PROJECT_ID
     DOCKER_TLS_CERTDIR: ""
     DOCKER_DRIVER: overlay2
-    DOCKER_HOST: tcp://localhost:2375
+    # DOCKER_HOST: tcp://localhost:2375
     DOCKER_BUILDKIT: 1
     DOCKER_CLI_EXPERIMENTAL: enabled
 
