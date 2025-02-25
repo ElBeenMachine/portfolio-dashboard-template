@@ -1,3 +1,5 @@
+[![Latest Release](https://gitlab.com/ElBeenMachine/portfolio-dashboard-template/-/badges/release.svg)](https://gitlab.com/ElBeenMachine/portfolio-dashboard-template/-/releases) [![pipeline status](https://gitlab.com/ElBeenMachine/portfolio-dashboard-template/badges/main/pipeline.svg)](https://gitlab.com/ElBeenMachine/portfolio-dashboard-template/-/commits/main)
+
 # Portfolio Dashboard Template
 
 > Disclaimer: If you are reading this from GitHub, please note that this project has been mirrored from my GitLab account, and as such, any issues, branches and merge requests may not be visible or up to date. To view the GitLab version of this project, please visit [the GitLab repository](https://gitlab.com/ElBeenMachine/portfolio-dashboard-template).
