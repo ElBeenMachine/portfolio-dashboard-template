@@ -96,7 +96,37 @@ get_release_version:
         - production
 
 # Build the project for release
-build_release:
+build_amd64:
+    stage: build
+    image: $DOCKER_IMAGE
+    services:
+        - docker:24.0.5-dind
+    before_script:
+        - echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USER --password-stdin
+        - docker context create builder-context
+        - docker buildx create --name builderx --driver docker-container --use builder-context
+    script:
+        - docker buildx build --cache-from "$DOCKER_USER/$PROJECT_NAME:cache" --tag "$DOCKER_USER/$PROJECT_NAME:cache"  --push --platform=linux/amd64 .
+    rules:
+        - if: $CI_COMMIT_BRANCH == "pre-production"
+
+build_arm64:
+    stage: build
+    image: $DOCKER_IMAGE
+    services:
+        - docker:24.0.5-dind
+    before_script:
+        - echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USER --password-stdin
+        - docker context create builder-context
+        - docker buildx create --name builderx --driver docker-container --use builder-context
+    script:
+        - docker buildx build --cache-from "$DOCKER_USER/$PROJECT_NAME:cache" --tag "$DOCKER_USER/$PROJECT_NAME:cache"  --push --platform=linux/arm64/v8 .
+    rules:
+        - if: $CI_COMMIT_BRANCH == "pre-production"
+    tags:
+        - arm64
+
+push:
     needs:
         - job: get_release_version
           artifacts: true
@@ -106,9 +136,10 @@ build_release:
         - docker:24.0.5-dind
     before_script:
         - echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USER --password-stdin
+        - docker context create builder-context
+        - docker buildx create --name builderx --driver docker-container --use builder-context
     script:
-        - docker buildx create --use
-        - docker buildx build --platform linux/amd64,linux/arm64 --build-arg VERSION=$VERSION -t $DOCKER_USER/$PROJECT_NAME:$VERSION -t $DOCKER_USER/$PROJECT_NAME:latest --push .
+        - docker buildx build --cache-from "$DOCKER_USER/$PROJECT_NAME:cache" --platform linux/amd64,linux/arm64 --build-arg VERSION=$VERSION -t $DOCKER_USER/$PROJECT_NAME:$VERSION -t $DOCKER_USER/$PROJECT_NAME:latest --push .
     rules:
         - if: $CI_COMMIT_BRANCH == "pre-production"
 
