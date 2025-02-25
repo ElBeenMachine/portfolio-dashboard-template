@@ -146,7 +146,7 @@ push:
 # Create a release
 create_release:
     needs:
-        - job: build_release
+        - job: push
         - job: get_release_version
           artifacts: true
     stage: release
