@@ -65,6 +65,8 @@ build_project:
     image: $DOCKER_IMAGE
     services:
         - docker:18.09.7-dind
+    variables:
+        DOCKER_HOST: tcp://localhost:2375
     script:
         - docker build -t $PROJECT_NAME:testing .
     rules:
