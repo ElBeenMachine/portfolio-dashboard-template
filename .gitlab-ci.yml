@@ -65,12 +65,12 @@ build_project:
     image: $DOCKER_IMAGE
     services:
         - docker:18.09.7-dind
-    variables:
-        DOCKER_HOST: tcp://localhost:2375
     script:
         - docker build -t $PROJECT_NAME:testing .
     rules:
         - if: $CI_COMMIT_BRANCH == "main"
+    tags:
+        - arm64
 
 # Merge the main branch into the pre-production branch
 create_merge_request_main_to_preprod:
