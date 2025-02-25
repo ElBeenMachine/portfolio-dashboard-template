@@ -7,6 +7,7 @@ variables:
     GITLAB_PROJECT_ID: $CI_PROJECT_ID
     DOCKER_TLS_CERTDIR: ""
     DOCKER_DRIVER: overlay2
+    DOCKER_HOST: tcp://localhost:2375
     DOCKER_BUILDKIT: 1
     DOCKER_CLI_EXPERIMENTAL: enabled
 
@@ -64,7 +65,7 @@ build_project:
     stage: build
     image: $DOCKER_IMAGE
     services:
-        - docker:24.0.5-dind
+        - docker:18.09.7-dind
     script:
         - docker build -t $PROJECT_NAME:testing .
     rules:
@@ -100,7 +101,7 @@ build_amd64:
     stage: build
     image: $DOCKER_IMAGE
     services:
-        - docker:24.0.5-dind
+        - docker:18.09.7-dind
     before_script:
         - echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USER --password-stdin
         - docker context create builder-context
@@ -114,7 +115,7 @@ build_arm64:
     stage: build
     image: $DOCKER_IMAGE
     services:
-        - docker:24.0.5-dind
+        - docker:18.09.7-dind
     before_script:
         - echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USER --password-stdin
         - docker context create builder-context
@@ -133,7 +134,7 @@ push:
     stage: release
     image: $DOCKER_IMAGE
     services:
-        - docker:24.0.5-dind
+        - docker:docker:18.09.7-dind
     before_script:
         - echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USER --password-stdin
         - docker context create builder-context
