@@ -120,6 +120,7 @@ build_arm64:
     variables:
         DOCKER_HOST: tcp://localhost:2375
     before_script:
+        - apk add python3
         - echo "Wait for Docker daemon at tcp://localhost:2375"
         - while ! nc -z localhost 2375; do sleep 0.1; done
         - echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USER --password-stdin
