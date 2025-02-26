@@ -68,9 +68,6 @@ build_project:
     image: $DOCKER_IMAGE
     services:
         - $DIND_IMAGE
-    before_script:
-        - echo "Wait for Docker daemon at tcp://localhost:2375"
-        - while ! nc -z localhost 2375; do sleep 0.1; done
     script:
         - docker build -t $PROJECT_NAME:testing .
     rules:
@@ -124,6 +121,9 @@ build_arm64:
     variables:
         DOCKER_HOST: tcp://localhost:2375
     before_script:
+    before_script:
+        - echo "Wait for Docker daemon at tcp://localhost:2375"
+        - while ! nc -z localhost 2375; do sleep 0.1; done
         - echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USER --password-stdin
         - docker context create builder-context
         - docker buildx create --name builderx --driver docker-container --use builder-context
