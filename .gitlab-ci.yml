@@ -67,6 +67,10 @@ build_project:
     image: $DOCKER_IMAGE
     services:
         - $DIND_IMAGE
+    before_script:
+        - echo "Wait for Docker daemon at tcp://localhost:2375"
+        - while ! nc -z localhost 2375; do sleep 0.1; done
+
     script:
         - docker build -t $PROJECT_NAME:testing .
     rules:
