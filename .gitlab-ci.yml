@@ -6,6 +6,7 @@ variables:
     PROJECT_NAME: portfolio-dashboard
     GITLAB_API_URL: "https://gitlab.com/api/v4"
     GITLAB_PROJECT_ID: $CI_PROJECT_ID
+
     DOCKER_TLS_CERTDIR: ""
     DOCKER_DRIVER: overlay2
     DOCKER_BUILDKIT: 1
@@ -70,13 +71,10 @@ build_project:
     before_script:
         - echo "Wait for Docker daemon at tcp://localhost:2375"
         - while ! nc -z localhost 2375; do sleep 0.1; done
-
     script:
         - docker build -t $PROJECT_NAME:testing .
     rules:
         - if: $CI_COMMIT_BRANCH == "main"
-    tags:
-        - arm64
 
 # Merge the main branch into the pre-production branch
 create_merge_request_main_to_preprod:
