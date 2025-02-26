@@ -1,7 +1,7 @@
 # Define variables and default images
 variables:
     NODE_IMAGE: node:alpine
-    DOCKER_IMAGE: docker:20.10.16
+    DOCKER_IMAGE: docker:24.0.5
     DIND_IMAGE: $DOCKER_IMAGE-dind
     PROJECT_NAME: portfolio-dashboard
     GITLAB_API_URL: "https://gitlab.com/api/v4"
@@ -120,7 +120,6 @@ build_arm64:
     variables:
         DOCKER_HOST: tcp://localhost:2375
     before_script:
-        - apk add python3
         - echo "Wait for Docker daemon at tcp://localhost:2375"
         - while ! nc -z localhost 2375; do sleep 0.1; done
         - echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USER --password-stdin
