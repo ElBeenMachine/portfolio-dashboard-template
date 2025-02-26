@@ -136,6 +136,8 @@ push:
     needs:
         - job: get_release_version
           artifacts: true
+        - job: build_amd64
+        - job: build_arm64
     stage: release
     image: $DOCKER_IMAGE
     services:
@@ -176,6 +178,8 @@ create_release:
 # Merge the main branch into the pre-production branch
 create_merge_request_preprod_to_prod:
     stage: merge
+    needs:
+        - job: push
     before_script:
         - apt-get update -y && apt-get install -y jq
         - export VERSION=$(git describe --tags --abbrev=0)
