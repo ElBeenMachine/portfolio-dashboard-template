@@ -9,7 +9,9 @@ COPY package.json ./
 COPY package-lock.json ./
 
 # Install dependencies
+RUN apk add --no-cache python3 make g++ 
 RUN npm ci
+
 
 # Copy the rest of the application code to the working directory
 COPY . .
