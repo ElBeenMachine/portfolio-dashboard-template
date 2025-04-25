@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM node:20-alpine AS builder
+FROM node:23-alpine AS builder
 
 # Set the working directory
 WORKDIR /app
@@ -11,7 +11,6 @@ COPY package-lock.json ./
 # Install dependencies
 RUN apk add --no-cache python3 make g++ 
 RUN npm ci
-
 
 # Copy the rest of the application code to the working directory
 COPY . .
@@ -27,13 +26,13 @@ RUN npm run init
 ENV DOCKER_BUILD=false
 
 # Build the Next.js application
-RUN npx next build
+RUN npm run build
 
 # Delete the database file
 RUN rm -rf /app/data/db/config.db
 
 # Stage 2: Run the application
-FROM node:20-alpine
+FROM node:slim
 
 # Set the working directory
 WORKDIR /app
