@@ -65,6 +65,10 @@ deploy_documentation:
 build_project:
     stage: build
     image: $DOCKER_IMAGE
+    cache:
+        - key:
+              files: [package-lock.json, package.json]
+          paths: [node_modules]
     services:
         - $DIND_IMAGE
     script:
@@ -101,6 +105,10 @@ get_release_version:
 build_amd64:
     stage: build
     image: $DOCKER_IMAGE
+    cache:
+        - key:
+              files: [package-lock.json, package.json]
+          paths: [node_modules]
     services:
         - $DIND_IMAGE
     before_script:
@@ -115,6 +123,10 @@ build_amd64:
 build_arm64:
     stage: build
     image: $DOCKER_IMAGE
+    cache:
+        - key:
+              files: [package-lock.json, package.json]
+          paths: [node_modules]
     services:
         - $DIND_IMAGE
     variables:
@@ -140,6 +152,12 @@ push:
         - job: build_arm64
     stage: release
     image: $DOCKER_IMAGE
+    cache:
+        - key:
+              files: [package-lock.json, package.json]
+          paths: [node_modules]
+          policy: pull-push
+          when: on_failure
     services:
         - $DIND_IMAGE
     before_script:
@@ -199,7 +217,7 @@ deploy:
     services: []
     before_script: []
     variables:
-        KUBE_CONTEXT: ElBeenMachine/kubernetes-agents:homelab-kubernetes-agent
+        KUBE_CONTEXT: bean-tech/kubernetes-agents:homelab-kubernetes-agent
     script:
         # Deploy the image to the local kubernetes cluster
         - kubectl config use-context $KUBE_CONTEXT
