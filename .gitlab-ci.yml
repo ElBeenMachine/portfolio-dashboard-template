@@ -155,7 +155,7 @@ build_and_push:
 # Create a release
 create_release:
     needs:
-        - job: push
+        - job: build_and_push
         - job: get_release_version
           artifacts: true
     stage: release
@@ -180,7 +180,7 @@ create_release:
 create_merge_request_preprod_to_prod:
     stage: merge
     needs:
-        - job: push
+        - job: build_and_push
     before_script:
         - apt-get update -y && apt-get install -y jq
         - export VERSION=$(git describe --tags --abbrev=0)
