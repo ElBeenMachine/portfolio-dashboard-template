@@ -32,7 +32,7 @@ RUN npm run build
 RUN rm -rf /app/data/db/config.db
 
 # Stage 2: Run the application
-FROM node:slim
+FROM node:23-alpine
 
 # Set the working directory
 WORKDIR /app
