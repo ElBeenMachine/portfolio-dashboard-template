@@ -97,48 +97,11 @@ get_release_version:
         - pre-production
         - production
 
-# Build the project for release
-# build_amd64:
-#     stage: build
-#     image: $DOCKER_IMAGE
-#     services:
-#         - $DIND_IMAGE
-#     before_script:
-#         - echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USER --password-stdin
-#         - docker context create builder-context
-#         - docker buildx create --name builderx --driver docker-container --use builder-context
-#     script:
-#         - docker buildx build --cache-from "$DOCKER_USER/$PROJECT_NAME:cache" --tag "$DOCKER_USER/$PROJECT_NAME:cache"  --push --platform=linux/amd64 .
-#     rules:
-#         - if: $CI_COMMIT_BRANCH == "pre-production"
-
-# build_arm64:
-#     stage: build
-#     image: $DOCKER_IMAGE
-#     services:
-#         - $DIND_IMAGE
-#     variables:
-#         DOCKER_HOST: tcp://localhost:2375
-#     before_script:
-#         - echo "Wait for Docker daemon at tcp://localhost:2375"
-#         - while ! nc -z localhost 2375; do sleep 0.1; done
-#         - echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USER --password-stdin
-#         - docker context create builder-context
-#         - docker buildx create --name builderx --driver docker-container --use builder-context
-#     script:
-#         - docker buildx build --cache-from "$DOCKER_USER/$PROJECT_NAME:cache" --tag "$DOCKER_USER/$PROJECT_NAME:cache"  --push --platform=linux/arm64/v8 .
-#     rules:
-#         - if: $CI_COMMIT_BRANCH == "pre-production"
-#     tags:
-#         - arm64
-
 # Push the image to the registry
 build_and_push:
     needs:
         - job: get_release_version
           artifacts: true
-        # - job: build_amd64
-        # - job: build_arm64
     stage: release
     image: $DOCKER_IMAGE
     services:
